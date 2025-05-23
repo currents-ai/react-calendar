@@ -249,21 +249,27 @@ export function EventCalendar({
           </div>
           <div className="flex items-center gap-2">
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="gap-1.5 max-[479px]:h-8">
-                  <span>
-                    <span className="min-[480px]:hidden" aria-hidden="true">
-                      {view.charAt(0).toUpperCase()}
+              <DropdownMenuTrigger>
+                <Button
+                  variant="outline"
+                  className="gap-1.5 max-[479px]:h-8"
+                  asChild
+                >
+                  <div>
+                    <span>
+                      <span className="min-[480px]:hidden" aria-hidden="true">
+                        {view.charAt(0).toUpperCase()}
+                      </span>
+                      <span className="max-[479px]:sr-only">
+                        {view.charAt(0).toUpperCase() + view.slice(1)}
+                      </span>
                     </span>
-                    <span className="max-[479px]:sr-only">
-                      {view.charAt(0).toUpperCase() + view.slice(1)}
-                    </span>
-                  </span>
-                  <ChevronDownIcon
-                    className="-me-1 opacity-60"
-                    size={16}
-                    aria-hidden="true"
-                  />
+                    <ChevronDownIcon
+                      className="-me-1 opacity-60"
+                      size={16}
+                      aria-hidden="true"
+                    />
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-32">

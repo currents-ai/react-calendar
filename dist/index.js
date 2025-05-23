@@ -11825,7 +11825,7 @@ function useId(deterministicId) {
   useLayoutEffect2(() => {
     setId((reactId) => reactId ?? String(count$1++));
   }, [deterministicId]);
-  return (id ? `radix-${id}` : "");
+  return deterministicId || (id ? `radix-${id}` : "");
 }
 
 // packages/react/use-callback-ref/src/use-callback-ref.tsx
@@ -19854,14 +19854,14 @@ var DropdownMenuGroup = t__namespace.forwardRef(
 );
 DropdownMenuGroup.displayName = GROUP_NAME;
 var LABEL_NAME = "DropdownMenuLabel";
-var DropdownMenuLabel$1 = t__namespace.forwardRef(
+var DropdownMenuLabel = t__namespace.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDropdownMenu, ...labelProps } = props;
     const menuScope = useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ jsxRuntime.jsx(Label, { ...menuScope, ...labelProps, ref: forwardedRef });
   }
 );
-DropdownMenuLabel$1.displayName = LABEL_NAME;
+DropdownMenuLabel.displayName = LABEL_NAME;
 var ITEM_NAME = "DropdownMenuItem";
 var DropdownMenuItem$1 = t__namespace.forwardRef(
   (props, forwardedRef) => {
@@ -19872,12 +19872,12 @@ var DropdownMenuItem$1 = t__namespace.forwardRef(
 );
 DropdownMenuItem$1.displayName = ITEM_NAME;
 var CHECKBOX_ITEM_NAME = "DropdownMenuCheckboxItem";
-var DropdownMenuCheckboxItem$1 = t__namespace.forwardRef((props, forwardedRef) => {
+var DropdownMenuCheckboxItem = t__namespace.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...checkboxItemProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsxRuntime.jsx(CheckboxItem, { ...menuScope, ...checkboxItemProps, ref: forwardedRef });
 });
-DropdownMenuCheckboxItem$1.displayName = CHECKBOX_ITEM_NAME;
+DropdownMenuCheckboxItem.displayName = CHECKBOX_ITEM_NAME;
 var RADIO_GROUP_NAME = "DropdownMenuRadioGroup";
 var DropdownMenuRadioGroup = t__namespace.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...radioGroupProps } = props;
@@ -19886,12 +19886,12 @@ var DropdownMenuRadioGroup = t__namespace.forwardRef((props, forwardedRef) => {
 });
 DropdownMenuRadioGroup.displayName = RADIO_GROUP_NAME;
 var RADIO_ITEM_NAME = "DropdownMenuRadioItem";
-var DropdownMenuRadioItem$1 = t__namespace.forwardRef((props, forwardedRef) => {
+var DropdownMenuRadioItem = t__namespace.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...radioItemProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsxRuntime.jsx(RadioItem, { ...menuScope, ...radioItemProps, ref: forwardedRef });
 });
-DropdownMenuRadioItem$1.displayName = RADIO_ITEM_NAME;
+DropdownMenuRadioItem.displayName = RADIO_ITEM_NAME;
 var INDICATOR_NAME = "DropdownMenuItemIndicator";
 var DropdownMenuItemIndicator = t__namespace.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...itemIndicatorProps } = props;
@@ -19900,12 +19900,12 @@ var DropdownMenuItemIndicator = t__namespace.forwardRef((props, forwardedRef) =>
 });
 DropdownMenuItemIndicator.displayName = INDICATOR_NAME;
 var SEPARATOR_NAME = "DropdownMenuSeparator";
-var DropdownMenuSeparator$1 = t__namespace.forwardRef((props, forwardedRef) => {
+var DropdownMenuSeparator = t__namespace.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...separatorProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsxRuntime.jsx(Separator, { ...menuScope, ...separatorProps, ref: forwardedRef });
 });
-DropdownMenuSeparator$1.displayName = SEPARATOR_NAME;
+DropdownMenuSeparator.displayName = SEPARATOR_NAME;
 var ARROW_NAME = "DropdownMenuArrow";
 var DropdownMenuArrow = t__namespace.forwardRef(
   (props, forwardedRef) => {
@@ -19916,14 +19916,14 @@ var DropdownMenuArrow = t__namespace.forwardRef(
 );
 DropdownMenuArrow.displayName = ARROW_NAME;
 var SUB_TRIGGER_NAME = "DropdownMenuSubTrigger";
-var DropdownMenuSubTrigger$1 = t__namespace.forwardRef((props, forwardedRef) => {
+var DropdownMenuSubTrigger = t__namespace.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...subTriggerProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsxRuntime.jsx(SubTrigger, { ...menuScope, ...subTriggerProps, ref: forwardedRef });
 });
-DropdownMenuSubTrigger$1.displayName = SUB_TRIGGER_NAME;
+DropdownMenuSubTrigger.displayName = SUB_TRIGGER_NAME;
 var SUB_CONTENT_NAME = "DropdownMenuSubContent";
-var DropdownMenuSubContent$1 = t__namespace.forwardRef((props, forwardedRef) => {
+var DropdownMenuSubContent = t__namespace.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...subContentProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsxRuntime.jsx(
@@ -19946,137 +19946,84 @@ var DropdownMenuSubContent$1 = t__namespace.forwardRef((props, forwardedRef) => 
     }
   );
 });
-DropdownMenuSubContent$1.displayName = SUB_CONTENT_NAME;
+DropdownMenuSubContent.displayName = SUB_CONTENT_NAME;
 var Root2 = DropdownMenu$1;
 var Trigger = DropdownMenuTrigger$1;
 var Portal2 = DropdownMenuPortal;
 var Content2 = DropdownMenuContent$1;
-var Label2 = DropdownMenuLabel$1;
 var Item2 = DropdownMenuItem$1;
-var CheckboxItem2 = DropdownMenuCheckboxItem$1;
-var RadioItem2 = DropdownMenuRadioItem$1;
-var ItemIndicator2 = DropdownMenuItemIndicator;
-var Separator2 = DropdownMenuSeparator$1;
-var SubTrigger2 = DropdownMenuSubTrigger$1;
-var SubContent2 = DropdownMenuSubContent$1;
 
-var DropdownMenu = Root2;
-var DropdownMenuTrigger = Trigger;
-var DropdownMenuSubTrigger = /*#__PURE__*/t__namespace.forwardRef(function (_a, ref) {
-  var className = _a.className,
-    inset = _a.inset,
-    children = _a.children,
-    props = __rest(_a, ["className", "inset", "children"]);
-  return jsxRuntime.jsxs(SubTrigger2, __assign({
-    ref: ref,
-    className: cn("focus:bg-accent data-[state=open]:bg-accent flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", inset && "pl-8", className)
-  }, props, {
-    children: [children, jsxRuntime.jsx(lucideReact.ChevronRight, {
-      className: "ml-auto"
-    })]
-  }));
-});
-DropdownMenuSubTrigger.displayName = SubTrigger2.displayName;
-var DropdownMenuSubContent = /*#__PURE__*/t__namespace.forwardRef(function (_a, ref) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(SubContent2, __assign({
-    ref: ref,
-    className: cn("bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-[--radix-dropdown-menu-content-transform-origin] overflow-hidden rounded-md border p-1 shadow-lg", className)
+function DropdownMenu(_a) {
+  var props = __rest(_a, []);
+  return jsxRuntime.jsx(Root2, __assign({
+    "data-slot": "dropdown-menu"
   }, props));
-});
-DropdownMenuSubContent.displayName = SubContent2.displayName;
-var DropdownMenuContent = /*#__PURE__*/t__namespace.forwardRef(function (_a, ref) {
+}
+function DropdownMenuTrigger(_a) {
+  var props = __rest(_a, []);
+  return jsxRuntime.jsx(Trigger, __assign({
+    "data-slot": "dropdown-menu-trigger"
+  }, props));
+}
+function DropdownMenuContent(_a) {
   var className = _a.className,
     _b = _a.sideOffset,
     sideOffset = _b === void 0 ? 4 : _b,
-    props = __rest(_a, ["className", "sideOffset"]);
+    onPointerDown = _a.onPointerDown,
+    onPointerDownOutside = _a.onPointerDownOutside,
+    onCloseAutoFocus = _a.onCloseAutoFocus,
+    props = __rest(_a, ["className", "sideOffset", "onPointerDown", "onPointerDownOutside", "onCloseAutoFocus"]);
+  var isCloseFromMouse = t__namespace.useRef(false);
+  var handlePointerDown = t__namespace.useCallback(function (e) {
+    isCloseFromMouse.current = true;
+    onPointerDown === null || onPointerDown === void 0 ? void 0 : onPointerDown(e);
+  }, [onPointerDown]);
+  var handlePointerDownOutside = t__namespace.useCallback(function (e) {
+    isCloseFromMouse.current = true;
+    onPointerDownOutside === null || onPointerDownOutside === void 0 ? void 0 : onPointerDownOutside(e);
+  }, [onPointerDownOutside]);
+  var handleCloseAutoFocus = t__namespace.useCallback(function (e) {
+    if (onCloseAutoFocus) {
+      return onCloseAutoFocus(e);
+    }
+    if (!isCloseFromMouse.current) {
+      return;
+    }
+    e.preventDefault();
+    isCloseFromMouse.current = false;
+  }, [onCloseAutoFocus]);
   return jsxRuntime.jsx(Portal2, {
     children: jsxRuntime.jsx(Content2, __assign({
-      ref: ref,
+      "data-slot": "dropdown-menu-content",
       sideOffset: sideOffset,
-      className: cn("bg-popover text-popover-foreground z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md", "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]", className)
+      className: cn("bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-40 overflow-hidden rounded-md border p-1 shadow-lg", className),
+      onPointerDown: handlePointerDown,
+      onPointerDownOutside: handlePointerDownOutside,
+      onCloseAutoFocus: handleCloseAutoFocus
     }, props))
   });
-});
-DropdownMenuContent.displayName = Content2.displayName;
-var DropdownMenuItem = /*#__PURE__*/t__namespace.forwardRef(function (_a, ref) {
+}
+function DropdownMenuItem(_a) {
   var className = _a.className,
     inset = _a.inset,
-    props = __rest(_a, ["className", "inset"]);
+    _b = _a.variant,
+    variant = _b === void 0 ? "default" : _b,
+    props = __rest(_a, ["className", "inset", "variant"]);
   return jsxRuntime.jsx(Item2, __assign({
-    ref: ref,
-    className: cn("focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0", inset && "pl-8", className)
+    "data-slot": "dropdown-menu-item",
+    "data-inset": inset,
+    "data-variant": variant,
+    className: cn("focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/40 data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:*:[svg]:!text-destructive-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0", className)
   }, props));
-});
-DropdownMenuItem.displayName = Item2.displayName;
-var DropdownMenuCheckboxItem = /*#__PURE__*/t__namespace.forwardRef(function (_a, ref) {
-  var className = _a.className,
-    children = _a.children,
-    checked = _a.checked,
-    props = __rest(_a, ["className", "children", "checked"]);
-  return jsxRuntime.jsxs(CheckboxItem2, __assign({
-    ref: ref,
-    className: cn("focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className),
-    checked: checked
-  }, props, {
-    children: [jsxRuntime.jsx("span", {
-      className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center",
-      children: jsxRuntime.jsx(ItemIndicator2, {
-        children: jsxRuntime.jsx(lucideReact.Check, {
-          className: "h-4 w-4"
-        })
-      })
-    }), children]
-  }));
-});
-DropdownMenuCheckboxItem.displayName = CheckboxItem2.displayName;
-var DropdownMenuRadioItem = /*#__PURE__*/t__namespace.forwardRef(function (_a, ref) {
-  var className = _a.className,
-    children = _a.children,
-    props = __rest(_a, ["className", "children"]);
-  return jsxRuntime.jsxs(RadioItem2, __assign({
-    ref: ref,
-    className: cn("focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className)
-  }, props, {
-    children: [jsxRuntime.jsx("span", {
-      className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center",
-      children: jsxRuntime.jsx(ItemIndicator2, {
-        children: jsxRuntime.jsx(lucideReact.Circle, {
-          className: "h-2 w-2 fill-current"
-        })
-      })
-    }), children]
-  }));
-});
-DropdownMenuRadioItem.displayName = RadioItem2.displayName;
-var DropdownMenuLabel = /*#__PURE__*/t__namespace.forwardRef(function (_a, ref) {
-  var className = _a.className,
-    inset = _a.inset,
-    props = __rest(_a, ["className", "inset"]);
-  return jsxRuntime.jsx(Label2, __assign({
-    ref: ref,
-    className: cn("px-2 py-1.5 text-sm font-semibold", inset && "pl-8", className)
-  }, props));
-});
-DropdownMenuLabel.displayName = Label2.displayName;
-var DropdownMenuSeparator = /*#__PURE__*/t__namespace.forwardRef(function (_a, ref) {
+}
+function DropdownMenuShortcut(_a) {
   var className = _a.className,
     props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(Separator2, __assign({
-    ref: ref,
-    className: cn("bg-muted -mx-1 my-1 h-px", className)
+  return jsxRuntime.jsx("kbd", __assign({
+    "data-slot": "dropdown-menu-shortcut",
+    className: cn("bg-background text-muted-foreground/70 ms-auto -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium", className)
   }, props));
-});
-DropdownMenuSeparator.displayName = Separator2.displayName;
-var DropdownMenuShortcut = function (_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx("span", __assign({
-    className: cn("ml-auto text-xs tracking-widest opacity-60", className)
-  }, props));
-};
-DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
+}
 
 function WeekView(_a) {
   var currentDate = _a.currentDate,
@@ -20556,24 +20503,26 @@ function EventCalendar(_a) {
           className: "flex items-center gap-2",
           children: [jsxRuntime.jsxs(DropdownMenu, {
             children: [jsxRuntime.jsx(DropdownMenuTrigger, {
-              asChild: true,
-              children: jsxRuntime.jsxs(Button$1, {
+              children: jsxRuntime.jsx(Button$1, {
                 variant: "outline",
                 className: "gap-1.5 max-[479px]:h-8",
-                children: [jsxRuntime.jsxs("span", {
-                  children: [jsxRuntime.jsx("span", {
-                    className: "min-[480px]:hidden",
-                    "aria-hidden": "true",
-                    children: view.charAt(0).toUpperCase()
-                  }), jsxRuntime.jsx("span", {
-                    className: "max-[479px]:sr-only",
-                    children: view.charAt(0).toUpperCase() + view.slice(1)
+                asChild: true,
+                children: jsxRuntime.jsxs("div", {
+                  children: [jsxRuntime.jsxs("span", {
+                    children: [jsxRuntime.jsx("span", {
+                      className: "invisible sm:visible",
+                      "aria-hidden": "true",
+                      children: view.charAt(0).toUpperCase()
+                    }), jsxRuntime.jsx("span", {
+                      className: "visible sm:invisible",
+                      children: view.charAt(0).toUpperCase() + view.slice(1)
+                    })]
+                  }), jsxRuntime.jsx(lucideReact.ChevronDownIcon, {
+                    className: "-me-1 opacity-60",
+                    size: 16,
+                    "aria-hidden": "true"
                   })]
-                }), jsxRuntime.jsx(lucideReact.ChevronDownIcon, {
-                  className: "-me-1 opacity-60",
-                  size: 16,
-                  "aria-hidden": "true"
-                })]
+                })
               })
             }), jsxRuntime.jsxs(DropdownMenuContent, {
               align: "end",

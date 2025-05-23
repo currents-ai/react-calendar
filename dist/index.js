@@ -20510,11 +20510,11 @@ function EventCalendar(_a) {
                 children: jsxRuntime.jsxs("div", {
                   children: [jsxRuntime.jsxs("span", {
                     children: [jsxRuntime.jsx("span", {
-                      className: "invisible sm:visible",
+                      className: "visible sm:invisible",
                       "aria-hidden": "true",
                       children: view.charAt(0).toUpperCase()
                     }), jsxRuntime.jsx("span", {
-                      className: "visible sm:invisible",
+                      className: "invisible sm:visible",
                       children: view.charAt(0).toUpperCase() + view.slice(1)
                     })]
                   }), jsxRuntime.jsx(lucideReact.ChevronDownIcon, {

@@ -20490,11 +20490,11 @@ function EventCalendar(_a) {
                 children: jsxs("div", {
                   children: [jsxs("span", {
                     children: [jsx("span", {
-                      className: "invisible sm:visible",
+                      className: "visible sm:invisible",
                       "aria-hidden": "true",
                       children: view.charAt(0).toUpperCase()
                     }), jsx("span", {
-                      className: "visible sm:invisible",
+                      className: "invisible sm:visible",
                       children: view.charAt(0).toUpperCase() + view.slice(1)
                     })]
                   }), jsx(ChevronDownIcon, {

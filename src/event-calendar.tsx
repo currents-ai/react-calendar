@@ -257,10 +257,10 @@ export function EventCalendar({
                 >
                   <div>
                     <span>
-                      <span className="invisible sm:visible" aria-hidden="true">
+                      <span className="visible sm:invisible" aria-hidden="true">
                         {view.charAt(0).toUpperCase()}
                       </span>
-                      <span className="visible sm:invisible">
+                      <span className="invisible sm:visible">
                         {view.charAt(0).toUpperCase() + view.slice(1)}
                       </span>
                     </span>

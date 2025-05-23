@@ -4,8 +4,7 @@ import t__default, { useMemo, useLayoutEffect, useEffect, useRef, useCallback, u
 import { isSameDay, differenceInMinutes, isPast, format, getMinutes, addDays, isToday, addMinutes, differenceInDays, startOfWeek, endOfWeek, isWithinInterval, startOfDay, eachHourOfInterval, addHours, getHours, areIntervalsOverlapping, addMonths, addWeeks, addYears, differenceInCalendarDays, differenceInCalendarMonths, eachMonthOfInterval, endOfISOWeek, endOfMonth, endOfYear, getISOWeek, getMonth, getYear, getWeek, isAfter, isBefore, isDate, isSameMonth, isSameYear, max as max$1, min as min$1, setMonth, setYear, startOfISOWeek, startOfMonth, startOfYear, eachDayOfInterval, subMonths, subWeeks } from 'date-fns';
 import * as ReactDOM from 'react-dom';
 import ReactDOM__default, { unstable_batchedUpdates, createPortal } from 'react-dom';
-import { cva } from 'class-variance-authority';
-import { ChevronLeftIcon, ChevronRightIcon, XIcon, ChevronDownIcon, CheckIcon, ChevronUpIcon, PlusIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, XIcon, ChevronDownIcon, CheckIcon, ChevronUpIcon, ChevronRight, Check, Circle, PlusIcon } from 'lucide-react';
 import { enUS } from 'date-fns/locale/en-US';
 
 /**
@@ -7820,6 +7819,47 @@ function getElementRef$1(element) {
   return element.props.ref || element.ref;
 }
 
+const falsyToString = (value)=>typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
+const cx = clsx;
+const cva = (base, config)=>(props)=>{
+        var _config_compoundVariants;
+        if ((config === null || config === void 0 ? void 0 : config.variants) == null) return cx(base, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+        const { variants, defaultVariants } = config;
+        const getVariantClassNames = Object.keys(variants).map((variant)=>{
+            const variantProp = props === null || props === void 0 ? void 0 : props[variant];
+            const defaultVariantProp = defaultVariants === null || defaultVariants === void 0 ? void 0 : defaultVariants[variant];
+            if (variantProp === null) return null;
+            const variantKey = falsyToString(variantProp) || falsyToString(defaultVariantProp);
+            return variants[variant][variantKey];
+        });
+        const propsWithoutUndefined = props && Object.entries(props).reduce((acc, param)=>{
+            let [key, value] = param;
+            if (value === undefined) {
+                return acc;
+            }
+            acc[key] = value;
+            return acc;
+        }, {});
+        const getCompoundVariantClassNames = config === null || config === void 0 ? void 0 : (_config_compoundVariants = config.compoundVariants) === null || _config_compoundVariants === void 0 ? void 0 : _config_compoundVariants.reduce((acc, param)=>{
+            let { class: cvClass, className: cvClassName, ...compoundVariantOptions } = param;
+            return Object.entries(compoundVariantOptions).every((param)=>{
+                let [key, value] = param;
+                return Array.isArray(value) ? value.includes({
+                    ...defaultVariants,
+                    ...propsWithoutUndefined
+                }[key]) : ({
+                    ...defaultVariants,
+                    ...propsWithoutUndefined
+                })[key] === value;
+            }) ? [
+                ...acc,
+                cvClass,
+                cvClassName
+            ] : acc;
+        }, []);
+        return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+    };
+
 var buttonVariants = cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]", {
   variants: {
     variant: {
@@ -11765,7 +11805,7 @@ function useId(deterministicId) {
   useLayoutEffect2(() => {
     setId((reactId) => reactId ?? String(count$1++));
   }, [deterministicId]);
-  return deterministicId || (id ? `radix-${id}` : "");
+  return (id ? `radix-${id}` : "");
 }
 
 // packages/react/use-callback-ref/src/use-callback-ref.tsx
@@ -19794,14 +19834,14 @@ var DropdownMenuGroup = t.forwardRef(
 );
 DropdownMenuGroup.displayName = GROUP_NAME;
 var LABEL_NAME = "DropdownMenuLabel";
-var DropdownMenuLabel = t.forwardRef(
+var DropdownMenuLabel$1 = t.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDropdownMenu, ...labelProps } = props;
     const menuScope = useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ jsx(Label, { ...menuScope, ...labelProps, ref: forwardedRef });
   }
 );
-DropdownMenuLabel.displayName = LABEL_NAME;
+DropdownMenuLabel$1.displayName = LABEL_NAME;
 var ITEM_NAME = "DropdownMenuItem";
 var DropdownMenuItem$1 = t.forwardRef(
   (props, forwardedRef) => {
@@ -19812,12 +19852,12 @@ var DropdownMenuItem$1 = t.forwardRef(
 );
 DropdownMenuItem$1.displayName = ITEM_NAME;
 var CHECKBOX_ITEM_NAME = "DropdownMenuCheckboxItem";
-var DropdownMenuCheckboxItem = t.forwardRef((props, forwardedRef) => {
+var DropdownMenuCheckboxItem$1 = t.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...checkboxItemProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsx(CheckboxItem, { ...menuScope, ...checkboxItemProps, ref: forwardedRef });
 });
-DropdownMenuCheckboxItem.displayName = CHECKBOX_ITEM_NAME;
+DropdownMenuCheckboxItem$1.displayName = CHECKBOX_ITEM_NAME;
 var RADIO_GROUP_NAME = "DropdownMenuRadioGroup";
 var DropdownMenuRadioGroup = t.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...radioGroupProps } = props;
@@ -19826,12 +19866,12 @@ var DropdownMenuRadioGroup = t.forwardRef((props, forwardedRef) => {
 });
 DropdownMenuRadioGroup.displayName = RADIO_GROUP_NAME;
 var RADIO_ITEM_NAME = "DropdownMenuRadioItem";
-var DropdownMenuRadioItem = t.forwardRef((props, forwardedRef) => {
+var DropdownMenuRadioItem$1 = t.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...radioItemProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsx(RadioItem, { ...menuScope, ...radioItemProps, ref: forwardedRef });
 });
-DropdownMenuRadioItem.displayName = RADIO_ITEM_NAME;
+DropdownMenuRadioItem$1.displayName = RADIO_ITEM_NAME;
 var INDICATOR_NAME = "DropdownMenuItemIndicator";
 var DropdownMenuItemIndicator = t.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...itemIndicatorProps } = props;
@@ -19840,12 +19880,12 @@ var DropdownMenuItemIndicator = t.forwardRef((props, forwardedRef) => {
 });
 DropdownMenuItemIndicator.displayName = INDICATOR_NAME;
 var SEPARATOR_NAME = "DropdownMenuSeparator";
-var DropdownMenuSeparator = t.forwardRef((props, forwardedRef) => {
+var DropdownMenuSeparator$1 = t.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...separatorProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsx(Separator, { ...menuScope, ...separatorProps, ref: forwardedRef });
 });
-DropdownMenuSeparator.displayName = SEPARATOR_NAME;
+DropdownMenuSeparator$1.displayName = SEPARATOR_NAME;
 var ARROW_NAME = "DropdownMenuArrow";
 var DropdownMenuArrow = t.forwardRef(
   (props, forwardedRef) => {
@@ -19856,14 +19896,14 @@ var DropdownMenuArrow = t.forwardRef(
 );
 DropdownMenuArrow.displayName = ARROW_NAME;
 var SUB_TRIGGER_NAME = "DropdownMenuSubTrigger";
-var DropdownMenuSubTrigger = t.forwardRef((props, forwardedRef) => {
+var DropdownMenuSubTrigger$1 = t.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...subTriggerProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsx(SubTrigger, { ...menuScope, ...subTriggerProps, ref: forwardedRef });
 });
-DropdownMenuSubTrigger.displayName = SUB_TRIGGER_NAME;
+DropdownMenuSubTrigger$1.displayName = SUB_TRIGGER_NAME;
 var SUB_CONTENT_NAME = "DropdownMenuSubContent";
-var DropdownMenuSubContent = t.forwardRef((props, forwardedRef) => {
+var DropdownMenuSubContent$1 = t.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...subContentProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsx(
@@ -19886,84 +19926,137 @@ var DropdownMenuSubContent = t.forwardRef((props, forwardedRef) => {
     }
   );
 });
-DropdownMenuSubContent.displayName = SUB_CONTENT_NAME;
+DropdownMenuSubContent$1.displayName = SUB_CONTENT_NAME;
 var Root2 = DropdownMenu$1;
 var Trigger = DropdownMenuTrigger$1;
 var Portal2 = DropdownMenuPortal;
 var Content2 = DropdownMenuContent$1;
+var Label2 = DropdownMenuLabel$1;
 var Item2 = DropdownMenuItem$1;
+var CheckboxItem2 = DropdownMenuCheckboxItem$1;
+var RadioItem2 = DropdownMenuRadioItem$1;
+var ItemIndicator2 = DropdownMenuItemIndicator;
+var Separator2 = DropdownMenuSeparator$1;
+var SubTrigger2 = DropdownMenuSubTrigger$1;
+var SubContent2 = DropdownMenuSubContent$1;
 
-function DropdownMenu(_a) {
-  var props = __rest(_a, []);
-  return jsx(Root2, __assign({
-    "data-slot": "dropdown-menu"
+var DropdownMenu = Root2;
+var DropdownMenuTrigger = Trigger;
+var DropdownMenuSubTrigger = /*#__PURE__*/t.forwardRef(function (_a, ref) {
+  var className = _a.className,
+    inset = _a.inset,
+    children = _a.children,
+    props = __rest(_a, ["className", "inset", "children"]);
+  return jsxs(SubTrigger2, __assign({
+    ref: ref,
+    className: cn("focus:bg-accent data-[state=open]:bg-accent flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", inset && "pl-8", className)
+  }, props, {
+    children: [children, jsx(ChevronRight, {
+      className: "ml-auto"
+    })]
+  }));
+});
+DropdownMenuSubTrigger.displayName = SubTrigger2.displayName;
+var DropdownMenuSubContent = /*#__PURE__*/t.forwardRef(function (_a, ref) {
+  var className = _a.className,
+    props = __rest(_a, ["className"]);
+  return jsx(SubContent2, __assign({
+    ref: ref,
+    className: cn("bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-[--radix-dropdown-menu-content-transform-origin] overflow-hidden rounded-md border p-1 shadow-lg", className)
   }, props));
-}
-function DropdownMenuTrigger(_a) {
-  var props = __rest(_a, []);
-  return jsx(Trigger, __assign({
-    "data-slot": "dropdown-menu-trigger"
-  }, props));
-}
-function DropdownMenuContent(_a) {
+});
+DropdownMenuSubContent.displayName = SubContent2.displayName;
+var DropdownMenuContent = /*#__PURE__*/t.forwardRef(function (_a, ref) {
   var className = _a.className,
     _b = _a.sideOffset,
     sideOffset = _b === void 0 ? 4 : _b,
-    onPointerDown = _a.onPointerDown,
-    onPointerDownOutside = _a.onPointerDownOutside,
-    onCloseAutoFocus = _a.onCloseAutoFocus,
-    props = __rest(_a, ["className", "sideOffset", "onPointerDown", "onPointerDownOutside", "onCloseAutoFocus"]);
-  var isCloseFromMouse = t.useRef(false);
-  var handlePointerDown = t.useCallback(function (e) {
-    isCloseFromMouse.current = true;
-    onPointerDown === null || onPointerDown === void 0 ? void 0 : onPointerDown(e);
-  }, [onPointerDown]);
-  var handlePointerDownOutside = t.useCallback(function (e) {
-    isCloseFromMouse.current = true;
-    onPointerDownOutside === null || onPointerDownOutside === void 0 ? void 0 : onPointerDownOutside(e);
-  }, [onPointerDownOutside]);
-  var handleCloseAutoFocus = t.useCallback(function (e) {
-    if (onCloseAutoFocus) {
-      return onCloseAutoFocus(e);
-    }
-    if (!isCloseFromMouse.current) {
-      return;
-    }
-    e.preventDefault();
-    isCloseFromMouse.current = false;
-  }, [onCloseAutoFocus]);
+    props = __rest(_a, ["className", "sideOffset"]);
   return jsx(Portal2, {
     children: jsx(Content2, __assign({
-      "data-slot": "dropdown-menu-content",
+      ref: ref,
       sideOffset: sideOffset,
-      className: cn("bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-40 overflow-hidden rounded-md border p-1 shadow-lg", className),
-      onPointerDown: handlePointerDown,
-      onPointerDownOutside: handlePointerDownOutside,
-      onCloseAutoFocus: handleCloseAutoFocus
+      className: cn("bg-popover text-popover-foreground z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md", "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]", className)
     }, props))
   });
-}
-function DropdownMenuItem(_a) {
+});
+DropdownMenuContent.displayName = Content2.displayName;
+var DropdownMenuItem = /*#__PURE__*/t.forwardRef(function (_a, ref) {
   var className = _a.className,
     inset = _a.inset,
-    _b = _a.variant,
-    variant = _b === void 0 ? "default" : _b,
-    props = __rest(_a, ["className", "inset", "variant"]);
+    props = __rest(_a, ["className", "inset"]);
   return jsx(Item2, __assign({
-    "data-slot": "dropdown-menu-item",
-    "data-inset": inset,
-    "data-variant": variant,
-    className: cn("focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/40 data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:*:[svg]:!text-destructive-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0", className)
+    ref: ref,
+    className: cn("focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0", inset && "pl-8", className)
   }, props));
-}
-function DropdownMenuShortcut(_a) {
+});
+DropdownMenuItem.displayName = Item2.displayName;
+var DropdownMenuCheckboxItem = /*#__PURE__*/t.forwardRef(function (_a, ref) {
+  var className = _a.className,
+    children = _a.children,
+    checked = _a.checked,
+    props = __rest(_a, ["className", "children", "checked"]);
+  return jsxs(CheckboxItem2, __assign({
+    ref: ref,
+    className: cn("focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className),
+    checked: checked
+  }, props, {
+    children: [jsx("span", {
+      className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center",
+      children: jsx(ItemIndicator2, {
+        children: jsx(Check, {
+          className: "h-4 w-4"
+        })
+      })
+    }), children]
+  }));
+});
+DropdownMenuCheckboxItem.displayName = CheckboxItem2.displayName;
+var DropdownMenuRadioItem = /*#__PURE__*/t.forwardRef(function (_a, ref) {
+  var className = _a.className,
+    children = _a.children,
+    props = __rest(_a, ["className", "children"]);
+  return jsxs(RadioItem2, __assign({
+    ref: ref,
+    className: cn("focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className)
+  }, props, {
+    children: [jsx("span", {
+      className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center",
+      children: jsx(ItemIndicator2, {
+        children: jsx(Circle, {
+          className: "h-2 w-2 fill-current"
+        })
+      })
+    }), children]
+  }));
+});
+DropdownMenuRadioItem.displayName = RadioItem2.displayName;
+var DropdownMenuLabel = /*#__PURE__*/t.forwardRef(function (_a, ref) {
+  var className = _a.className,
+    inset = _a.inset,
+    props = __rest(_a, ["className", "inset"]);
+  return jsx(Label2, __assign({
+    ref: ref,
+    className: cn("px-2 py-1.5 text-sm font-semibold", inset && "pl-8", className)
+  }, props));
+});
+DropdownMenuLabel.displayName = Label2.displayName;
+var DropdownMenuSeparator = /*#__PURE__*/t.forwardRef(function (_a, ref) {
   var className = _a.className,
     props = __rest(_a, ["className"]);
-  return jsx("kbd", __assign({
-    "data-slot": "dropdown-menu-shortcut",
-    className: cn("bg-background text-muted-foreground/70 ms-auto -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium", className)
+  return jsx(Separator2, __assign({
+    ref: ref,
+    className: cn("bg-muted -mx-1 my-1 h-px", className)
   }, props));
-}
+});
+DropdownMenuSeparator.displayName = Separator2.displayName;
+var DropdownMenuShortcut = function (_a) {
+  var className = _a.className,
+    props = __rest(_a, ["className"]);
+  return jsx("span", __assign({
+    className: cn("ml-auto text-xs tracking-widest opacity-60", className)
+  }, props));
+};
+DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
 function WeekView(_a) {
   var currentDate = _a.currentDate,

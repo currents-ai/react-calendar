@@ -34,20 +34,20 @@ export default [
         tsconfig: "./tsconfig.json",
         exclude: ["**/node_modules/**", "**/dist/**"],
       }),
-      postcss({
-        config: {
-          path: "./postcss.config.cjs", // Create this file next
-        },
-        extensions: [".css"],
-        minimize: true,
-        inject: {
-          insertAt: "top",
-        },
-        plugins: [
-          tailwindcss(tailwindcssConfig), // Create this file next
-          autoprefixer,
-        ],
-      }),
+      // postcss({
+      //   config: {
+      //     path: "./postcss.config.cjs", // Create this file next
+      //   },
+      //   extensions: [".css"],
+      //   minimize: true,
+      //   inject: {
+      //     insertAt: "top",
+      //   },
+      //   plugins: [
+      //     tailwindcss(tailwindcssConfig), // Create this file next
+      //     autoprefixer,
+      //   ],
+      // }),
       babel({
         babelHelpers: "bundled",
         exclude: "node_modules/**",

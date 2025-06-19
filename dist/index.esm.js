@@ -2713,7 +2713,7 @@ function EventWrapper(_a) {
   var displayEnd = currentTime ? new Date(new Date(currentTime).getTime() + (new Date(event.end).getTime() - new Date(event.start).getTime())) : new Date(event.end);
   var isEventInPast = isPast(displayEnd);
   return jsx("button", __assign({
-    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 flex h-full w-full overflow-hidden px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] data-dragging:cursor-grabbing data-dragging:shadow-lg data-past-event:line-through sm:px-2", getEventColorClasses(event.color), getBorderRadiusClasses(isFirstDay, isLastDay), className),
+    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] data-dragging:cursor-grabbing data-dragging:shadow-lg data-past-event:line-through sm:px-2", getEventColorClasses(event.color), getBorderRadiusClasses(isFirstDay, isLastDay), className),
     "data-dragging": isDragging || undefined,
     "data-past-event": isEventInPast || undefined,
     onClick: onClick,
@@ -2768,14 +2768,13 @@ function EventItem(_a) {
       isLastDay: isLastDay,
       isDragging: isDragging,
       onClick: onClick,
-      className: cn("mt-[var(--event-gap)] h-[var(--event-height)] items-center text-[10px] sm:text-xs", className),
+      className: cn("mt-[var(--event-gap)] h-full py-0.5 items-center text-[10px] sm:text-xs", className),
       currentTime: currentTime,
       dndListeners: dndListeners,
       dndAttributes: dndAttributes,
       onMouseDown: onMouseDown,
       onTouchStart: onTouchStart,
       children: children || jsxs("span", {
-        className: "truncate",
         children: [!event.allDay && jsxs("span", {
           className: "truncate font-normal opacity-70 sm:text-[11px]",
           children: [formatTimeWithOptionalMinutes(displayStart), " "]

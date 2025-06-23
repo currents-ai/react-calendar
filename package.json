@@ -34,7 +34,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.2.3",
     "@remixicon/react": "^4.2.0",
-    "react-day-picker": "9.6.4",
+    "react-day-picker": "9.7.0",
     "class-variance-authority": "^0.7.1"
   },
   "devDependencies": {

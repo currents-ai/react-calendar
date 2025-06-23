@@ -55,15 +55,6 @@ interface DroppableCellProps {
 }
 declare function DroppableCell({ id, date, time, children, className, onClick, }: DroppableCellProps): react_jsx_runtime.JSX.Element;
 
-interface EventDialogProps {
-    event: CalendarEvent | null;
-    isOpen: boolean;
-    onClose: () => void;
-    onSave: (event: CalendarEvent) => void;
-    onDelete: (eventId: string) => void;
-}
-declare function EventDialog({ event, isOpen, onClose, onSave, onDelete, }: EventDialogProps): react_jsx_runtime.JSX.Element;
-
 interface EventItemProps {
     event: CalendarEvent;
     view: "month" | "week" | "day" | "agenda";
@@ -81,18 +72,6 @@ interface EventItemProps {
     onTouchStart?: (e: React.TouchEvent) => void;
 }
 declare function EventItem({ event, view, isDragging, onClick, showTime, currentTime, isFirstDay, isLastDay, children, className, dndListeners, dndAttributes, onMouseDown, onTouchStart, }: EventItemProps): react_jsx_runtime.JSX.Element;
-
-interface EventsPopupProps {
-    date: Date;
-    events: CalendarEvent[];
-    position: {
-        top: number;
-        left: number;
-    };
-    onClose: () => void;
-    onEventSelect: (event: CalendarEvent) => void;
-}
-declare function EventsPopup({ date, events, position, onClose, onEventSelect, }: EventsPopupProps): react_jsx_runtime.JSX.Element;
 
 interface EventCalendarProps {
     events?: CalendarEvent[];
@@ -214,5 +193,5 @@ interface EventVisibilityResult {
  */
 declare function useEventVisibility({ eventHeight, eventGap, }: EventVisibilityOptions): EventVisibilityResult;
 
-export { AgendaDaysToShow, AgendaView, CalendarDndProvider, DayView, DefaultEndHour, DefaultStartHour, DraggableEvent, DroppableCell, EndHour, EventCalendar, EventDialog, EventGap, EventHeight, EventItem, EventsPopup, MonthView, StartHour, WeekCellsHeight, WeekView, getAgendaEventsForDay, getAllEventsForDay, getBorderRadiusClasses, getEventColorClasses, getEventsForDay, getSpanningEventsForDay, isMultiDayEvent, sortEvents, useCalendarDnd, useCurrentTimeIndicator, useEventVisibility };
+export { AgendaDaysToShow, AgendaView, CalendarDndProvider, DayView, DefaultEndHour, DefaultStartHour, DraggableEvent, DroppableCell, EndHour, EventCalendar, EventGap, EventHeight, EventItem, MonthView, StartHour, WeekCellsHeight, WeekView, getAgendaEventsForDay, getAllEventsForDay, getBorderRadiusClasses, getEventColorClasses, getEventsForDay, getSpanningEventsForDay, isMultiDayEvent, sortEvents, useCalendarDnd, useCurrentTimeIndicator, useEventVisibility };
 export type { CalendarEvent, CalendarView, EventColor };

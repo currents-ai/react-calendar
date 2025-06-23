@@ -7,16 +7,10 @@ var dateFns = require('date-fns');
 var tailwindMerge = require('tailwind-merge');
 var core = require('@dnd-kit/core');
 var utilities = require('@dnd-kit/utilities');
+var lucideReact = require('lucide-react');
+var PopoverPrimitive = require('@radix-ui/react-popover');
 var reactSlot = require('@radix-ui/react-slot');
 var classVarianceAuthority = require('class-variance-authority');
-var lucideReact = require('lucide-react');
-var reactDayPicker = require('react-day-picker');
-var CheckboxPrimitive = require('@radix-ui/react-checkbox');
-var DialogPrimitive = require('@radix-ui/react-dialog');
-var LabelPrimitive = require('@radix-ui/react-label');
-var PopoverPrimitive = require('@radix-ui/react-popover');
-var RadioGroupPrimitive = require('@radix-ui/react-radio-group');
-var SelectPrimitive = require('@radix-ui/react-select');
 var DropdownMenuPrimitive = require('@radix-ui/react-dropdown-menu');
 
 function _interopNamespaceDefault(e) {
@@ -37,12 +31,7 @@ function _interopNamespaceDefault(e) {
 }
 
 var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React);
-var CheckboxPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(CheckboxPrimitive);
-var DialogPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(DialogPrimitive);
-var LabelPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(LabelPrimitive);
 var PopoverPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(PopoverPrimitive);
-var RadioGroupPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(RadioGroupPrimitive);
-var SelectPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(SelectPrimitive);
 var DropdownMenuPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(DropdownMenuPrimitive);
 
 var EventHeight = 24;
@@ -1104,943 +1093,6 @@ function DayView(_a) {
   });
 }
 
-var buttonVariants = classVarianceAuthority.cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]", {
-  variants: {
-    variant: {
-      default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
-      destructive: "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
-      outline: "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
-      secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-      ghost: "hover:bg-accent hover:text-accent-foreground",
-      link: "text-primary underline-offset-4 hover:underline"
-    },
-    size: {
-      default: "h-9 px-3 py-2",
-      sm: "h-8 rounded-md px-3 text-xs",
-      lg: "h-10 rounded-md px-8",
-      icon: "size-9"
-    }
-  },
-  defaultVariants: {
-    variant: "default",
-    size: "default"
-  }
-});
-function Button(_a) {
-  var className = _a.className,
-    variant = _a.variant,
-    size = _a.size,
-    _b = _a.asChild,
-    asChild = _b === void 0 ? false : _b,
-    props = __rest(_a, ["className", "variant", "size", "asChild"]);
-  var Comp = asChild ? reactSlot.Slot : "button";
-  return jsxRuntime.jsx(Comp, __assign({
-    "data-slot": "button",
-    className: cn(buttonVariants({
-      variant: variant,
-      size: size,
-      className: className
-    }))
-  }, props));
-}
-
-function Calendar(_a) {
-  var className = _a.className,
-    classNames = _a.classNames,
-    _b = _a.showOutsideDays,
-    showOutsideDays = _b === void 0 ? true : _b,
-    userComponents = _a.components,
-    props = __rest(_a, ["className", "classNames", "showOutsideDays", "components"]);
-  var defaultClassNames = {
-    months: "relative flex flex-col sm:flex-row gap-4",
-    month: "w-full",
-    month_caption: "relative mx-10 mb-1 flex h-9 items-center justify-center z-20",
-    caption_label: "text-sm font-medium",
-    nav: "absolute top-0 flex w-full justify-between z-10",
-    button_previous: cn(buttonVariants({
-      variant: "ghost"
-    }), "size-9 text-muted-foreground/80 hover:text-foreground p-0"),
-    button_next: cn(buttonVariants({
-      variant: "ghost"
-    }), "size-9 text-muted-foreground/80 hover:text-foreground p-0"),
-    weekday: "size-9 p-0 text-xs font-medium text-muted-foreground/80",
-    day_button: "relative flex size-9 items-center justify-center whitespace-nowrap rounded-md p-0 text-foreground group-[[data-selected]:not(.range-middle)]:[transition-property:color,background-color,border-radius,box-shadow] group-[[data-selected]:not(.range-middle)]:duration-150 group-data-disabled:pointer-events-none focus-visible:z-10 hover:not-in-data-selected:bg-accent group-data-selected:bg-primary hover:not-in-data-selected:text-foreground group-data-selected:text-primary-foreground group-data-disabled:text-foreground/30 group-data-disabled:line-through group-data-outside:text-foreground/30 group-data-selected:group-data-outside:text-primary-foreground outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] group-[.range-start:not(.range-end)]:rounded-e-none group-[.range-end:not(.range-start)]:rounded-s-none group-[.range-middle]:rounded-none group-[.range-middle]:group-data-selected:bg-accent group-[.range-middle]:group-data-selected:text-foreground",
-    day: "group size-9 px-0 py-px text-sm",
-    range_start: "range-start",
-    range_end: "range-end",
-    range_middle: "range-middle",
-    today: "*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-10 *:after:size-[3px] *:after:-translate-x-1/2 *:after:rounded-full *:after:bg-primary [&[data-selected]:not(.range-middle)>*]:after:bg-background [&[data-disabled]>*]:after:bg-foreground/30 *:after:transition-colors",
-    outside: "text-muted-foreground data-selected:bg-accent/50 data-selected:text-muted-foreground",
-    hidden: "invisible",
-    week_number: "size-9 p-0 text-xs font-medium text-muted-foreground/80"
-  };
-  var mergedClassNames = Object.keys(defaultClassNames).reduce(function (acc, key) {
-    var _a;
-    return __assign(__assign({}, acc), (_a = {}, _a[key] = (classNames === null || classNames === void 0 ? void 0 : classNames[key]) ? cn(defaultClassNames[key], classNames[key]) : defaultClassNames[key], _a));
-  }, {});
-  var defaultComponents = {
-    Chevron: function (props) {
-      if (props.orientation === "left") {
-        return jsxRuntime.jsx(lucideReact.ChevronLeftIcon, __assign({
-          size: 16
-        }, props, {
-          "aria-hidden": "true"
-        }));
-      }
-      return jsxRuntime.jsx(lucideReact.ChevronRightIcon, __assign({
-        size: 16
-      }, props, {
-        "aria-hidden": "true"
-      }));
-    }
-  };
-  var mergedComponents = __assign(__assign({}, defaultComponents), userComponents);
-  return jsxRuntime.jsx(reactDayPicker.DayPicker, __assign({
-    showOutsideDays: showOutsideDays,
-    className: cn("w-fit", className),
-    classNames: mergedClassNames,
-    components: mergedComponents
-  }, props));
-}
-
-function Checkbox(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(CheckboxPrimitive__namespace.Root, __assign({
-    "data-slot": "checkbox",
-    className: cn("peer border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-500", className)
-  }, props, {
-    children: jsxRuntime.jsx(CheckboxPrimitive__namespace.Indicator, {
-      "data-slot": "checkbox-indicator",
-      className: "grid place-content-center text-current",
-      children: props.checked === "indeterminate" ? jsxRuntime.jsx("svg", {
-        width: "9",
-        height: "9",
-        viewBox: "0 0 9 9",
-        fill: "currentcolor",
-        xmlns: "http://www.w3.org/2000/svg",
-        children: jsxRuntime.jsx("path", {
-          fillRule: "evenodd",
-          clipRule: "evenodd",
-          d: "M0.75 4.5C0.75 4.08579 1.08579 3.75 1.5 3.75H7.5C7.91421 3.75 8.25 4.08579 8.25 4.5C8.25 4.91421 7.91421 5.25 7.5 5.25H1.5C1.08579 5.25 0.75 4.91421 0.75 4.5Z"
-        })
-      }) : jsxRuntime.jsx("svg", {
-        width: "9",
-        height: "9",
-        viewBox: "0 0 9 9",
-        fill: "currentcolor",
-        xmlns: "http://www.w3.org/2000/svg",
-        children: jsxRuntime.jsx("path", {
-          fillRule: "evenodd",
-          clipRule: "evenodd",
-          d: "M8.53547 0.62293C8.88226 0.849446 8.97976 1.3142 8.75325 1.66099L4.5083 8.1599C4.38833 8.34356 4.19397 8.4655 3.9764 8.49358C3.75883 8.52167 3.53987 8.45309 3.3772 8.30591L0.616113 5.80777C0.308959 5.52987 0.285246 5.05559 0.563148 4.74844C0.84105 4.44128 1.31533 4.41757 1.62249 4.69547L3.73256 6.60459L7.49741 0.840706C7.72393 0.493916 8.18868 0.396414 8.53547 0.62293Z"
-        })
-      })
-    })
-  }));
-}
-
-function Dialog(_a) {
-  var props = __rest(_a, []);
-  return jsxRuntime.jsx(DialogPrimitive__namespace.Root, __assign({
-    "data-slot": "dialog"
-  }, props));
-}
-function DialogPortal(_a) {
-  var props = __rest(_a, []);
-  return jsxRuntime.jsx(DialogPrimitive__namespace.Portal, __assign({
-    "data-slot": "dialog-portal"
-  }, props));
-}
-function DialogOverlay(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(DialogPrimitive__namespace.Overlay, __assign({
-    "data-slot": "dialog-overlay",
-    className: cn("data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80", className)
-  }, props));
-}
-function DialogContent(_a) {
-  var className = _a.className,
-    children = _a.children,
-    props = __rest(_a, ["className", "children"]);
-  return jsxRuntime.jsxs(DialogPortal, {
-    children: [jsxRuntime.jsx(DialogOverlay, {}), jsxRuntime.jsxs(DialogPrimitive__namespace.Content, __assign({
-      "data-slot": "dialog-content",
-      className: cn("bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-1/2 left-1/2 z-50 grid max-h-[calc(100%-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-xl border p-6 shadow-lg duration-200 sm:max-w-100", className)
-    }, props, {
-      children: [children, jsxRuntime.jsxs(DialogPrimitive__namespace.Close, {
-        className: "group focus-visible:border-ring focus-visible:ring-ring/50 absolute top-3 right-3 flex size-7 items-center justify-center rounded transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:pointer-events-none",
-        children: [jsxRuntime.jsx(lucideReact.XIcon, {
-          size: 16,
-          className: "opacity-60 transition-opacity group-hover:opacity-100"
-        }), jsxRuntime.jsx("span", {
-          className: "sr-only",
-          children: "Close"
-        })]
-      })]
-    }))]
-  });
-}
-function DialogHeader(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx("div", __assign({
-    "data-slot": "alert-dialog-header",
-    className: cn("flex flex-col gap-1 text-center sm:text-left", className)
-  }, props));
-}
-function DialogFooter(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx("div", __assign({
-    "data-slot": "alert-dialog-footer",
-    className: cn("flex flex-col-reverse gap-3 sm:flex-row sm:justify-end", className)
-  }, props));
-}
-function DialogTitle(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(DialogPrimitive__namespace.Title, __assign({
-    "data-slot": "alert-dialog-title",
-    className: cn("text-lg leading-none font-semibold", className)
-  }, props));
-}
-function DialogDescription(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(DialogPrimitive__namespace.Description, __assign({
-    "data-slot": "alert-dialog-description",
-    className: cn("text-muted-foreground text-sm", className)
-  }, props));
-}
-
-function Input(_a) {
-  var className = _a.className,
-    type = _a.type,
-    props = __rest(_a, ["className", "type"]);
-  return jsxRuntime.jsx("input", __assign({
-    type: type,
-    "data-slot": "input",
-    className: cn("border-input file:text-foreground placeholder:text-muted-foreground/70 flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50", "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]", "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive", type === "search" && "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none", type === "file" && "text-muted-foreground/70 file:border-input file:text-foreground p-0 pr-3 italic file:me-3 file:h-full file:border-0 file:border-r file:border-solid file:bg-transparent file:px-3 file:text-sm file:font-medium file:not-italic", className)
-  }, props));
-}
-
-function Label(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(LabelPrimitive__namespace.Root, __assign({
-    "data-slot": "label",
-    className: cn("text-foreground text-sm leading-4 font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50", className)
-  }, props));
-}
-
-function Popover(_a) {
-  var props = __rest(_a, []);
-  return jsxRuntime.jsx(PopoverPrimitive__namespace.Root, __assign({
-    "data-slot": "popover"
-  }, props));
-}
-function PopoverTrigger(_a) {
-  var props = __rest(_a, []);
-  return jsxRuntime.jsx(PopoverPrimitive__namespace.Trigger, __assign({
-    "data-slot": "popover-trigger"
-  }, props));
-}
-function PopoverContent(_a) {
-  var className = _a.className,
-    _b = _a.align,
-    align = _b === void 0 ? "center" : _b,
-    _c = _a.sideOffset,
-    sideOffset = _c === void 0 ? 4 : _c,
-    _d = _a.showArrow,
-    showArrow = _d === void 0 ? false : _d,
-    props = __rest(_a, ["className", "align", "sideOffset", "showArrow"]);
-  return jsxRuntime.jsx(PopoverPrimitive__namespace.Portal, {
-    children: jsxRuntime.jsxs(PopoverPrimitive__namespace.Content, __assign({
-      "data-slot": "popover-content",
-      align: align,
-      sideOffset: sideOffset,
-      className: cn("bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 rounded-md border p-4 shadow-md outline-hidden", className)
-    }, props, {
-      children: [props.children, showArrow && jsxRuntime.jsx(PopoverPrimitive__namespace.Arrow, {
-        className: "fill-popover -my-px drop-shadow-[0_1px_0_hsl(var(--border))]"
-      })]
-    }))
-  });
-}
-
-function RadioGroup(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(RadioGroupPrimitive__namespace.Root, __assign({
-    "data-slot": "radio-group",
-    className: cn("grid gap-3", className)
-  }, props));
-}
-function RadioGroupItem(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(RadioGroupPrimitive__namespace.Item, __assign({
-    "data-slot": "radio-group-item",
-    className: cn("border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50", className)
-  }, props, {
-    children: jsxRuntime.jsx(RadioGroupPrimitive__namespace.Indicator, {
-      className: "flex items-center justify-center text-current",
-      children: jsxRuntime.jsx("svg", {
-        width: "6",
-        height: "6",
-        viewBox: "0 0 6 6",
-        fill: "currentcolor",
-        xmlns: "http://www.w3.org/2000/svg",
-        children: jsxRuntime.jsx("circle", {
-          cx: "3",
-          cy: "3",
-          r: "3"
-        })
-      })
-    })
-  }));
-}
-
-function Select(_a) {
-  var props = __rest(_a, []);
-  return jsxRuntime.jsx(SelectPrimitive__namespace.Root, __assign({
-    "data-slot": "select"
-  }, props));
-}
-function SelectValue(_a) {
-  var props = __rest(_a, []);
-  return jsxRuntime.jsx(SelectPrimitive__namespace.Value, __assign({
-    "data-slot": "select-value"
-  }, props));
-}
-function SelectTrigger(_a) {
-  var className = _a.className,
-    children = _a.children,
-    props = __rest(_a, ["className", "children"]);
-  return jsxRuntime.jsxs(SelectPrimitive__namespace.Trigger, __assign({
-    "data-slot": "select-trigger",
-    className: cn("border-input text-foreground data-[placeholder]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&>span]:line-clamp-1", className)
-  }, props, {
-    children: [children, jsxRuntime.jsx(SelectPrimitive__namespace.Icon, {
-      asChild: true,
-      children: jsxRuntime.jsx(lucideReact.ChevronDownIcon, {
-        size: 16,
-        className: "text-muted-foreground/80 in-aria-invalid:text-destructive/80 shrink-0"
-      })
-    })]
-  }));
-}
-function SelectContent(_a) {
-  var className = _a.className,
-    children = _a.children,
-    _b = _a.position,
-    position = _b === void 0 ? "popper" : _b,
-    props = __rest(_a, ["className", "children", "position"]);
-  return jsxRuntime.jsx(SelectPrimitive__namespace.Portal, {
-    children: jsxRuntime.jsxs(SelectPrimitive__namespace.Content, __assign({
-      "data-slot": "select-content",
-      className: cn("border-input bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-[min(24rem,var(--radix-select-content-available-height))] min-w-32 overflow-hidden rounded-md border shadow-lg [&_[role=group]]:py-1", position === "popper" && "w-full min-w-[var(--radix-select-trigger-width)] data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1", className),
-      position: position
-    }, props, {
-      children: [jsxRuntime.jsx(SelectScrollUpButton, {}), jsxRuntime.jsx(SelectPrimitive__namespace.Viewport, {
-        className: cn("p-1", position === "popper" && "h-[var(--radix-select-trigger-height)]"),
-        children: children
-      }), jsxRuntime.jsx(SelectScrollDownButton, {})]
-    }))
-  });
-}
-function SelectItem(_a) {
-  var className = _a.className,
-    children = _a.children,
-    props = __rest(_a, ["className", "children"]);
-  return jsxRuntime.jsxs(SelectPrimitive__namespace.Item, __assign({
-    "data-slot": "select-item",
-    className: cn("focus:bg-accent focus:text-accent-foreground relative flex w-full cursor-default items-center rounded py-1.5 ps-8 pe-2 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50", className)
-  }, props, {
-    children: [jsxRuntime.jsx("span", {
-      className: "absolute start-2 flex size-3.5 items-center justify-center",
-      children: jsxRuntime.jsx(SelectPrimitive__namespace.ItemIndicator, {
-        children: jsxRuntime.jsx(lucideReact.CheckIcon, {
-          size: 16
-        })
-      })
-    }), jsxRuntime.jsx(SelectPrimitive__namespace.ItemText, {
-      children: children
-    })]
-  }));
-}
-function SelectScrollUpButton(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(SelectPrimitive__namespace.ScrollUpButton, __assign({
-    "data-slot": "select-scroll-up-button",
-    className: cn("text-muted-foreground/80 flex cursor-default items-center justify-center py-1", className)
-  }, props, {
-    children: jsxRuntime.jsx(lucideReact.ChevronUpIcon, {
-      size: 16
-    })
-  }));
-}
-function SelectScrollDownButton(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx(SelectPrimitive__namespace.ScrollDownButton, __assign({
-    "data-slot": "select-scroll-down-button",
-    className: cn("text-muted-foreground/80 flex cursor-default items-center justify-center py-1", className)
-  }, props, {
-    children: jsxRuntime.jsx(lucideReact.ChevronDownIcon, {
-      size: 16
-    })
-  }));
-}
-
-function Textarea(_a) {
-  var className = _a.className,
-    props = __rest(_a, ["className"]);
-  return jsxRuntime.jsx("textarea", __assign({
-    "data-slot": "textarea",
-    className: cn("border-input placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex min-h-19.5 w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50", className)
-  }, props));
-}
-Textarea.displayName = "Textarea";
-
-function EventDialog(_a) {
-  var _b;
-  var event = _a.event,
-    isOpen = _a.isOpen,
-    onClose = _a.onClose,
-    onSave = _a.onSave,
-    onDelete = _a.onDelete;
-  var _c = React.useState(""),
-    title = _c[0],
-    setTitle = _c[1];
-  var _d = React.useState(""),
-    description = _d[0],
-    setDescription = _d[1];
-  var _e = React.useState(new Date()),
-    startDate = _e[0],
-    setStartDate = _e[1];
-  var _f = React.useState(new Date()),
-    endDate = _f[0],
-    setEndDate = _f[1];
-  var _g = React.useState("".concat(DefaultStartHour, ":00")),
-    startTime = _g[0],
-    setStartTime = _g[1];
-  var _h = React.useState("".concat(DefaultEndHour, ":00")),
-    endTime = _h[0],
-    setEndTime = _h[1];
-  var _j = React.useState(false),
-    allDay = _j[0],
-    setAllDay = _j[1];
-  var _k = React.useState(""),
-    location = _k[0],
-    setLocation = _k[1];
-  var _l = React.useState("sky"),
-    color = _l[0],
-    setColor = _l[1];
-  var _m = React.useState(null),
-    error = _m[0],
-    setError = _m[1];
-  var _o = React.useState(false),
-    startDateOpen = _o[0],
-    setStartDateOpen = _o[1];
-  var _p = React.useState(false),
-    endDateOpen = _p[0],
-    setEndDateOpen = _p[1];
-  // Debug log to check what event is being passed
-  React.useEffect(function () {
-    console.log("EventDialog received event:", event);
-  }, [event]);
-  React.useEffect(function () {
-    if (event) {
-      setTitle(event.title || "");
-      setDescription(event.description || "");
-      var start = new Date(event.start);
-      var end = new Date(event.end);
-      setStartDate(start);
-      setEndDate(end);
-      setStartTime(formatTimeForInput(start));
-      setEndTime(formatTimeForInput(end));
-      setAllDay(event.allDay || false);
-      setLocation(event.location || "");
-      setColor(event.color || "sky");
-      setError(null); // Reset error when opening dialog
-    } else {
-      resetForm();
-    }
-  }, [event]);
-  var resetForm = function () {
-    setTitle("");
-    setDescription("");
-    setStartDate(new Date());
-    setEndDate(new Date());
-    setStartTime("".concat(DefaultStartHour, ":00"));
-    setEndTime("".concat(DefaultEndHour, ":00"));
-    setAllDay(false);
-    setLocation("");
-    setColor("sky");
-    setError(null);
-  };
-  var formatTimeForInput = function (date) {
-    var hours = date.getHours().toString().padStart(2, "0");
-    var minutes = Math.floor(date.getMinutes() / 15) * 15;
-    return "".concat(hours, ":").concat(minutes.toString().padStart(2, "0"));
-  };
-  // Memoize time options so they're only calculated once
-  var timeOptions = React.useMemo(function () {
-    var options = [];
-    for (var hour = StartHour; hour <= EndHour; hour++) {
-      for (var minute = 0; minute < 60; minute += 15) {
-        var formattedHour = hour.toString().padStart(2, "0");
-        var formattedMinute = minute.toString().padStart(2, "0");
-        var value = "".concat(formattedHour, ":").concat(formattedMinute);
-        // Use a fixed date to avoid unnecessary date object creations
-        var date = new Date(2000, 0, 1, hour, minute);
-        var label = dateFns.format(date, "h:mm a");
-        options.push({
-          value: value,
-          label: label
-        });
-      }
-    }
-    return options;
-  }, []); // Empty dependency array ensures this only runs once
-  var handleSave = function () {
-    var start = new Date(startDate);
-    var end = new Date(endDate);
-    if (!allDay) {
-      var _a = startTime.split(":").map(Number),
-        _b = _a[0],
-        startHours = _b === void 0 ? 0 : _b,
-        _c = _a[1],
-        startMinutes = _c === void 0 ? 0 : _c;
-      var _d = endTime.split(":").map(Number),
-        _e = _d[0],
-        endHours = _e === void 0 ? 0 : _e,
-        _f = _d[1],
-        endMinutes = _f === void 0 ? 0 : _f;
-      if (startHours < StartHour || startHours > EndHour || endHours < StartHour || endHours > EndHour) {
-        setError("Selected time must be between ".concat(StartHour, ":00 and ").concat(EndHour, ":00"));
-        return;
-      }
-      start.setHours(startHours, startMinutes, 0);
-      end.setHours(endHours, endMinutes, 0);
-    } else {
-      start.setHours(0, 0, 0, 0);
-      end.setHours(23, 59, 59, 999);
-    }
-    // Validate that end date is not before start date
-    if (dateFns.isBefore(end, start)) {
-      setError("End date cannot be before start date");
-      return;
-    }
-    // Use generic title if empty
-    var eventTitle = title.trim() ? title : "(no title)";
-    onSave({
-      id: (event === null || event === void 0 ? void 0 : event.id) || "",
-      title: eventTitle,
-      description: description,
-      start: start,
-      end: end,
-      allDay: allDay,
-      location: location,
-      color: color
-    });
-  };
-  var handleDelete = function () {
-    if (event === null || event === void 0 ? void 0 : event.id) {
-      onDelete(event.id);
-    }
-  };
-  // Updated color options to match types.ts
-  var colorOptions = [{
-    value: "sky",
-    label: "Sky",
-    bgClass: "bg-sky-400 data-[state=checked]:bg-sky-400",
-    borderClass: "border-sky-400 data-[state=checked]:border-sky-400"
-  }, {
-    value: "amber",
-    label: "Amber",
-    bgClass: "bg-amber-400 data-[state=checked]:bg-amber-400",
-    borderClass: "border-amber-400 data-[state=checked]:border-amber-400"
-  }, {
-    value: "violet",
-    label: "Violet",
-    bgClass: "bg-violet-400 data-[state=checked]:bg-violet-400",
-    borderClass: "border-violet-400 data-[state=checked]:border-violet-400"
-  }, {
-    value: "rose",
-    label: "Rose",
-    bgClass: "bg-rose-400 data-[state=checked]:bg-rose-400",
-    borderClass: "border-rose-400 data-[state=checked]:border-rose-400"
-  }, {
-    value: "emerald",
-    label: "Emerald",
-    bgClass: "bg-emerald-400 data-[state=checked]:bg-emerald-400",
-    borderClass: "border-emerald-400 data-[state=checked]:border-emerald-400"
-  }, {
-    value: "orange",
-    label: "Orange",
-    bgClass: "bg-orange-400 data-[state=checked]:bg-orange-400",
-    borderClass: "border-orange-400 data-[state=checked]:border-orange-400"
-  }];
-  return jsxRuntime.jsx(Dialog, {
-    open: isOpen,
-    onOpenChange: function (open) {
-      return !open && onClose();
-    },
-    children: jsxRuntime.jsxs(DialogContent, {
-      className: "sm:max-w-[425px]",
-      children: [jsxRuntime.jsxs(DialogHeader, {
-        children: [jsxRuntime.jsx(DialogTitle, {
-          children: (event === null || event === void 0 ? void 0 : event.id) ? "Edit Event" : "Create Event"
-        }), jsxRuntime.jsx(DialogDescription, {
-          className: "sr-only",
-          children: (event === null || event === void 0 ? void 0 : event.id) ? "Edit the details of this event" : "Add a new event to your calendar"
-        })]
-      }), error && jsxRuntime.jsx("div", {
-        className: "bg-destructive/15 text-destructive rounded-md px-3 py-2 text-sm",
-        children: error
-      }), jsxRuntime.jsxs("div", {
-        className: "grid gap-4 py-4",
-        children: [jsxRuntime.jsxs("div", {
-          className: "*:not-first:mt-1.5",
-          children: [jsxRuntime.jsx(Label, {
-            htmlFor: "title",
-            children: "Title"
-          }), jsxRuntime.jsx(Input, {
-            id: "title",
-            value: title,
-            onChange: function (e) {
-              return setTitle(e.target.value);
-            }
-          })]
-        }), jsxRuntime.jsxs("div", {
-          className: "*:not-first:mt-1.5",
-          children: [jsxRuntime.jsx(Label, {
-            htmlFor: "description",
-            children: "Description"
-          }), jsxRuntime.jsx(Textarea, {
-            id: "description",
-            value: description,
-            onChange: function (e) {
-              return setDescription(e.target.value);
-            },
-            rows: 3
-          })]
-        }), jsxRuntime.jsxs("div", {
-          className: "flex gap-4",
-          children: [jsxRuntime.jsxs("div", {
-            className: "flex-1 *:not-first:mt-1.5",
-            children: [jsxRuntime.jsx(Label, {
-              htmlFor: "start-date",
-              children: "Start Date"
-            }), jsxRuntime.jsxs(Popover, {
-              open: startDateOpen,
-              onOpenChange: setStartDateOpen,
-              children: [jsxRuntime.jsx(PopoverTrigger, {
-                asChild: true,
-                children: jsxRuntime.jsxs(Button, {
-                  id: "start-date",
-                  variant: "outline",
-                  className: cn("group bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]", !startDate && "text-muted-foreground"),
-                  children: [jsxRuntime.jsx("span", {
-                    className: cn("truncate", !startDate && "text-muted-foreground"),
-                    children: startDate ? dateFns.format(startDate, "PPP") : "Pick a date"
-                  }), jsxRuntime.jsx(react.RiCalendarLine, {
-                    size: 16,
-                    className: "text-muted-foreground/80 shrink-0",
-                    "aria-hidden": "true"
-                  })]
-                })
-              }), jsxRuntime.jsx(PopoverContent, {
-                className: "w-auto p-2",
-                align: "start",
-                children: jsxRuntime.jsx(Calendar, {
-                  mode: "single",
-                  selected: startDate,
-                  defaultMonth: startDate,
-                  onSelect: function (date) {
-                    if (date) {
-                      setStartDate(date);
-                      // If end date is before the new start date, update it to match the start date
-                      if (dateFns.isBefore(endDate, date)) {
-                        setEndDate(date);
-                      }
-                      setError(null);
-                      setStartDateOpen(false);
-                    }
-                  }
-                })
-              })]
-            })]
-          }), !allDay && jsxRuntime.jsxs("div", {
-            className: "min-w-28 *:not-first:mt-1.5",
-            children: [jsxRuntime.jsx(Label, {
-              htmlFor: "start-time",
-              children: "Start Time"
-            }), jsxRuntime.jsxs(Select, {
-              value: startTime,
-              onValueChange: setStartTime,
-              children: [jsxRuntime.jsx(SelectTrigger, {
-                id: "start-time",
-                children: jsxRuntime.jsx(SelectValue, {
-                  placeholder: "Select time"
-                })
-              }), jsxRuntime.jsx(SelectContent, {
-                children: timeOptions.map(function (option) {
-                  return jsxRuntime.jsx(SelectItem, {
-                    value: option.value,
-                    children: option.label
-                  }, option.value);
-                })
-              })]
-            })]
-          })]
-        }), jsxRuntime.jsxs("div", {
-          className: "flex gap-4",
-          children: [jsxRuntime.jsxs("div", {
-            className: "flex-1 *:not-first:mt-1.5",
-            children: [jsxRuntime.jsx(Label, {
-              htmlFor: "end-date",
-              children: "End Date"
-            }), jsxRuntime.jsxs(Popover, {
-              open: endDateOpen,
-              onOpenChange: setEndDateOpen,
-              children: [jsxRuntime.jsx(PopoverTrigger, {
-                asChild: true,
-                children: jsxRuntime.jsxs(Button, {
-                  id: "end-date",
-                  variant: "outline",
-                  className: cn("group bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]", !endDate && "text-muted-foreground"),
-                  children: [jsxRuntime.jsx("span", {
-                    className: cn("truncate", !endDate && "text-muted-foreground"),
-                    children: endDate ? dateFns.format(endDate, "PPP") : "Pick a date"
-                  }), jsxRuntime.jsx(react.RiCalendarLine, {
-                    size: 16,
-                    className: "text-muted-foreground/80 shrink-0",
-                    "aria-hidden": "true"
-                  })]
-                })
-              }), jsxRuntime.jsx(PopoverContent, {
-                className: "w-auto p-2",
-                align: "start",
-                children: jsxRuntime.jsx(Calendar, {
-                  mode: "single",
-                  selected: endDate,
-                  defaultMonth: endDate,
-                  disabled: {
-                    before: startDate
-                  },
-                  onSelect: function (date) {
-                    if (date) {
-                      setEndDate(date);
-                      setError(null);
-                      setEndDateOpen(false);
-                    }
-                  }
-                })
-              })]
-            })]
-          }), !allDay && jsxRuntime.jsxs("div", {
-            className: "min-w-28 *:not-first:mt-1.5",
-            children: [jsxRuntime.jsx(Label, {
-              htmlFor: "end-time",
-              children: "End Time"
-            }), jsxRuntime.jsxs(Select, {
-              value: endTime,
-              onValueChange: setEndTime,
-              children: [jsxRuntime.jsx(SelectTrigger, {
-                id: "end-time",
-                children: jsxRuntime.jsx(SelectValue, {
-                  placeholder: "Select time"
-                })
-              }), jsxRuntime.jsx(SelectContent, {
-                children: timeOptions.map(function (option) {
-                  return jsxRuntime.jsx(SelectItem, {
-                    value: option.value,
-                    children: option.label
-                  }, option.value);
-                })
-              })]
-            })]
-          })]
-        }), jsxRuntime.jsxs("div", {
-          className: "flex items-center gap-2",
-          children: [jsxRuntime.jsx(Checkbox, {
-            id: "all-day",
-            checked: allDay,
-            onCheckedChange: function (checked) {
-              return setAllDay(checked === true);
-            }
-          }), jsxRuntime.jsx(Label, {
-            htmlFor: "all-day",
-            children: "All day"
-          })]
-        }), jsxRuntime.jsxs("div", {
-          className: "*:not-first:mt-1.5",
-          children: [jsxRuntime.jsx(Label, {
-            htmlFor: "location",
-            children: "Location"
-          }), jsxRuntime.jsx(Input, {
-            id: "location",
-            value: location,
-            onChange: function (e) {
-              return setLocation(e.target.value);
-            }
-          })]
-        }), jsxRuntime.jsxs("fieldset", {
-          className: "space-y-4",
-          children: [jsxRuntime.jsx("legend", {
-            className: "text-foreground text-sm leading-none font-medium",
-            children: "Etiquette"
-          }), jsxRuntime.jsx(RadioGroup, {
-            className: "flex gap-1.5",
-            defaultValue: (_b = colorOptions[0]) === null || _b === void 0 ? void 0 : _b.value,
-            value: color,
-            onValueChange: function (value) {
-              return setColor(value);
-            },
-            children: colorOptions.map(function (colorOption) {
-              return jsxRuntime.jsx(RadioGroupItem, {
-                id: "color-".concat(colorOption.value),
-                value: colorOption.value,
-                "aria-label": colorOption.label,
-                className: cn("size-6 shadow-none", colorOption.bgClass, colorOption.borderClass)
-              }, colorOption.value);
-            })
-          })]
-        })]
-      }), jsxRuntime.jsxs(DialogFooter, {
-        className: "flex-row sm:justify-between",
-        children: [(event === null || event === void 0 ? void 0 : event.id) && jsxRuntime.jsx(Button, {
-          variant: "outline",
-          size: "icon",
-          onClick: handleDelete,
-          "aria-label": "Delete event",
-          children: jsxRuntime.jsx(react.RiDeleteBinLine, {
-            size: 16,
-            "aria-hidden": "true"
-          })
-        }), jsxRuntime.jsxs("div", {
-          className: "flex flex-1 justify-end gap-2",
-          children: [jsxRuntime.jsx(Button, {
-            variant: "outline",
-            onClick: onClose,
-            children: "Cancel"
-          }), jsxRuntime.jsx(Button, {
-            onClick: handleSave,
-            children: "Save"
-          })]
-        })]
-      })]
-    })
-  });
-}
-
-function EventsPopup(_a) {
-  var date = _a.date,
-    events = _a.events,
-    position = _a.position,
-    onClose = _a.onClose,
-    onEventSelect = _a.onEventSelect;
-  var popupRef = React.useRef(null);
-  // Handle click outside to close popup
-  React.useEffect(function () {
-    var handleClickOutside = function (event) {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
-        onClose();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return function () {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onClose]);
-  // Handle escape key to close popup
-  React.useEffect(function () {
-    var handleEscKey = function (event) {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-    document.addEventListener("keydown", handleEscKey);
-    return function () {
-      document.removeEventListener("keydown", handleEscKey);
-    };
-  }, [onClose]);
-  var handleEventClick = function (event) {
-    onEventSelect(event);
-    onClose();
-  };
-  // Adjust position to ensure popup stays within viewport
-  var adjustedPosition = React.useMemo(function () {
-    var positionCopy = __assign({}, position);
-    // Check if we need to adjust the position to fit in the viewport
-    if (popupRef.current) {
-      var rect = popupRef.current.getBoundingClientRect();
-      var viewportWidth = window.innerWidth;
-      var viewportHeight = window.innerHeight;
-      // Adjust horizontally if needed
-      if (positionCopy.left + rect.width > viewportWidth) {
-        positionCopy.left = Math.max(0, viewportWidth - rect.width);
-      }
-      // Adjust vertically if needed
-      if (positionCopy.top + rect.height > viewportHeight) {
-        positionCopy.top = Math.max(0, viewportHeight - rect.height);
-      }
-    }
-    return positionCopy;
-  }, [position]);
-  return jsxRuntime.jsxs("div", {
-    ref: popupRef,
-    className: "bg-background absolute z-50 max-h-96 w-80 overflow-auto rounded-md border shadow-lg",
-    style: {
-      top: "".concat(adjustedPosition.top, "px"),
-      left: "".concat(adjustedPosition.left, "px")
-    },
-    children: [jsxRuntime.jsxs("div", {
-      className: "bg-background sticky top-0 flex items-center justify-between border-b p-3",
-      children: [jsxRuntime.jsx("h3", {
-        className: "font-medium",
-        children: dateFns.format(date, "d MMMM yyyy")
-      }), jsxRuntime.jsx("button", {
-        onClick: onClose,
-        className: "hover:bg-muted rounded-full p-1",
-        "aria-label": "Close",
-        children: jsxRuntime.jsx(lucideReact.XIcon, {
-          className: "h-4 w-4"
-        })
-      })]
-    }), jsxRuntime.jsx("div", {
-      className: "space-y-2 p-3",
-      children: events.length === 0 ? jsxRuntime.jsx("div", {
-        className: "text-muted-foreground py-2 text-sm",
-        children: "No events"
-      }) : events.map(function (event) {
-        var eventStart = new Date(event.start);
-        var eventEnd = new Date(event.end);
-        var isFirstDay = dateFns.isSameDay(date, eventStart);
-        var isLastDay = dateFns.isSameDay(date, eventEnd);
-        return jsxRuntime.jsx("div", {
-          className: "cursor-pointer",
-          onClick: function () {
-            return handleEventClick(event);
-          },
-          children: jsxRuntime.jsx(EventItem, {
-            event: event,
-            view: "agenda",
-            isFirstDay: isFirstDay,
-            isLastDay: isLastDay
-          })
-        }, event.id);
-      })
-    })]
-  });
-}
-
 /**
  * Hook for calculating event visibility based on container height
  * Uses ResizeObserver for efficient updates
@@ -2102,6 +1154,41 @@ function useEventVisibility(_a) {
     contentHeight: contentHeight,
     getVisibleEventCount: getVisibleEventCount
   };
+}
+
+function Popover(_a) {
+  var props = __rest(_a, []);
+  return jsxRuntime.jsx(PopoverPrimitive__namespace.Root, __assign({
+    "data-slot": "popover"
+  }, props));
+}
+function PopoverTrigger(_a) {
+  var props = __rest(_a, []);
+  return jsxRuntime.jsx(PopoverPrimitive__namespace.Trigger, __assign({
+    "data-slot": "popover-trigger"
+  }, props));
+}
+function PopoverContent(_a) {
+  var className = _a.className,
+    _b = _a.align,
+    align = _b === void 0 ? "center" : _b,
+    _c = _a.sideOffset,
+    sideOffset = _c === void 0 ? 4 : _c,
+    _d = _a.showArrow,
+    showArrow = _d === void 0 ? false : _d,
+    props = __rest(_a, ["className", "align", "sideOffset", "showArrow"]);
+  return jsxRuntime.jsx(PopoverPrimitive__namespace.Portal, {
+    children: jsxRuntime.jsxs(PopoverPrimitive__namespace.Content, __assign({
+      "data-slot": "popover-content",
+      align: align,
+      sideOffset: sideOffset,
+      className: cn("bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 rounded-md border p-4 shadow-md outline-hidden", className)
+    }, props, {
+      children: [props.children, showArrow && jsxRuntime.jsx(PopoverPrimitive__namespace.Arrow, {
+        className: "fill-popover -my-px drop-shadow-[0_1px_0_hsl(var(--border))]"
+      })]
+    }))
+  });
 }
 
 function MonthView(_a) {
@@ -2303,6 +1390,46 @@ function MonthView(_a) {
       })
     })]
   });
+}
+
+var buttonVariants = classVarianceAuthority.cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]", {
+  variants: {
+    variant: {
+      default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
+      destructive: "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+      outline: "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
+      secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
+      ghost: "hover:bg-accent hover:text-accent-foreground",
+      link: "text-primary underline-offset-4 hover:underline"
+    },
+    size: {
+      default: "h-9 px-3 py-2",
+      sm: "h-8 rounded-md px-3 text-xs",
+      lg: "h-10 rounded-md px-8",
+      icon: "size-9"
+    }
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default"
+  }
+});
+function Button(_a) {
+  var className = _a.className,
+    variant = _a.variant,
+    size = _a.size,
+    _b = _a.asChild,
+    asChild = _b === void 0 ? false : _b,
+    props = __rest(_a, ["className", "variant", "size", "asChild"]);
+  var Comp = asChild ? reactSlot.Slot : "button";
+  return jsxRuntime.jsx(Comp, __assign({
+    "data-slot": "button",
+    className: cn(buttonVariants({
+      variant: variant,
+      size: size,
+      className: className
+    }))
+  }, props));
 }
 
 function DropdownMenu(_a) {
@@ -2963,11 +2090,9 @@ exports.DraggableEvent = DraggableEvent;
 exports.DroppableCell = DroppableCell;
 exports.EndHour = EndHour;
 exports.EventCalendar = EventCalendar;
-exports.EventDialog = EventDialog;
 exports.EventGap = EventGap;
 exports.EventHeight = EventHeight;
 exports.EventItem = EventItem;
-exports.EventsPopup = EventsPopup;
 exports.MonthView = MonthView;
 exports.StartHour = StartHour;
 exports.WeekCellsHeight = WeekCellsHeight;

@@ -130,7 +130,7 @@ export function MonthView({
               return (
                 <div
                   key={day.toString()}
-                  className="group data-outside-cell:bg-sidebar-primary-foreground data-outside-cell:bg-opacity-25 data-outside-cell:text-muted-foreground border-r border-b last:border-r-0"
+                  className="group data-outside-cell:bg-sidebar data-outside-cell:bg-opacity-25 data-outside-cell:text-muted-foreground border-r border-b last:border-r-0"
                   data-today={isToday(day) || undefined}
                   data-outside-cell={!isCurrentMonth || undefined}
                 >

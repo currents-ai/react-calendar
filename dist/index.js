@@ -1358,7 +1358,7 @@ function MonthView(_a) {
                       align: "center",
                       className: "max-w-52 p-3",
                       style: {
-                        "--event-height": "".concat(EventHeight, "px")
+                        "--event-height": "".concat(eventHeight, "px")
                       },
                       children: jsxRuntime.jsxs("div", {
                         className: "space-y-2",
@@ -1947,6 +1947,7 @@ function EventCalendar(_a) {
       "--event-gap": "".concat(eventGap, "px"),
       "--week-cells-height": "".concat(weekCellsHeight, "px")
     },
+    "data-height": eventHeight,
     children: jsxRuntime.jsxs(CalendarDndProvider, {
       onEventUpdate: handleEventUpdate,
       children: [jsxRuntime.jsxs("div", {
@@ -2071,7 +2072,9 @@ function EventCalendar(_a) {
           currentDate: currentDate,
           events: events,
           onEventSelect: onEventSelect,
-          onEventCreate: onEventCreate
+          onEventCreate: onEventCreate,
+          eventGap: eventGap,
+          eventHeight: eventHeight
         }), view === "week" && jsxRuntime.jsx(WeekView, {
           currentDate: currentDate,
           events: events,

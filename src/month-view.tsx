@@ -226,7 +226,7 @@ export function MonthView({
                             className="max-w-52 p-3"
                             style={
                               {
-                                "--event-height": `${EventHeight}px`,
+                                "--event-height": `${eventHeight}px`,
                               } as React.CSSProperties
                             }
                           >

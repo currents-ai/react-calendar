@@ -15,6 +15,7 @@ import {
 import { DefaultStartHour, EventGap, EventHeight } from "./constants"
 import { DraggableEvent } from "./draggable-event"
 import { DroppableCell } from "./droppable-cell"
+import { EventCalendarProps } from "./event-calendar"
 import { EventItem } from "./event-item"
 import { useEventVisibility } from "./hooks/use-event-visibility"
 import { CalendarEvent } from "./types"
@@ -26,7 +27,8 @@ import {
   sortEvents,
 } from "./utils"
 
-interface MonthViewProps {
+interface MonthViewProps
+  extends Pick<EventCalendarProps, "eventHeight" | "eventGap"> {
   currentDate: Date
   events: CalendarEvent[]
   onEventSelect?: (event: CalendarEvent) => void
@@ -38,6 +40,8 @@ export function MonthView({
   events,
   onEventSelect,
   onEventCreate,
+  eventHeight = EventHeight,
+  eventGap = EventGap,
 }: MonthViewProps) {
   const days = useMemo(() => {
     const monthStart = startOfMonth(currentDate)
@@ -77,8 +81,8 @@ export function MonthView({
 
   const [isMounted, setIsMounted] = useState(false)
   const { contentRef, getVisibleEventCount } = useEventVisibility({
-    eventHeight: EventHeight,
-    eventGap: EventGap,
+    eventHeight,
+    eventGap,
   })
 
   useEffect(() => {

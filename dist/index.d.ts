@@ -98,13 +98,13 @@ interface EventCalendarProps {
 }
 declare function EventCalendar({ events, onEventAdd, onEventUpdate, onEventDelete, className, initialView, onEventCreate, onEventSelect, showViewSwitcher, showNewEventButton, eventHeight, eventGap, weekCellsHeight, agendaDaysToShow, }: EventCalendarProps): react_jsx_runtime.JSX.Element;
 
-interface MonthViewProps {
+interface MonthViewProps extends Pick<EventCalendarProps, "eventHeight" | "eventGap"> {
     currentDate: Date;
     events: CalendarEvent[];
     onEventSelect?: (event: CalendarEvent) => void;
     onEventCreate?: (startTime: Date) => void;
 }
-declare function MonthView({ currentDate, events, onEventSelect, onEventCreate, }: MonthViewProps): react_jsx_runtime.JSX.Element;
+declare function MonthView({ currentDate, events, onEventSelect, onEventCreate, eventHeight, eventGap, }: MonthViewProps): react_jsx_runtime.JSX.Element;
 
 interface WeekViewProps {
     currentDate: Date;

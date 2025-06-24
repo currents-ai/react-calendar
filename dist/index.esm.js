@@ -1173,7 +1173,11 @@ function MonthView(_a) {
   var currentDate = _a.currentDate,
     events = _a.events,
     onEventSelect = _a.onEventSelect,
-    onEventCreate = _a.onEventCreate;
+    onEventCreate = _a.onEventCreate,
+    _b = _a.eventHeight,
+    eventHeight = _b === void 0 ? EventHeight : _b,
+    _c = _a.eventGap,
+    eventGap = _c === void 0 ? EventGap : _c;
   var days = useMemo(function () {
     var monthStart = startOfMonth(currentDate);
     var monthEnd = endOfMonth(monthStart);
@@ -1212,15 +1216,15 @@ function MonthView(_a) {
     e.stopPropagation();
     onEventSelect === null || onEventSelect === void 0 ? void 0 : onEventSelect(event);
   };
-  var _b = useState(false),
-    isMounted = _b[0],
-    setIsMounted = _b[1];
-  var _c = useEventVisibility({
-      eventHeight: EventHeight,
-      eventGap: EventGap
+  var _d = useState(false),
+    isMounted = _d[0],
+    setIsMounted = _d[1];
+  var _e = useEventVisibility({
+      eventHeight: eventHeight,
+      eventGap: eventGap
     }),
-    contentRef = _c.contentRef,
-    getVisibleEventCount = _c.getVisibleEventCount;
+    contentRef = _e.contentRef,
+    getVisibleEventCount = _e.getVisibleEventCount;
   useEffect(function () {
     setIsMounted(true);
   }, []);

@@ -9,4 +9,4 @@ export interface CalendarEvent {
     color?: EventColor;
     location?: string;
 }
-export type EventColor = "sky" | "amber" | "violet" | "rose" | "emerald" | "orange";
+export type EventColor = "sky" | "amber" | "violet" | "rose" | "emerald" | "orange" | "gray" | "black" | "green" | "green-dark" | "red" | "red-light" | "blue" | "yellow";

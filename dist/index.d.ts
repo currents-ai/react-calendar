@@ -14,7 +14,7 @@ interface CalendarEvent {
     color?: EventColor;
     location?: string;
 }
-type EventColor = "sky" | "amber" | "violet" | "rose" | "emerald" | "orange";
+type EventColor = "sky" | "amber" | "violet" | "rose" | "emerald" | "orange" | "gray" | "black" | "green" | "green-dark" | "red" | "red-light" | "blue" | "yellow";
 
 interface AgendaViewProps {
     currentDate: Date;

@@ -1787,13 +1787,22 @@ function EventCalendar(_a) {
     _c = _a.initialView,
     initialView = _c === void 0 ? "month" : _c,
     onEventCreate = _a.onEventCreate,
-    onEventSelect = _a.onEventSelect;
-  var _d = useState(new Date()),
-    currentDate = _d[0],
-    setCurrentDate = _d[1];
-  var _e = useState(initialView),
-    view = _e[0],
-    setView = _e[1];
+    onEventSelect = _a.onEventSelect,
+    showViewSwitcher = _a.showViewSwitcher,
+    showNewEventButton = _a.showNewEventButton,
+    _d = _a.eventHeight,
+    eventHeight = _d === void 0 ? EventHeight : _d,
+    _e = _a.eventGap,
+    eventGap = _e === void 0 ? EventGap : _e,
+    _f = _a.weekCellsHeight,
+    weekCellsHeight = _f === void 0 ? WeekCellsHeight : _f;
+    _a.agendaDaysToShow;
+  var _h = useState(new Date()),
+    currentDate = _h[0],
+    setCurrentDate = _h[1];
+  var _j = useState(initialView),
+    view = _j[0],
+    setView = _j[1];
   // const [isEventDialogOpen, setIsEventDialogOpen] = useState(false)
   // const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
   // Add keyboard shortcuts for view switching
@@ -1803,7 +1812,7 @@ function EventCalendar(_a) {
       // or if the event dialog is open
       if (
       // isEventDialogOpen ||
-      e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLElement && e.target.isContentEditable) {
+      !showViewSwitcher || e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLElement && e.target.isContentEditable) {
         return;
       }
       switch (e.key.toLowerCase()) {
@@ -1825,9 +1834,8 @@ function EventCalendar(_a) {
     return function () {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [
-    /* isEventDialogOpen */
-  ]);
+  }, [/* isEventDialogOpen */
+  showViewSwitcher]);
   var handlePrevious = function () {
     if (view === "month") {
       setCurrentDate(subMonths(currentDate, 1));
@@ -1860,7 +1868,7 @@ function EventCalendar(_a) {
     // // Show toast notification when an event is updated via drag and drop
     // toast(`Event "${updatedEvent.title}" moved`, {
     //   description: format(new Date(updatedEvent.start), "MMM d, yyyy"),
-    //   position: "bottom-left",
+    //   position: "bottom-left",rest
     // })
   };
   var viewTitle = useMemo(function () {
@@ -1909,9 +1917,9 @@ function EventCalendar(_a) {
   return jsx("div", {
     className: "flex flex-col rounded-lg border has-data-[slot=month-view]:flex-1",
     style: {
-      "--event-height": "".concat(EventHeight, "px"),
-      "--event-gap": "".concat(EventGap, "px"),
-      "--week-cells-height": "".concat(WeekCellsHeight, "px")
+      "--event-height": "".concat(eventHeight, "px"),
+      "--event-gap": "".concat(eventGap, "px"),
+      "--week-cells-height": "".concat(weekCellsHeight, "px")
     },
     children: jsxs(CalendarDndProvider, {
       onEventUpdate: handleEventUpdate,
@@ -1958,7 +1966,7 @@ function EventCalendar(_a) {
           })]
         }), jsxs("div", {
           className: "flex items-center gap-2",
-          children: [jsxs(DropdownMenu, {
+          children: [showViewSwitcher && jsxs(DropdownMenu, {
             children: [jsx(DropdownMenuTrigger, {
               children: jsx(Button, {
                 variant: "outline",
@@ -2014,7 +2022,7 @@ function EventCalendar(_a) {
                 })]
               })]
             })]
-          }), jsxs(Button, {
+          }), showNewEventButton && jsxs(Button, {
             className: "aspect-square max-[479px]:p-0!",
             onClick: function () {
               var startTime = new Date(currentDate);

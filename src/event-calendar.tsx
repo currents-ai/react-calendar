@@ -216,6 +216,7 @@ export function EventCalendar({
           "--week-cells-height": `${weekCellsHeight}px`,
         } as React.CSSProperties
       }
+      data-height={eventHeight}
     >
       <CalendarDndProvider onEventUpdate={handleEventUpdate}>
         <div
@@ -331,6 +332,8 @@ export function EventCalendar({
               events={events}
               onEventSelect={onEventSelect}
               onEventCreate={onEventCreate}
+              eventGap={eventGap}
+              eventHeight={eventHeight}
             />
           )}
           {view === "week" && (

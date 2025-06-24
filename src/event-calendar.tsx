@@ -55,6 +55,13 @@ export interface EventCalendarProps {
   onEventResizeEnd?: (event: CalendarEvent) => void
   className?: string
   initialView?: CalendarView
+  showViewSwitcher?: boolean
+  showTodayButton?: boolean
+  showNewEventButton?: boolean
+  eventHeight?: number
+  eventGap?: number
+  weekCellsHeight?: number
+  agendaDaysToShow?: number
 }
 
 export function EventCalendar({
@@ -66,6 +73,12 @@ export function EventCalendar({
   initialView = "month",
   onEventCreate,
   onEventSelect,
+  showViewSwitcher,
+  showNewEventButton,
+  eventHeight = EventHeight,
+  eventGap = EventGap,
+  weekCellsHeight = WeekCellsHeight,
+  agendaDaysToShow = AgendaDaysToShow,
 }: EventCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [view, setView] = useState<CalendarView>(initialView)
@@ -73,46 +86,45 @@ export function EventCalendar({
   // const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
 
   // Add keyboard shortcuts for view switching
-  useEffect(
-    () => {
-      const handleKeyDown = (e: KeyboardEvent) => {
-        // Skip if user is typing in an input, textarea or contentEditable element
-        // or if the event dialog is open
-        if (
-          // isEventDialogOpen ||
-          e.target instanceof HTMLInputElement ||
-          e.target instanceof HTMLTextAreaElement ||
-          (e.target instanceof HTMLElement && e.target.isContentEditable)
-        ) {
-          return
-        }
-
-        switch (e.key.toLowerCase()) {
-          case "m":
-            setView("month")
-            break
-          case "w":
-            setView("week")
-            break
-          case "d":
-            setView("day")
-            break
-          case "a":
-            setView("agenda")
-            break
-        }
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Skip if user is typing in an input, textarea or contentEditable element
+      // or if the event dialog is open
+      if (
+        // isEventDialogOpen ||
+        !showViewSwitcher ||
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        (e.target instanceof HTMLElement && e.target.isContentEditable)
+      ) {
+        return
       }
 
-      window.addEventListener("keydown", handleKeyDown)
-
-      return () => {
-        window.removeEventListener("keydown", handleKeyDown)
+      switch (e.key.toLowerCase()) {
+        case "m":
+          setView("month")
+          break
+        case "w":
+          setView("week")
+          break
+        case "d":
+          setView("day")
+          break
+        case "a":
+          setView("agenda")
+          break
       }
-    },
-    [
-      /* isEventDialogOpen */
-    ]
-  )
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [
+    /* isEventDialogOpen */
+    showViewSwitcher,
+  ])
 
   const handlePrevious = () => {
     if (view === "month") {
@@ -150,7 +162,7 @@ export function EventCalendar({
     // // Show toast notification when an event is updated via drag and drop
     // toast(`Event "${updatedEvent.title}" moved`, {
     //   description: format(new Date(updatedEvent.start), "MMM d, yyyy"),
-    //   position: "bottom-left",
+    //   position: "bottom-left",rest
     // })
   }
 
@@ -199,9 +211,9 @@ export function EventCalendar({
       className="flex flex-col rounded-lg border has-data-[slot=month-view]:flex-1"
       style={
         {
-          "--event-height": `${EventHeight}px`,
-          "--event-gap": `${EventGap}px`,
-          "--week-cells-height": `${WeekCellsHeight}px`,
+          "--event-height": `${eventHeight}px`,
+          "--event-gap": `${eventGap}px`,
+          "--week-cells-height": `${weekCellsHeight}px`,
         } as React.CSSProperties
       }
     >
@@ -248,60 +260,67 @@ export function EventCalendar({
             </h2>
           </div>
           <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button
-                  variant="outline"
-                  className="gap-1.5 max-[479px]:h-8"
-                  asChild
-                >
-                  <div>
-                    <span>
-                      <span className="visible sm:invisible" aria-hidden="true">
-                        {view.charAt(0).toUpperCase()}
+            {showViewSwitcher && (
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button
+                    variant="outline"
+                    className="gap-1.5 max-[479px]:h-8"
+                    asChild
+                  >
+                    <div>
+                      <span>
+                        <span
+                          className="visible sm:invisible"
+                          aria-hidden="true"
+                        >
+                          {view.charAt(0).toUpperCase()}
+                        </span>
+                        <span className="invisible sm:visible">
+                          {view.charAt(0).toUpperCase() + view.slice(1)}
+                        </span>
                       </span>
-                      <span className="invisible sm:visible">
-                        {view.charAt(0).toUpperCase() + view.slice(1)}
-                      </span>
-                    </span>
-                    <ChevronDownIcon
-                      className="-me-1 opacity-60"
-                      size={16}
-                      aria-hidden="true"
-                    />
-                  </div>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-32">
-                <DropdownMenuItem onClick={() => setView("month")}>
-                  Month <DropdownMenuShortcut>M</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setView("week")}>
-                  Week <DropdownMenuShortcut>W</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setView("day")}>
-                  Day <DropdownMenuShortcut>D</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setView("agenda")}>
-                  Agenda <DropdownMenuShortcut>A</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button
-              className="aspect-square max-[479px]:p-0!"
-              onClick={() => {
-                const startTime = new Date(currentDate)
-                startTime.setHours(0, 0, 0, 0)
-                onEventCreate?.(startTime)
-              }}
-            >
-              <PlusIcon
-                className="opacity-60 sm:-ms-1"
-                size={16}
-                aria-hidden="true"
-              />
-              <span className="max-sm:sr-only">New event</span>
-            </Button>
+                      <ChevronDownIcon
+                        className="-me-1 opacity-60"
+                        size={16}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-32">
+                  <DropdownMenuItem onClick={() => setView("month")}>
+                    Month <DropdownMenuShortcut>M</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setView("week")}>
+                    Week <DropdownMenuShortcut>W</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setView("day")}>
+                    Day <DropdownMenuShortcut>D</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setView("agenda")}>
+                    Agenda <DropdownMenuShortcut>A</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            {showNewEventButton && (
+              <Button
+                className="aspect-square max-[479px]:p-0!"
+                onClick={() => {
+                  const startTime = new Date(currentDate)
+                  startTime.setHours(0, 0, 0, 0)
+                  onEventCreate?.(startTime)
+                }}
+              >
+                <PlusIcon
+                  className="opacity-60 sm:-ms-1"
+                  size={16}
+                  aria-hidden="true"
+                />
+                <span className="max-sm:sr-only">New event</span>
+              </Button>
+            )}
           </div>
         </div>
 

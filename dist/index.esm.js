@@ -109,6 +109,22 @@ function getEventColorClasses(color) {
       return "bg-emerald-200/50 hover:bg-emerald-200/40 text-emerald-950/80 dark:bg-emerald-400/25 dark:hover:bg-emerald-400/20 dark:text-emerald-200 shadow-emerald-700/8";
     case "orange":
       return "bg-orange-200/50 hover:bg-orange-200/40 text-orange-950/80 dark:bg-orange-400/25 dark:hover:bg-orange-400/20 dark:text-orange-200 shadow-orange-700/8";
+    case "gray":
+      return "text-zinc-700 bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-400";
+    case "black":
+      return "bg-black text-gray-400";
+    case "green":
+      return "bg-green-500/20 dark:bg-green-500/30 text-green-800 dark:text-green-400";
+    case "green-dark":
+      return "bg-green-100 dark:bg-emerald-600 dark:bg-opacity-70 text-green-800 dark:text-white";
+    case "red":
+      return "bg-red-500/20 dark:bg-red-500/30 text-red-700 dark:text-red-500 ";
+    case "red-light":
+      return "bg-red-400 bg-opacity-10 text-red-500";
+    case "blue":
+      return "bg-blue-100  dark:bg-blue-500 text-highlight dark:text-blue-100";
+    case "yellow":
+      return "bg-yellow-500/20 dark:bg-yellow-500/30 text-yellow-700 dark:text-yellow-400";
     default:
       return "bg-sky-200/50 hover:bg-sky-200/40 text-sky-950/80 dark:bg-sky-400/25 dark:hover:bg-sky-400/20 dark:text-sky-200 shadow-sky-700/8";
   }
@@ -1257,7 +1273,7 @@ function MonthView(_a) {
             var hasMore = visibleCount !== undefined && allDayEvents.length > visibleCount;
             var remainingCount = hasMore ? allDayEvents.length - visibleCount : 0;
             return jsx("div", {
-              className: "group border-border/70 data-outside-cell:bg-muted/25 data-outside-cell:text-muted-foreground/70 border-r border-b last:border-r-0",
+              className: "group data-outside-cell:bg-sidebar-primary-foreground data-outside-cell:bg-opacity-25 data-outside-cell:text-muted-foreground border-r border-b last:border-r-0",
               "data-today": isToday(day) || undefined,
               "data-outside-cell": !isCurrentMonth || undefined,
               children: jsxs(DroppableCell, {

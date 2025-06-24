@@ -88,8 +88,15 @@ interface EventCalendarProps {
     onEventResizeEnd?: (event: CalendarEvent) => void;
     className?: string;
     initialView?: CalendarView;
+    showViewSwitcher?: boolean;
+    showTodayButton?: boolean;
+    showNewEventButton?: boolean;
+    eventHeight?: number;
+    eventGap?: number;
+    weekCellsHeight?: number;
+    agendaDaysToShow?: number;
 }
-declare function EventCalendar({ events, onEventAdd, onEventUpdate, onEventDelete, className, initialView, onEventCreate, onEventSelect, }: EventCalendarProps): react_jsx_runtime.JSX.Element;
+declare function EventCalendar({ events, onEventAdd, onEventUpdate, onEventDelete, className, initialView, onEventCreate, onEventSelect, showViewSwitcher, showNewEventButton, eventHeight, eventGap, weekCellsHeight, agendaDaysToShow, }: EventCalendarProps): react_jsx_runtime.JSX.Element;
 
 interface MonthViewProps {
     currentDate: Date;

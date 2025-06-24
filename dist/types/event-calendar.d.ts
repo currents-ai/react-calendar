@@ -14,5 +14,12 @@ export interface EventCalendarProps {
     onEventResizeEnd?: (event: CalendarEvent) => void;
     className?: string;
     initialView?: CalendarView;
+    showViewSwitcher?: boolean;
+    showTodayButton?: boolean;
+    showNewEventButton?: boolean;
+    eventHeight?: number;
+    eventGap?: number;
+    weekCellsHeight?: number;
+    agendaDaysToShow?: number;
 }
-export declare function EventCalendar({ events, onEventAdd, onEventUpdate, onEventDelete, className, initialView, onEventCreate, onEventSelect, }: EventCalendarProps): import("react/jsx-runtime").JSX.Element;
+export declare function EventCalendar({ events, onEventAdd, onEventUpdate, onEventDelete, className, initialView, onEventCreate, onEventSelect, showViewSwitcher, showNewEventButton, eventHeight, eventGap, weekCellsHeight, agendaDaysToShow, }: EventCalendarProps): import("react/jsx-runtime").JSX.Element;

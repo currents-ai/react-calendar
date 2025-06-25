@@ -28,7 +28,10 @@ import {
 } from "./utils"
 
 interface MonthViewProps
-  extends Pick<EventCalendarProps, "eventHeight" | "eventGap"> {
+  extends Pick<
+    EventCalendarProps,
+    "eventHeight" | "eventGap" | "showNewEventButton"
+  > {
   currentDate: Date
   events: CalendarEvent[]
   onEventSelect?: (event: CalendarEvent) => void
@@ -42,6 +45,7 @@ export function MonthView({
   onEventCreate,
   eventHeight = EventHeight,
   eventGap = EventGap,
+  showNewEventButton,
 }: MonthViewProps) {
   const days = useMemo(() => {
     const monthStart = startOfMonth(currentDate)
@@ -138,9 +142,11 @@ export function MonthView({
                     id={cellId}
                     date={day}
                     onClick={() => {
-                      const startTime = new Date(day)
-                      startTime.setHours(DefaultStartHour, 0, 0)
-                      onEventCreate?.(startTime)
+                      if (showNewEventButton) {
+                        const startTime = new Date(day)
+                        startTime.setHours(DefaultStartHour, 0, 0)
+                        onEventCreate?.(startTime)
+                      }
                     }}
                   >
                     <div className="group-data-today:bg-primary group-data-today:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm">

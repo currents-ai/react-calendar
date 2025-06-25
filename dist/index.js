@@ -821,7 +821,7 @@ function DroppableCell(_a) {
   return jsxRuntime.jsx("div", {
     ref: setNodeRef,
     onClick: onClick,
-    className: cn("data-dragging:bg-accent flex h-full flex-col overflow-hidden px-0.5 py-1 sm:px-1", className),
+    className: cn("[&[data-dragging]]:bg-accent flex h-full flex-col overflow-hidden px-0.5 py-1 sm:px-1", className),
     title: formattedTime ? "".concat(formattedTime) : undefined,
     "data-dragging": isOver && activeEvent ? true : undefined,
     children: children
@@ -1215,7 +1215,8 @@ function MonthView(_a) {
     _b = _a.eventHeight,
     eventHeight = _b === void 0 ? EventHeight : _b,
     _c = _a.eventGap,
-    eventGap = _c === void 0 ? EventGap : _c;
+    eventGap = _c === void 0 ? EventGap : _c,
+    showNewEventButton = _a.showNewEventButton;
   var days = React.useMemo(function () {
     var monthStart = dateFns.startOfMonth(currentDate);
     var monthEnd = dateFns.endOfMonth(monthStart);
@@ -1302,9 +1303,11 @@ function MonthView(_a) {
                 id: cellId,
                 date: day,
                 onClick: function () {
-                  var startTime = new Date(day);
-                  startTime.setHours(DefaultStartHour, 0, 0);
-                  onEventCreate === null || onEventCreate === void 0 ? void 0 : onEventCreate(startTime);
+                  if (showNewEventButton) {
+                    var startTime = new Date(day);
+                    startTime.setHours(DefaultStartHour, 0, 0);
+                    onEventCreate === null || onEventCreate === void 0 ? void 0 : onEventCreate(startTime);
+                  }
                 },
                 children: [jsxRuntime.jsx("div", {
                   className: "group-data-today:bg-primary group-data-today:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm",
@@ -2090,7 +2093,8 @@ function EventCalendar(_a) {
           onEventSelect: onEventSelect,
           onEventCreate: onEventCreate,
           eventGap: eventGap,
-          eventHeight: eventHeight
+          eventHeight: eventHeight,
+          showNewEventButton: showNewEventButton
         }), view === "week" && jsxRuntime.jsx(WeekView, {
           currentDate: currentDate,
           events: events,

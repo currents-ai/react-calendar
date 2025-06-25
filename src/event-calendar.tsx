@@ -1,44 +1,21 @@
-import { useEffect, useMemo, useState } from "react"
-import { RiCalendarCheckLine } from "@remixicon/react"
-import {
-  addDays,
-  addMonths,
-  addWeeks,
-  endOfWeek,
-  format,
-  isSameMonth,
-  startOfWeek,
-  subMonths,
-  subWeeks,
-} from "date-fns"
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PlusIcon,
-} from "lucide-react"
+import { useEffect, useMemo, useState } from "react";
+import { RiCalendarCheckLine } from "@remixicon/react";
+import { addDays, addMonths, addWeeks, endOfWeek, format, isSameMonth, startOfWeek, subMonths, subWeeks } from "date-fns";
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "lucide-react";
 
-import { AgendaView } from "./agenda-view"
-import { CalendarDndProvider } from "./calendar-dnd-context"
-import {
-  AgendaDaysToShow,
-  EventGap,
-  EventHeight,
-  WeekCellsHeight,
-} from "./constants"
-import { DayView } from "./day-view"
-import { cn } from "./lib/utils"
-import { MonthView } from "./month-view"
-import { CalendarEvent, CalendarView } from "./types"
-import { Button } from "./ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
-import { WeekView } from "./week-view"
+
+
+import { AgendaView } from "./agenda-view";
+import { CalendarDndProvider } from "./calendar-dnd-context";
+import { AgendaDaysToShow, EventGap, EventHeight, WeekCellsHeight } from "./constants";
+import { DayView } from "./day-view";
+import { cn } from "./lib/utils";
+import { MonthView } from "./month-view";
+import { CalendarEvent, CalendarView } from "./types";
+import { Button } from "./ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { WeekView } from "./week-view";
+
 
 export interface EventCalendarProps {
   events?: CalendarEvent[]
@@ -334,6 +311,7 @@ export function EventCalendar({
               onEventCreate={onEventCreate}
               eventGap={eventGap}
               eventHeight={eventHeight}
+              showNewEventButton={showNewEventButton}
             />
           )}
           {view === "week" && (

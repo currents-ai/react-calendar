@@ -258,7 +258,7 @@ function EventWrapper(_a) {
   var displayEnd = currentTime ? new Date(new Date(currentTime).getTime() + (new Date(event.end).getTime() - new Date(event.start).getTime())) : new Date(event.end);
   var isEventInPast = dateFns.isPast(displayEnd);
   return jsxRuntime.jsx("button", __assign({
-    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] data-dragging:cursor-grabbing data-dragging:shadow-lg data-past-event:line-through sm:px-2", getEventColorClasses(event.color), getBorderRadiusClasses(isFirstDay, isLastDay), className),
+    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] [&[data-dragging]]:cursor-grabbing [&[data-dragging]]:shadow-lg [&[data-past-event]]:line-through sm:px-2", getEventColorClasses(event.color), getBorderRadiusClasses(isFirstDay, isLastDay), className),
     "data-dragging": isDragging || undefined,
     "data-past-event": isEventInPast || undefined,
     onClick: onClick,
@@ -359,7 +359,7 @@ function EventItem(_a) {
   }
   // Agenda view - kept separate since it's significantly different
   return jsxRuntime.jsxs("button", __assign({
-    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-col gap-1 rounded p-2 text-left transition outline-none focus-visible:ring-[3px] data-past-event:line-through data-past-event:opacity-90", getEventColorClasses(eventColor), className),
+    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-col gap-1 rounded p-2 text-left transition outline-none focus-visible:ring-[3px] [&[data-past-event]]:line-through [&[data-past-event]]:opacity-90", getEventColorClasses(eventColor), className),
     "data-past-event": dateFns.isPast(new Date(event.end)) || undefined,
     onClick: onClick,
     onMouseDown: onMouseDown,
@@ -1310,7 +1310,8 @@ function MonthView(_a) {
                   }
                 },
                 children: [jsxRuntime.jsx("div", {
-                  className: "group-data-today:bg-primary group-data-today:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm",
+                  "data-today": dateFns.isToday(day) || undefined,
+                  className: "[&[data-today]]:bg-primary [&[data-today]]:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm",
                   children: dateFns.format(day, "d")
                 }), jsxRuntime.jsxs("div", {
                   ref: isReferenceCell ? contentRef : null,

@@ -149,7 +149,10 @@ export function MonthView({
                       }
                     }}
                   >
-                    <div className="group-data-today:bg-primary group-data-today:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm">
+                    <div
+                      data-today={isToday(day) || undefined}
+                      className="[&[data-today]]:bg-primary [&[data-today]]:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm"
+                    >
                       {format(day, "d")}
                     </div>
                     <div

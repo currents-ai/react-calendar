@@ -351,7 +351,7 @@ function EventItem(_a) {
           className: "truncate font-medium",
           children: event.title
         }), showTime && jsxRuntime.jsx("div", {
-          className: "truncate font-normal opacity-70 sm:text-[11px]",
+          className: "truncate font-normal opacity-70",
           children: getEventTime()
         })]
       })

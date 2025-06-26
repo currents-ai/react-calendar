@@ -258,7 +258,7 @@ function EventWrapper(_a) {
   var displayEnd = currentTime ? new Date(new Date(currentTime).getTime() + (new Date(event.end).getTime() - new Date(event.start).getTime())) : new Date(event.end);
   var isEventInPast = dateFns.isPast(displayEnd);
   return jsxRuntime.jsx("button", __assign({
-    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] [&[data-dragging]]:cursor-grabbing [&[data-dragging]]:shadow-lg [&[data-past-event]]:line-through sm:px-2", getEventColorClasses(event.color), getBorderRadiusClasses(isFirstDay, isLastDay), className),
+    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] [&[data-dragging]]:cursor-grabbing [&[data-dragging]]:shadow-lg sm:px-2", getEventColorClasses(event.color), getBorderRadiusClasses(isFirstDay, isLastDay), className),
     "data-dragging": isDragging || undefined,
     "data-past-event": isEventInPast || undefined,
     onClick: onClick,
@@ -351,7 +351,7 @@ function EventItem(_a) {
           className: "truncate font-medium",
           children: event.title
         }), showTime && jsxRuntime.jsx("div", {
-          className: "truncate font-normal opacity-70",
+          className: "truncate font-normal opacity-70 sm:text-[11px]",
           children: getEventTime()
         })]
       })

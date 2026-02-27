@@ -1,30 +1,14 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
 import { useMemo, useState, useRef, useId, createContext, useContext, useEffect, useLayoutEffect } from 'react';
-import { RiCalendarEventLine, RiCalendarCheckLine } from '@remixicon/react';
 import { isSameDay, differenceInMinutes, isPast, format, getMinutes, addDays, isToday, addMinutes, differenceInDays, startOfWeek, endOfWeek, isWithinInterval, startOfDay, eachHourOfInterval, addHours, getHours, areIntervalsOverlapping, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isBefore, subMonths, subWeeks, addMonths, addWeeks } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { useSensors, useSensor, MouseSensor, TouchSensor, PointerSensor, DndContext, DragOverlay, useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon, PlusIcon } from 'lucide-react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-
-var EventHeight = 24;
-// Vertical gap between events in pixels - controls spacing in month view
-var EventGap = 4;
-// Height of hour cells in week and day views - controls the scale of time display
-var WeekCellsHeight = 72;
-// Number of days to show in the agenda view
-var AgendaDaysToShow = 30;
-// Start and end hours for the week and day views
-var StartHour = 0;
-var EndHour = 24;
-// Default start and end times
-var DefaultStartHour = 9; // 9 AM
-var DefaultEndHour = 10; // 10 AM
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -80,6 +64,119 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
+
+function ChevronDownIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsx("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, props, {
+    children: jsx("path", {
+      d: "m6 9 6 6 6-6"
+    })
+  }));
+}
+function ChevronLeftIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsx("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, props, {
+    children: jsx("path", {
+      d: "m15 18-6-6 6-6"
+    })
+  }));
+}
+function ChevronRightIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsx("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, props, {
+    children: jsx("path", {
+      d: "m9 18 6-6-6-6"
+    })
+  }));
+}
+function PlusIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsxs("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, props, {
+    children: [jsx("path", {
+      d: "M5 12h14"
+    }), jsx("path", {
+      d: "M12 5v14"
+    })]
+  }));
+}
+function CalendarEventIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsx("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "currentColor"
+  }, props, {
+    children: jsx("path", {
+      d: "M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 11H4V19H20V11ZM11 13V17H6V13H11ZM7 5H4V9H20V5H17V7H15V5H9V7H7V5Z"
+    })
+  }));
+}
+
+var EventHeight = 24;
+// Vertical gap between events in pixels - controls spacing in month view
+var EventGap = 4;
+// Height of hour cells in week and day views - controls the scale of time display
+var WeekCellsHeight = 72;
+// Number of days to show in the agenda view
+var AgendaDaysToShow = 30;
+// Start and end hours for the week and day views
+var StartHour = 0;
+var EndHour = 24;
+// Default start and end times
+var DefaultStartHour = 9; // 9 AM
+var DefaultEndHour = 10; // 10 AM
 
 function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e)){var o=e.length;for(t=0;t<o;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);}else for(f in e)e[f]&&(n&&(n+=" "),n+=f);return n}function clsx(){for(var e,t,f=0,n="",o=arguments.length;f<o;f++)(e=arguments[f])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}
 
@@ -394,7 +491,7 @@ function AgendaView(_a) {
     className: "border-border/70 border-t px-4",
     children: !hasEvents ? jsxs("div", {
       className: "flex min-h-[70svh] flex-col items-center justify-center py-16 text-center",
-      children: [jsx(RiCalendarEventLine, {
+      children: [jsx(CalendarEventIcon, {
         size: 32,
         className: "text-muted-foreground/50 mb-2"
       }), jsx("h3", {
@@ -1952,18 +2049,14 @@ function EventCalendar(_a) {
         className: cn("flex items-center justify-between p-2 sm:p-4", className),
         children: [jsxs("div", {
           className: "flex items-center gap-1 sm:gap-4",
-          children: [jsxs(Button, {
+          children: [jsx(Button, {
             variant: "outline",
             className: "aspect-square max-[479px]:p-0!",
             onClick: handleToday,
-            children: [jsx(RiCalendarCheckLine, {
-              className: "min-[480px]:hidden",
-              size: 16,
-              "aria-hidden": "true"
-            }), jsx("span", {
+            children: jsx("span", {
               className: "max-[479px]:sr-only",
               children: "Today"
-            })]
+            })
           }), jsxs("div", {
             className: "flex items-center sm:gap-2",
             children: [jsx(Button, {

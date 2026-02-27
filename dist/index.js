@@ -2,12 +2,10 @@
 
 var jsxRuntime = require('react/jsx-runtime');
 var React = require('react');
-var react = require('@remixicon/react');
 var dateFns = require('date-fns');
 var tailwindMerge = require('tailwind-merge');
 var core = require('@dnd-kit/core');
 var utilities = require('@dnd-kit/utilities');
-var lucideReact = require('lucide-react');
 var PopoverPrimitive = require('@radix-ui/react-popover');
 var reactSlot = require('@radix-ui/react-slot');
 var classVarianceAuthority = require('class-variance-authority');
@@ -33,20 +31,6 @@ function _interopNamespaceDefault(e) {
 var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React);
 var PopoverPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(PopoverPrimitive);
 var DropdownMenuPrimitive__namespace = /*#__PURE__*/_interopNamespaceDefault(DropdownMenuPrimitive);
-
-var EventHeight = 24;
-// Vertical gap between events in pixels - controls spacing in month view
-var EventGap = 4;
-// Height of hour cells in week and day views - controls the scale of time display
-var WeekCellsHeight = 72;
-// Number of days to show in the agenda view
-var AgendaDaysToShow = 30;
-// Start and end hours for the week and day views
-var StartHour = 0;
-var EndHour = 24;
-// Default start and end times
-var DefaultStartHour = 9; // 9 AM
-var DefaultEndHour = 10; // 10 AM
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -102,6 +86,119 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
+
+function ChevronDownIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsxRuntime.jsx("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, props, {
+    children: jsxRuntime.jsx("path", {
+      d: "m6 9 6 6 6-6"
+    })
+  }));
+}
+function ChevronLeftIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsxRuntime.jsx("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, props, {
+    children: jsxRuntime.jsx("path", {
+      d: "m15 18-6-6 6-6"
+    })
+  }));
+}
+function ChevronRightIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsxRuntime.jsx("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, props, {
+    children: jsxRuntime.jsx("path", {
+      d: "m9 18 6-6-6-6"
+    })
+  }));
+}
+function PlusIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsxRuntime.jsxs("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, props, {
+    children: [jsxRuntime.jsx("path", {
+      d: "M5 12h14"
+    }), jsxRuntime.jsx("path", {
+      d: "M12 5v14"
+    })]
+  }));
+}
+function CalendarEventIcon(_a) {
+  var _b = _a.size,
+    size = _b === void 0 ? 24 : _b,
+    props = __rest(_a, ["size"]);
+  return jsxRuntime.jsx("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "currentColor"
+  }, props, {
+    children: jsxRuntime.jsx("path", {
+      d: "M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 11H4V19H20V11ZM11 13V17H6V13H11ZM7 5H4V9H20V5H17V7H15V5H9V7H7V5Z"
+    })
+  }));
+}
+
+var EventHeight = 24;
+// Vertical gap between events in pixels - controls spacing in month view
+var EventGap = 4;
+// Height of hour cells in week and day views - controls the scale of time display
+var WeekCellsHeight = 72;
+// Number of days to show in the agenda view
+var AgendaDaysToShow = 30;
+// Start and end hours for the week and day views
+var StartHour = 0;
+var EndHour = 24;
+// Default start and end times
+var DefaultStartHour = 9; // 9 AM
+var DefaultEndHour = 10; // 10 AM
 
 function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e)){var o=e.length;for(t=0;t<o;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);}else for(f in e)e[f]&&(n&&(n+=" "),n+=f);return n}function clsx(){for(var e,t,f=0,n="",o=arguments.length;f<o;f++)(e=arguments[f])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}
 
@@ -416,7 +513,7 @@ function AgendaView(_a) {
     className: "border-border/70 border-t px-4",
     children: !hasEvents ? jsxRuntime.jsxs("div", {
       className: "flex min-h-[70svh] flex-col items-center justify-center py-16 text-center",
-      children: [jsxRuntime.jsx(react.RiCalendarEventLine, {
+      children: [jsxRuntime.jsx(CalendarEventIcon, {
         size: 32,
         className: "text-muted-foreground/50 mb-2"
       }), jsxRuntime.jsx("h3", {
@@ -1974,18 +2071,14 @@ function EventCalendar(_a) {
         className: cn("flex items-center justify-between p-2 sm:p-4", className),
         children: [jsxRuntime.jsxs("div", {
           className: "flex items-center gap-1 sm:gap-4",
-          children: [jsxRuntime.jsxs(Button, {
+          children: [jsxRuntime.jsx(Button, {
             variant: "outline",
             className: "aspect-square max-[479px]:p-0!",
             onClick: handleToday,
-            children: [jsxRuntime.jsx(react.RiCalendarCheckLine, {
-              className: "min-[480px]:hidden",
-              size: 16,
-              "aria-hidden": "true"
-            }), jsxRuntime.jsx("span", {
+            children: jsxRuntime.jsx("span", {
               className: "max-[479px]:sr-only",
               children: "Today"
-            })]
+            })
           }), jsxRuntime.jsxs("div", {
             className: "flex items-center sm:gap-2",
             children: [jsxRuntime.jsx(Button, {
@@ -1993,7 +2086,7 @@ function EventCalendar(_a) {
               size: "icon",
               onClick: handlePrevious,
               "aria-label": "Previous",
-              children: jsxRuntime.jsx(lucideReact.ChevronLeftIcon, {
+              children: jsxRuntime.jsx(ChevronLeftIcon, {
                 size: 16,
                 "aria-hidden": "true"
               })
@@ -2002,7 +2095,7 @@ function EventCalendar(_a) {
               size: "icon",
               onClick: handleNext,
               "aria-label": "Next",
-              children: jsxRuntime.jsx(lucideReact.ChevronRightIcon, {
+              children: jsxRuntime.jsx(ChevronRightIcon, {
                 size: 16,
                 "aria-hidden": "true"
               })
@@ -2029,7 +2122,7 @@ function EventCalendar(_a) {
                       className: "invisible sm:visible",
                       children: view.charAt(0).toUpperCase() + view.slice(1)
                     })]
-                  }), jsxRuntime.jsx(lucideReact.ChevronDownIcon, {
+                  }), jsxRuntime.jsx(ChevronDownIcon, {
                     className: "-me-1 opacity-60",
                     size: 16,
                     "aria-hidden": "true"
@@ -2076,7 +2169,7 @@ function EventCalendar(_a) {
               startTime.setHours(0, 0, 0, 0);
               onEventCreate === null || onEventCreate === void 0 ? void 0 : onEventCreate(startTime);
             },
-            children: [jsxRuntime.jsx(lucideReact.PlusIcon, {
+            children: [jsxRuntime.jsx(PlusIcon, {
               className: "opacity-60 sm:-ms-1",
               size: 16,
               "aria-hidden": "true"

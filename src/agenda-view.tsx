@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { RiCalendarEventLine } from "@remixicon/react"
+import { CalendarEventIcon } from "./icons"
 import { addDays, format, isToday } from "date-fns"
 
 import { AgendaDaysToShow } from "./constants"
@@ -41,7 +41,7 @@ export function AgendaView({
     <div className="border-border/70 border-t px-4">
       {!hasEvents ? (
         <div className="flex min-h-[70svh] flex-col items-center justify-center py-16 text-center">
-          <RiCalendarEventLine
+          <CalendarEventIcon
             size={32}
             className="text-muted-foreground/50 mb-2"
           />

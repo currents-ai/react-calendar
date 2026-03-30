@@ -4,6 +4,10 @@ import type { CalendarEvent, EventColor } from "./types";
  */
 export declare function getEventColorClasses(color?: EventColor | string): string;
 /**
+ * Get CSS classes for tag badge colors
+ */
+export declare function getTagColorClasses(color?: string): string;
+/**
  * Get CSS classes for border radius based on event position in multi-day events
  */
 export declare function getBorderRadiusClasses(isFirstDay: boolean, isLastDay: boolean): string;

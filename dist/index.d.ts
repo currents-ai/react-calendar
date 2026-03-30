@@ -1,6 +1,4 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import { DraggableAttributes, UniqueIdentifier } from '@dnd-kit/core';
-import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import { ReactNode } from 'react';
 
 type CalendarView = "month" | "week" | "day" | "agenda";
@@ -13,6 +11,10 @@ interface CalendarEvent {
     allDay?: boolean;
     color?: EventColor;
     location?: string;
+    tag?: {
+        label: string;
+        color?: EventColor;
+    };
 }
 type EventColor = "sky" | "amber" | "violet" | "rose" | "emerald" | "orange" | "gray" | "black" | "green" | "green-dark" | "red" | "red-light" | "blue" | "yellow";
 
@@ -37,13 +39,11 @@ interface DraggableEventProps {
     showTime?: boolean;
     onClick?: (e: React.MouseEvent) => void;
     height?: number;
-    isMultiDay?: boolean;
-    multiDayWidth?: number;
     isFirstDay?: boolean;
     isLastDay?: boolean;
     "aria-hidden"?: boolean | "true" | "false";
 }
-declare function DraggableEvent({ event, view, showTime, onClick, height, isMultiDay, multiDayWidth, isFirstDay, isLastDay, "aria-hidden": ariaHidden, }: DraggableEventProps): react_jsx_runtime.JSX.Element;
+declare function DraggableEvent({ event, view, showTime, onClick, height, isFirstDay, isLastDay, "aria-hidden": ariaHidden, }: DraggableEventProps): react_jsx_runtime.JSX.Element;
 
 interface DroppableCellProps {
     id: string;
@@ -66,12 +66,9 @@ interface EventItemProps {
     isLastDay?: boolean;
     children?: React.ReactNode;
     className?: string;
-    dndListeners?: SyntheticListenerMap;
-    dndAttributes?: DraggableAttributes;
-    onMouseDown?: (e: React.MouseEvent) => void;
-    onTouchStart?: (e: React.TouchEvent) => void;
+    "aria-hidden"?: boolean | "true" | "false";
 }
-declare function EventItem({ event, view, isDragging, onClick, showTime, currentTime, isFirstDay, isLastDay, children, className, dndListeners, dndAttributes, onMouseDown, onTouchStart, }: EventItemProps): react_jsx_runtime.JSX.Element;
+declare function EventItem({ event, view, isDragging, onClick, showTime, currentTime, isFirstDay, isLastDay, children, className, }: EventItemProps): react_jsx_runtime.JSX.Element;
 
 interface EventCalendarProps {
     events?: CalendarEvent[];
@@ -116,20 +113,8 @@ declare function WeekView({ currentDate, events, onEventSelect, onEventCreate, }
 
 type CalendarDndContextType = {
     activeEvent: CalendarEvent | null;
-    activeId: UniqueIdentifier | null;
-    activeView: "month" | "week" | "day" | null;
+    activeId: string | number | null;
     currentTime: Date | null;
-    eventHeight: number | null;
-    isMultiDay: boolean;
-    multiDayWidth: number | null;
-    dragHandlePosition: {
-        x?: number;
-        y?: number;
-        data?: {
-            isFirstDay?: boolean;
-            isLastDay?: boolean;
-        };
-    } | null;
 };
 declare const useCalendarDnd: () => CalendarDndContextType;
 interface CalendarDndProviderProps {
@@ -151,6 +136,10 @@ declare const DefaultEndHour = 10;
  * Get CSS classes for event colors
  */
 declare function getEventColorClasses(color?: EventColor | string): string;
+/**
+ * Get CSS classes for tag badge colors
+ */
+declare function getTagColorClasses(color?: string): string;
 /**
  * Get CSS classes for border radius based on event position in multi-day events
  */
@@ -200,5 +189,5 @@ interface EventVisibilityResult {
  */
 declare function useEventVisibility({ eventHeight, eventGap, }: EventVisibilityOptions): EventVisibilityResult;
 
-export { AgendaDaysToShow, AgendaView, CalendarDndProvider, DayView, DefaultEndHour, DefaultStartHour, DraggableEvent, DroppableCell, EndHour, EventCalendar, EventGap, EventHeight, EventItem, MonthView, StartHour, WeekCellsHeight, WeekView, getAgendaEventsForDay, getAllEventsForDay, getBorderRadiusClasses, getEventColorClasses, getEventsForDay, getSpanningEventsForDay, isMultiDayEvent, sortEvents, useCalendarDnd, useCurrentTimeIndicator, useEventVisibility };
+export { AgendaDaysToShow, AgendaView, CalendarDndProvider, DayView, DefaultEndHour, DefaultStartHour, DraggableEvent, DroppableCell, EndHour, EventCalendar, EventGap, EventHeight, EventItem, MonthView, StartHour, WeekCellsHeight, WeekView, getAgendaEventsForDay, getAllEventsForDay, getBorderRadiusClasses, getEventColorClasses, getEventsForDay, getSpanningEventsForDay, getTagColorClasses, isMultiDayEvent, sortEvents, useCalendarDnd, useCurrentTimeIndicator, useEventVisibility };
 export type { CalendarEvent, CalendarView, EventColor };

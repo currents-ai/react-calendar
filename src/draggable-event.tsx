@@ -1,7 +1,4 @@
-import { useRef, useState } from "react"
-import { useDraggable } from "@dnd-kit/core"
-import { CSS } from "@dnd-kit/utilities"
-import { differenceInDays } from "date-fns"
+import { useDraggable } from "@dnd-kit/react"
 
 import { useCalendarDnd } from "./calendar-dnd-context"
 import { EventItem } from "./event-item"
@@ -13,11 +10,29 @@ interface DraggableEventProps {
   showTime?: boolean
   onClick?: (e: React.MouseEvent) => void
   height?: number
-  isMultiDay?: boolean
-  multiDayWidth?: number
   isFirstDay?: boolean
   isLastDay?: boolean
   "aria-hidden"?: boolean | "true" | "false"
+}
+
+function GripIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      stroke="none"
+    >
+      <circle cx="9" cy="12" r="2" />
+      <circle cx="9" cy="6" r="2" />
+      <circle cx="9" cy="18" r="2" />
+      <circle cx="15" cy="12" r="2" />
+      <circle cx="15" cy="6" r="2" />
+      <circle cx="15" cy="18" r="2" />
+    </svg>
+  )
 }
 
 export function DraggableEvent({
@@ -26,99 +41,40 @@ export function DraggableEvent({
   showTime,
   onClick,
   height,
-  isMultiDay,
-  multiDayWidth,
   isFirstDay = true,
   isLastDay = true,
   "aria-hidden": ariaHidden,
 }: DraggableEventProps) {
   const { activeId } = useCalendarDnd()
-  const elementRef = useRef<HTMLDivElement>(null)
-  const [dragHandlePosition, setDragHandlePosition] = useState<{
-    x: number
-    y: number
-  } | null>(null)
 
-  // Check if this is a multi-day event
-  const eventStart = new Date(event.start)
-  const eventEnd = new Date(event.end)
-  const isMultiDayEvent =
-    isMultiDay || event.allDay || differenceInDays(eventEnd, eventStart) >= 1
+  const { ref, handleRef, isDragSource } = useDraggable({
+    id: `${event.id}-${view}`,
+    data: {
+      event,
+      view,
+    },
+  })
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: `${event.id}-${view}`,
-      data: {
-        event,
-        view,
-        height: height || elementRef.current?.offsetHeight || null,
-        isMultiDay: isMultiDayEvent,
-        multiDayWidth: multiDayWidth,
-        dragHandlePosition,
-        isFirstDay,
-        isLastDay,
-      },
-    })
-
-  // Handle mouse down to track where on the event the user clicked
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (elementRef.current) {
-      const rect = elementRef.current.getBoundingClientRect()
-      setDragHandlePosition({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      })
-    }
-  }
-
-  // Don't render if this event is being dragged
-  if (isDragging || activeId === `${event.id}-${view}`) {
-    return (
-      <div
-        ref={setNodeRef}
-        className="opacity-0"
-        style={{ height: height || "auto" }}
-      />
-    )
-  }
-
-  const style = transform
-    ? {
-        transform: CSS.Translate.toString(transform),
-        height: height || "auto",
-        width:
-          isMultiDayEvent && multiDayWidth ? `${multiDayWidth}%` : undefined,
-      }
-    : {
-        height: height || "auto",
-        width:
-          isMultiDayEvent && multiDayWidth ? `${multiDayWidth}%` : undefined,
-      }
-
-  // Handle touch start to track where on the event the user touched
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (elementRef.current) {
-      const rect = elementRef.current.getBoundingClientRect()
-      const touch = e.touches[0]
-      if (touch) {
-        setDragHandlePosition({
-          x: touch.clientX - rect.left,
-          y: touch.clientY - rect.top,
-        })
-      }
-    }
-  }
+  const isDragging = isDragSource || activeId === `${event.id}-${view}`
 
   return (
     <div
-      ref={(node) => {
-        setNodeRef(node)
-        //@ts-ignore
-        if (elementRef) elementRef.current = node
+      ref={ref}
+      className="group/drag relative"
+      style={{
+        height: height || "auto",
+        opacity: isDragging ? 0.3 : undefined,
       }}
-      style={style}
-      className="touch-none"
     >
+      {/* Drag handle - visible on hover */}
+      <div
+        ref={handleRef}
+        className="absolute -left-0.5 top-0 bottom-0 z-10 flex w-5 cursor-grab items-center justify-center rounded-l opacity-0 transition-opacity group-hover/drag:opacity-60 active:cursor-grabbing"
+        aria-label="Drag to move event"
+      >
+        <GripIcon />
+      </div>
+
       <EventItem
         event={event}
         view={view}
@@ -127,11 +83,8 @@ export function DraggableEvent({
         isLastDay={isLastDay}
         isDragging={isDragging}
         onClick={onClick}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
-        dndListeners={listeners}
-        dndAttributes={attributes}
         aria-hidden={ariaHidden}
+        className="group-hover/drag:pl-3.5 sm:group-hover/drag:pl-4"
       />
     </div>
   )

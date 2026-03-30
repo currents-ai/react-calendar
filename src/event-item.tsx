@@ -13,12 +13,13 @@ const formatTimeWithOptionalMinutes = (date: Date) => {
   return format(date, getMinutes(date) === 0 ? "ha" : "h:mma").toLowerCase()
 }
 
-function EventTag({ label, color }: { label: string; color?: string }) {
+function EventTag({ label, color,className }: { label: string; color?: string ,className?:string}) {
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center rounded px-0.5 py-px text-[8px] font-semibold leading-tight sm:text-[9px]",
-        getTagColorClasses(color)
+        "inline-flex shrink-0 items-center rounded px-0.5 py-px font-medium leading-tight text-[10px] mt-0.5",
+        getTagColorClasses(color),
+        className
       )}
     >
       {label}
@@ -143,20 +144,18 @@ export function EventItem({
         currentTime={currentTime}
       >
         {children || (
-          <div className="flex min-w-0 items-center gap-1">
-            <span >
+          <div className="flex min-w-0 flex-col w-full">
+            <div className="flex items-center">
               {!event.allDay && (
                 <span className="font-normal opacity-70 sm:text-[11px]">
-                  {formatTimeWithOptionalMinutes(displayStart)}{" "}
+                  {formatTimeWithOptionalMinutes(displayStart)}
                 </span>
               )}
-              {event.title}
-            </span>
-            {event.tag && (
-              <span className="hidden sm:inline-flex">
-                <EventTag label={event.tag.label} color={event.tag.color} />
-              </span>
-            )}
+              {event.tag && (
+                  <EventTag label={event.tag.label} color={event.tag.color} className="ml-auto" />
+              )}
+            </div>
+            <span className="truncate font-medium">{event.title}</span>
           </div>
         )}
       </EventWrapper>

@@ -332,9 +332,10 @@ var formatTimeWithOptionalMinutes = function (date) {
 };
 function EventTag(_a) {
   var label = _a.label,
-    color = _a.color;
+    color = _a.color,
+    className = _a.className;
   return jsx("span", {
-    className: cn("inline-flex shrink-0 items-center rounded px-0.5 py-px text-[8px] font-semibold leading-tight sm:text-[9px]", getTagColorClasses(color)),
+    className: cn("inline-flex shrink-0 items-center rounded px-0.5 py-px font-medium leading-tight text-[10px] mt-0.5", getTagColorClasses(color), className),
     children: label
   });
 }
@@ -399,18 +400,20 @@ function EventItem(_a) {
       className: cn("mt-[var(--event-gap)] h-full py-0.5 items-center gap-1 text-[10px] sm:text-xs", className),
       currentTime: currentTime,
       children: children || jsxs("div", {
-        className: "flex min-w-0 items-center gap-1",
-        children: [jsxs("span", {
-          children: [!event.allDay && jsxs("span", {
+        className: "flex min-w-0 flex-col w-full",
+        children: [jsxs("div", {
+          className: "flex items-center",
+          children: [!event.allDay && jsx("span", {
             className: "font-normal opacity-70 sm:text-[11px]",
-            children: [formatTimeWithOptionalMinutes(displayStart), " "]
-          }), event.title]
-        }), event.tag && jsx("span", {
-          className: "hidden sm:inline-flex",
-          children: jsx(EventTag, {
+            children: formatTimeWithOptionalMinutes(displayStart)
+          }), event.tag && jsx(EventTag, {
             label: event.tag.label,
-            color: event.tag.color
-          })
+            color: event.tag.color,
+            className: "ml-auto"
+          })]
+        }), jsx("span", {
+          className: "truncate font-medium",
+          children: event.title
         })]
       })
     });

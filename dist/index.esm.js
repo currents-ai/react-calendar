@@ -1,10 +1,9 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
-import { useMemo, useState, useRef, useId, createContext, useContext, useEffect, useLayoutEffect } from 'react';
-import { isSameDay, differenceInMinutes, isPast, format, getMinutes, addDays, isToday, addMinutes, differenceInDays, startOfWeek, endOfWeek, isWithinInterval, startOfDay, eachHourOfInterval, addHours, getHours, areIntervalsOverlapping, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isBefore, subMonths, subWeeks, addMonths, addWeeks } from 'date-fns';
+import { useMemo, useState, createContext, useContext, useEffect, useRef, useLayoutEffect } from 'react';
+import { isSameDay, differenceInMinutes, isPast, format, getMinutes, addDays, isToday, addMinutes, startOfWeek, endOfWeek, isWithinInterval, startOfDay, eachHourOfInterval, addHours, getHours, areIntervalsOverlapping, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isBefore, subMonths, subWeeks, addMonths, addWeeks } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
-import { useSensors, useSensor, MouseSensor, TouchSensor, PointerSensor, DndContext, DragOverlay, useDraggable, useDroppable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
+import { DragDropProvider, DragOverlay, useDraggable, useDroppable } from '@dnd-kit/react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
@@ -26,43 +25,36 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 /* global Reflect, Promise, SuppressedError, Symbol, Iterator */
 
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-
-function __rest(s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-}
-
-function __spreadArray(to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
+var __assign = function () {
+  __assign = Object.assign || function __assign(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
-    return to.concat(ar || Array.prototype.slice.call(from));
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+function __rest(s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
 }
-
+function __spreadArray(to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+}
 typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
-    var e = new Error(message);
-    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+  var e = new Error(message);
+  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
 function ChevronDownIcon(_a) {
@@ -227,6 +219,35 @@ function getEventColorClasses(color) {
   }
 }
 /**
+ * Get CSS classes for tag badge colors
+ */
+function getTagColorClasses(color) {
+  switch (color) {
+    case "sky":
+      return "bg-sky-300/40 text-sky-900 dark:bg-sky-400/20 dark:text-sky-200";
+    case "amber":
+      return "bg-amber-300/40 text-amber-900 dark:bg-amber-400/20 dark:text-amber-200";
+    case "violet":
+      return "bg-violet-300/40 text-violet-900 dark:bg-violet-400/20 dark:text-violet-200";
+    case "rose":
+      return "bg-rose-300/40 text-rose-900 dark:bg-rose-400/20 dark:text-rose-200";
+    case "emerald":
+      return "bg-emerald-300/40 text-emerald-900 dark:bg-emerald-400/20 dark:text-emerald-200";
+    case "orange":
+      return "bg-orange-300/40 text-orange-900 dark:bg-orange-400/20 dark:text-orange-200";
+    case "red":
+      return "bg-red-300/40 text-red-900 dark:bg-red-400/20 dark:text-red-200";
+    case "green":
+      return "bg-green-300/40 text-green-900 dark:bg-green-400/20 dark:text-green-200";
+    case "blue":
+      return "bg-blue-300/40 text-blue-900 dark:bg-blue-400/20 dark:text-blue-200";
+    case "yellow":
+      return "bg-yellow-300/40 text-yellow-900 dark:bg-yellow-400/20 dark:text-yellow-200";
+    default:
+      return "bg-black/10 text-current dark:bg-white/10";
+  }
+}
+/**
  * Get CSS classes for border radius based on event position in multi-day events
  */
 function getBorderRadiusClasses(isFirstDay, isLastDay) {
@@ -306,14 +327,17 @@ function getAgendaEventsForDay(events, day) {
   });
 }
 
-// Using date-fns format with custom formatting:
-// 'h' - hours (1-12)
-// 'a' - am/pm
-// ':mm' - minutes with leading zero (only if the token 'mm' is present)
 var formatTimeWithOptionalMinutes = function (date) {
   return format(date, getMinutes(date) === 0 ? "ha" : "h:mma").toLowerCase();
 };
-// Shared wrapper component for event styling
+function EventTag(_a) {
+  var label = _a.label,
+    color = _a.color;
+  return jsx("span", {
+    className: cn("inline-flex shrink-0 items-center rounded px-0.5 py-px text-[8px] font-semibold leading-tight sm:text-[9px]", getTagColorClasses(color)),
+    children: label
+  });
+}
 function EventWrapper(_a) {
   var event = _a.event,
     _b = _a.isFirstDay,
@@ -324,24 +348,16 @@ function EventWrapper(_a) {
     onClick = _a.onClick,
     className = _a.className,
     children = _a.children,
-    currentTime = _a.currentTime,
-    dndListeners = _a.dndListeners,
-    dndAttributes = _a.dndAttributes,
-    onMouseDown = _a.onMouseDown,
-    onTouchStart = _a.onTouchStart;
-  // Always use the currentTime (if provided) to determine if the event is in the past
+    currentTime = _a.currentTime;
   var displayEnd = currentTime ? new Date(new Date(currentTime).getTime() + (new Date(event.end).getTime() - new Date(event.start).getTime())) : new Date(event.end);
   var isEventInPast = isPast(displayEnd);
-  return jsx("button", __assign({
+  return jsx("button", {
     className: cn("focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] [&[data-dragging]]:cursor-grabbing [&[data-dragging]]:shadow-lg sm:px-2", getEventColorClasses(event.color), getBorderRadiusClasses(isFirstDay, isLastDay), className),
     "data-dragging": isDragging || undefined,
     "data-past-event": isEventInPast || undefined,
     onClick: onClick,
-    onMouseDown: onMouseDown,
-    onTouchStart: onTouchStart
-  }, dndListeners, dndAttributes, {
     children: children
-  }));
+  });
 }
 function EventItem(_a) {
   var event = _a.event,
@@ -355,30 +371,22 @@ function EventItem(_a) {
     _c = _a.isLastDay,
     isLastDay = _c === void 0 ? true : _c,
     children = _a.children,
-    className = _a.className,
-    dndListeners = _a.dndListeners,
-    dndAttributes = _a.dndAttributes,
-    onMouseDown = _a.onMouseDown,
-    onTouchStart = _a.onTouchStart;
+    className = _a.className;
   var eventColor = event.color;
-  // Use the provided currentTime (for dragging) or the event's actual time
   var displayStart = useMemo(function () {
     return currentTime || new Date(event.start);
   }, [currentTime, event.start]);
   var displayEnd = useMemo(function () {
     return currentTime ? new Date(new Date(currentTime).getTime() + (new Date(event.end).getTime() - new Date(event.start).getTime())) : new Date(event.end);
   }, [currentTime, event.start, event.end]);
-  // Calculate event duration in minutes
   var durationMinutes = useMemo(function () {
     return differenceInMinutes(displayEnd, displayStart);
   }, [displayStart, displayEnd]);
   var getEventTime = function () {
     if (event.allDay) return "All day";
-    // For short events (less than 45 minutes), only show start time
     if (durationMinutes < 45) {
       return formatTimeWithOptionalMinutes(displayStart);
     }
-    // For longer events, show both start and end time
     return "".concat(formatTimeWithOptionalMinutes(displayStart), " - ").concat(formatTimeWithOptionalMinutes(displayEnd));
   };
   if (view === "month") {
@@ -388,17 +396,22 @@ function EventItem(_a) {
       isLastDay: isLastDay,
       isDragging: isDragging,
       onClick: onClick,
-      className: cn("mt-[var(--event-gap)] h-full py-0.5 items-center text-[10px] sm:text-xs", className),
+      className: cn("mt-[var(--event-gap)] h-full py-0.5 items-center gap-1 text-[10px] sm:text-xs", className),
       currentTime: currentTime,
-      dndListeners: dndListeners,
-      dndAttributes: dndAttributes,
-      onMouseDown: onMouseDown,
-      onTouchStart: onTouchStart,
-      children: children || jsxs("span", {
-        children: [!event.allDay && jsxs("span", {
-          className: "truncate font-normal opacity-70 sm:text-[11px]",
-          children: [formatTimeWithOptionalMinutes(displayStart), " "]
-        }), event.title]
+      children: children || jsxs("div", {
+        className: "flex min-w-0 items-center gap-1",
+        children: [jsxs("span", {
+          children: [!event.allDay && jsxs("span", {
+            className: "font-normal opacity-70 sm:text-[11px]",
+            children: [formatTimeWithOptionalMinutes(displayStart), " "]
+          }), event.title]
+        }), event.tag && jsx("span", {
+          className: "hidden sm:inline-flex",
+          children: jsx(EventTag, {
+            label: event.tag.label,
+            color: event.tag.color
+          })
+        })]
       })
     });
   }
@@ -411,20 +424,28 @@ function EventItem(_a) {
       onClick: onClick,
       className: cn("py-1", durationMinutes < 45 ? "items-center" : "flex-col", view === "week" ? "text-[10px] sm:text-xs" : "text-xs", className),
       currentTime: currentTime,
-      dndListeners: dndListeners,
-      dndAttributes: dndAttributes,
-      onMouseDown: onMouseDown,
-      onTouchStart: onTouchStart,
       children: durationMinutes < 45 ? jsxs("div", {
-        className: "truncate",
-        children: [event.title, " ", showTime && jsx("span", {
-          className: "opacity-70",
-          children: formatTimeWithOptionalMinutes(displayStart)
+        className: "flex min-w-0 items-center gap-1",
+        children: [jsxs("span", {
+          className: "truncate",
+          children: [event.title, " ", showTime && jsx("span", {
+            className: "opacity-70",
+            children: formatTimeWithOptionalMinutes(displayStart)
+          })]
+        }), event.tag && jsx(EventTag, {
+          label: event.tag.label,
+          color: event.tag.color
         })]
       }) : jsxs(Fragment, {
-        children: [jsx("div", {
-          className: "truncate font-medium",
-          children: event.title
+        children: [jsxs("div", {
+          className: "flex min-w-0 items-center gap-1",
+          children: [jsx("span", {
+            className: "truncate font-medium",
+            children: event.title
+          }), event.tag && jsx(EventTag, {
+            label: event.tag.label,
+            color: event.tag.color
+          })]
         }), showTime && jsx("div", {
           className: "truncate font-normal opacity-70 sm:text-[11px]",
           children: getEventTime()
@@ -432,17 +453,20 @@ function EventItem(_a) {
       })
     });
   }
-  // Agenda view - kept separate since it's significantly different
-  return jsxs("button", __assign({
+  // Agenda view
+  return jsxs("button", {
     className: cn("focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-col gap-1 rounded p-2 text-left transition outline-none focus-visible:ring-[3px] [&[data-past-event]]:opacity-90", getEventColorClasses(eventColor), className),
     "data-past-event": isPast(new Date(event.end)) || undefined,
     onClick: onClick,
-    onMouseDown: onMouseDown,
-    onTouchStart: onTouchStart
-  }, dndListeners, dndAttributes, {
-    children: [jsx("div", {
-      className: "text-sm font-medium",
-      children: event.title
+    children: [jsxs("div", {
+      className: "flex items-center gap-1.5",
+      children: [jsx("span", {
+        className: "text-sm font-medium",
+        children: event.title
+      }), event.tag && jsx(EventTag, {
+        label: event.tag.label,
+        color: event.tag.color
+      })]
     }), jsxs("div", {
       className: "text-xs opacity-70",
       children: [event.allDay ? jsx("span", {
@@ -462,7 +486,7 @@ function EventItem(_a) {
       className: "my-1 text-xs opacity-90",
       children: event.description
     })]
-  }));
+  });
 }
 
 function AgendaView(_a) {
@@ -527,186 +551,118 @@ function AgendaView(_a) {
   });
 }
 
-// Create the context
 var CalendarDndContext = /*#__PURE__*/createContext({
   activeEvent: null,
   activeId: null,
-  activeView: null,
-  currentTime: null,
-  eventHeight: null,
-  isMultiDay: false,
-  multiDayWidth: null,
-  dragHandlePosition: null
+  currentTime: null
 });
-// Hook to use the context
 var useCalendarDnd = function () {
   return useContext(CalendarDndContext);
 };
 function CalendarDndProvider(_a) {
-  var _b, _c;
   var children = _a.children,
     onEventUpdate = _a.onEventUpdate;
+  var _b = useState(null),
+    activeEvent = _b[0],
+    setActiveEvent = _b[1];
+  var _c = useState(null),
+    activeId = _c[0],
+    setActiveId = _c[1];
   var _d = useState(null),
-    activeEvent = _d[0],
-    setActiveEvent = _d[1];
+    activeView = _d[0],
+    setActiveView = _d[1];
   var _e = useState(null),
-    activeId = _e[0],
-    setActiveId = _e[1];
-  var _f = useState(null),
-    activeView = _f[0],
-    setActiveView = _f[1];
-  var _g = useState(null),
-    currentTime = _g[0],
-    setCurrentTime = _g[1];
-  var _h = useState(null),
-    eventHeight = _h[0],
-    setEventHeight = _h[1];
-  var _j = useState(false),
-    isMultiDay = _j[0],
-    setIsMultiDay = _j[1];
-  var _k = useState(null),
-    multiDayWidth = _k[0],
-    setMultiDayWidth = _k[1];
-  var _l = useState(null),
-    dragHandlePosition = _l[0],
-    setDragHandlePosition = _l[1];
-  // Store original event dimensions
-  var eventDimensions = useRef({
-    height: 0
-  });
-  // Configure sensors for better drag detection
-  var sensors = useSensors(useSensor(MouseSensor, {
-    // Require the mouse to move by 5px before activating
-    activationConstraint: {
-      distance: 5
-    }
-  }), useSensor(TouchSensor, {
-    // Press delay of 250ms, with tolerance of 5px of movement
-    activationConstraint: {
-      delay: 250,
-      tolerance: 5
-    }
-  }), useSensor(PointerSensor, {
-    // Require the pointer to move by 5px before activating
-    activationConstraint: {
-      distance: 5
-    }
-  }));
-  // Generate a stable ID for the DndContext
-  var dndContextId = useId();
+    currentTime = _e[0],
+    setCurrentTime = _e[1];
   var handleDragStart = function (event) {
-    var active = event.active;
-    // Add safety check for data.current
-    if (!active.data.current) {
-      console.error("Missing data in drag start event", event);
-      return;
-    }
-    var _a = active.data.current,
+    var operation = event.operation;
+    var source = operation.source;
+    if (!(source === null || source === void 0 ? void 0 : source.data)) return;
+    var _a = source.data,
       calendarEvent = _a.event,
-      view = _a.view,
-      height = _a.height,
-      eventIsMultiDay = _a.isMultiDay,
-      eventMultiDayWidth = _a.multiDayWidth,
-      eventDragHandlePosition = _a.dragHandlePosition;
+      view = _a.view;
     setActiveEvent(calendarEvent);
-    setActiveId(active.id);
+    setActiveId(source.id);
     setActiveView(view);
     setCurrentTime(new Date(calendarEvent.start));
-    setIsMultiDay(eventIsMultiDay || false);
-    setMultiDayWidth(eventMultiDayWidth || null);
-    setDragHandlePosition(eventDragHandlePosition || null);
-    // Store event height if provided
-    if (height) {
-      eventDimensions.current.height = height;
-      setEventHeight(height);
-    }
+  };
+  var snapToQuarterHour = function (time) {
+    var hours = Math.floor(time);
+    var fractionalHour = time - hours;
+    var minutes = 0;
+    if (fractionalHour < 0.125) minutes = 0;else if (fractionalHour < 0.375) minutes = 15;else if (fractionalHour < 0.625) minutes = 30;else minutes = 45;
+    return {
+      hours: hours,
+      minutes: minutes
+    };
   };
   var handleDragOver = function (event) {
-    var over = event.over;
-    if (over && activeEvent && over.data.current) {
-      var _a = over.data.current,
-        date = _a.date,
-        time = _a.time;
-      // Update time for week/day views
-      if (time !== undefined && activeView !== "month") {
-        var newTime = new Date(date);
-        // Calculate hours and minutes with 15-minute precision
-        var hours = Math.floor(time);
-        var fractionalHour = time - hours;
-        // Map to nearest 15 minute interval (0, 0.25, 0.5, 0.75)
-        var minutes = 0;
-        if (fractionalHour < 0.125) minutes = 0;else if (fractionalHour < 0.375) minutes = 15;else if (fractionalHour < 0.625) minutes = 30;else minutes = 45;
-        newTime.setHours(hours, minutes, 0, 0);
-        // Only update if time has changed
-        if (!currentTime || newTime.getHours() !== currentTime.getHours() || newTime.getMinutes() !== currentTime.getMinutes() || newTime.getDate() !== currentTime.getDate() || newTime.getMonth() !== currentTime.getMonth() || newTime.getFullYear() !== currentTime.getFullYear()) {
-          setCurrentTime(newTime);
-        }
-      } else if (activeView === "month") {
-        // For month view, just update the date but preserve time
-        var newTime = new Date(date);
-        if (currentTime) {
-          newTime.setHours(currentTime.getHours(), currentTime.getMinutes(), currentTime.getSeconds(), currentTime.getMilliseconds());
-        }
-        // Only update if date has changed
-        if (!currentTime || newTime.getDate() !== currentTime.getDate() || newTime.getMonth() !== currentTime.getMonth() || newTime.getFullYear() !== currentTime.getFullYear()) {
-          setCurrentTime(newTime);
-        }
+    var operation = event.operation;
+    var target = operation.target;
+    if (!(target === null || target === void 0 ? void 0 : target.data) || !activeEvent) return;
+    var _a = target.data,
+      date = _a.date,
+      time = _a.time;
+    if (time !== undefined) {
+      var _b = snapToQuarterHour(time),
+        hours = _b.hours,
+        minutes = _b.minutes;
+      var newTime = new Date(date);
+      newTime.setHours(hours, minutes, 0, 0);
+      if (!currentTime || newTime.getTime() !== currentTime.getTime()) {
+        setCurrentTime(newTime);
+      }
+    } else {
+      // Month view: update date, preserve time
+      var newTime = new Date(date);
+      if (currentTime) {
+        newTime.setHours(currentTime.getHours(), currentTime.getMinutes(), currentTime.getSeconds(), 0);
+      }
+      if (!currentTime || newTime.getTime() !== currentTime.getTime()) {
+        setCurrentTime(newTime);
       }
     }
   };
+  var resetState = function () {
+    setActiveEvent(null);
+    setActiveId(null);
+    setActiveView(null);
+    setCurrentTime(null);
+  };
   var handleDragEnd = function (event) {
-    var active = event.active,
-      over = event.over;
-    // Add robust error checking
-    if (!over || !activeEvent || !currentTime) {
-      // Reset state and exit early
-      setActiveEvent(null);
-      setActiveId(null);
-      setActiveView(null);
-      setCurrentTime(null);
-      setEventHeight(null);
-      setIsMultiDay(false);
-      setMultiDayWidth(null);
-      setDragHandlePosition(null);
+    var operation = event.operation;
+    var source = operation.source;
+    var target = operation.target;
+    if (!target || !activeEvent || !currentTime) {
+      resetState();
       return;
     }
     try {
-      // Safely access data with checks
-      if (!active.data.current || !over.data.current) {
+      if (!(source === null || source === void 0 ? void 0 : source.data) || !(target === null || target === void 0 ? void 0 : target.data)) {
         throw new Error("Missing data in drag event");
       }
-      var activeData = active.data.current;
-      var overData = over.data.current;
-      // Verify we have all required data
+      var activeData = source.data;
+      var overData = target.data;
       if (!activeData.event || !overData.date) {
         throw new Error("Missing required event data");
       }
       var calendarEvent = activeData.event;
       var date = overData.date;
       var time = overData.time;
-      // Calculate new start time
       var newStart = new Date(date);
-      // If time is provided (for week/day views), set the hours and minutes
       if (time !== undefined) {
-        var hours = Math.floor(time);
-        var fractionalHour = time - hours;
-        // Map to nearest 15 minute interval (0, 0.25, 0.5, 0.75)
-        var minutes = 0;
-        if (fractionalHour < 0.125) minutes = 0;else if (fractionalHour < 0.375) minutes = 15;else if (fractionalHour < 0.625) minutes = 30;else minutes = 45;
+        var _a = snapToQuarterHour(time),
+          hours = _a.hours,
+          minutes = _a.minutes;
         newStart.setHours(hours, minutes, 0, 0);
       } else {
-        // For month view, preserve the original time from currentTime
-        newStart.setHours(currentTime.getHours(), currentTime.getMinutes(), currentTime.getSeconds(), currentTime.getMilliseconds());
+        newStart.setHours(currentTime.getHours(), currentTime.getMinutes(), 0, 0);
       }
-      // Calculate new end time based on the original duration
       var originalStart = new Date(calendarEvent.start);
       var originalEnd = new Date(calendarEvent.end);
       var durationMinutes = differenceInMinutes(originalEnd, originalStart);
       var newEnd = addMinutes(newStart, durationMinutes);
-      // Only update if the start time has actually changed
-      var hasStartTimeChanged = originalStart.getFullYear() !== newStart.getFullYear() || originalStart.getMonth() !== newStart.getMonth() || originalStart.getDate() !== newStart.getDate() || originalStart.getHours() !== newStart.getHours() || originalStart.getMinutes() !== newStart.getMinutes();
-      if (hasStartTimeChanged) {
-        // Update the event only if the time has changed
+      if (originalStart.getTime() !== newStart.getTime()) {
         onEventUpdate(__assign(__assign({}, calendarEvent), {
           start: newStart,
           end: newEnd
@@ -715,20 +671,10 @@ function CalendarDndProvider(_a) {
     } catch (error) {
       console.error("Error in drag end handler:", error);
     } finally {
-      // Always reset state
-      setActiveEvent(null);
-      setActiveId(null);
-      setActiveView(null);
-      setCurrentTime(null);
-      setEventHeight(null);
-      setIsMultiDay(false);
-      setMultiDayWidth(null);
-      setDragHandlePosition(null);
+      resetState();
     }
   };
-  return jsx(DndContext, {
-    id: dndContextId,
-    sensors: sensors,
+  return jsx(DragDropProvider, {
     onDragStart: handleDragStart,
     onDragOver: handleDragOver,
     onDragEnd: handleDragEnd,
@@ -736,128 +682,97 @@ function CalendarDndProvider(_a) {
       value: {
         activeEvent: activeEvent,
         activeId: activeId,
-        activeView: activeView,
-        currentTime: currentTime,
-        eventHeight: eventHeight,
-        isMultiDay: isMultiDay,
-        multiDayWidth: multiDayWidth,
-        dragHandlePosition: dragHandlePosition
+        currentTime: currentTime
       },
       children: [children, jsx(DragOverlay, {
-        adjustScale: false,
-        dropAnimation: null,
-        children: activeEvent && activeView && jsx("div", {
+        children: activeEvent ? jsx("div", {
+          className: "pointer-events-none w-48 opacity-80 shadow-lg",
           style: {
-            height: eventHeight ? "".concat(eventHeight, "px") : "auto",
-            width: isMultiDay && multiDayWidth ? "".concat(multiDayWidth, "%") : "100%"
-            // Remove the transform that was causing the shift
+            maxWidth: activeView === "month" ? "12rem" : "10rem"
           },
           children: jsx(EventItem, {
             event: activeEvent,
-            view: activeView,
-            isDragging: true,
+            view: activeView || "month",
             showTime: activeView !== "month",
-            currentTime: currentTime || undefined,
-            isFirstDay: ((_b = dragHandlePosition === null || dragHandlePosition === void 0 ? void 0 : dragHandlePosition.data) === null || _b === void 0 ? void 0 : _b.isFirstDay) !== false,
-            isLastDay: ((_c = dragHandlePosition === null || dragHandlePosition === void 0 ? void 0 : dragHandlePosition.data) === null || _c === void 0 ? void 0 : _c.isLastDay) !== false
+            currentTime: currentTime || undefined
           })
-        })
+        }) : null
       })]
     })
   });
 }
 
+function GripIcon() {
+  return jsxs("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "12",
+    height: "12",
+    viewBox: "0 0 24 24",
+    fill: "currentColor",
+    stroke: "none",
+    children: [jsx("circle", {
+      cx: "9",
+      cy: "12",
+      r: "2"
+    }), jsx("circle", {
+      cx: "9",
+      cy: "6",
+      r: "2"
+    }), jsx("circle", {
+      cx: "9",
+      cy: "18",
+      r: "2"
+    }), jsx("circle", {
+      cx: "15",
+      cy: "12",
+      r: "2"
+    }), jsx("circle", {
+      cx: "15",
+      cy: "6",
+      r: "2"
+    }), jsx("circle", {
+      cx: "15",
+      cy: "18",
+      r: "2"
+    })]
+  });
+}
 function DraggableEvent(_a) {
-  var _b;
   var event = _a.event,
     view = _a.view,
     showTime = _a.showTime,
     onClick = _a.onClick,
     height = _a.height,
-    isMultiDay = _a.isMultiDay,
-    multiDayWidth = _a.multiDayWidth,
-    _c = _a.isFirstDay,
-    isFirstDay = _c === void 0 ? true : _c,
-    _d = _a.isLastDay,
-    isLastDay = _d === void 0 ? true : _d,
+    _b = _a.isFirstDay,
+    isFirstDay = _b === void 0 ? true : _b,
+    _c = _a.isLastDay,
+    isLastDay = _c === void 0 ? true : _c,
     ariaHidden = _a["aria-hidden"];
   var activeId = useCalendarDnd().activeId;
-  var elementRef = useRef(null);
-  var _e = useState(null),
-    dragHandlePosition = _e[0],
-    setDragHandlePosition = _e[1];
-  // Check if this is a multi-day event
-  var eventStart = new Date(event.start);
-  var eventEnd = new Date(event.end);
-  var isMultiDayEvent = isMultiDay || event.allDay || differenceInDays(eventEnd, eventStart) >= 1;
-  var _f = useDraggable({
+  var _d = useDraggable({
       id: "".concat(event.id, "-").concat(view),
       data: {
         event: event,
-        view: view,
-        height: height || ((_b = elementRef.current) === null || _b === void 0 ? void 0 : _b.offsetHeight) || null,
-        isMultiDay: isMultiDayEvent,
-        multiDayWidth: multiDayWidth,
-        dragHandlePosition: dragHandlePosition,
-        isFirstDay: isFirstDay,
-        isLastDay: isLastDay
+        view: view
       }
     }),
-    attributes = _f.attributes,
-    listeners = _f.listeners,
-    setNodeRef = _f.setNodeRef,
-    transform = _f.transform,
-    isDragging = _f.isDragging;
-  // Handle mouse down to track where on the event the user clicked
-  var handleMouseDown = function (e) {
-    if (elementRef.current) {
-      var rect = elementRef.current.getBoundingClientRect();
-      setDragHandlePosition({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      });
-    }
-  };
-  // Don't render if this event is being dragged
-  if (isDragging || activeId === "".concat(event.id, "-").concat(view)) {
-    return jsx("div", {
-      ref: setNodeRef,
-      className: "opacity-0",
-      style: {
-        height: height || "auto"
-      }
-    });
-  }
-  var style = transform ? {
-    transform: CSS.Translate.toString(transform),
-    height: height || "auto",
-    width: isMultiDayEvent && multiDayWidth ? "".concat(multiDayWidth, "%") : undefined
-  } : {
-    height: height || "auto",
-    width: isMultiDayEvent && multiDayWidth ? "".concat(multiDayWidth, "%") : undefined
-  };
-  // Handle touch start to track where on the event the user touched
-  var handleTouchStart = function (e) {
-    if (elementRef.current) {
-      var rect = elementRef.current.getBoundingClientRect();
-      var touch = e.touches[0];
-      if (touch) {
-        setDragHandlePosition({
-          x: touch.clientX - rect.left,
-          y: touch.clientY - rect.top
-        });
-      }
-    }
-  };
-  return jsx("div", {
-    ref: function (node) {
-      setNodeRef(node);
-      //@ts-ignore
-      if (elementRef) elementRef.current = node;
+    ref = _d.ref,
+    handleRef = _d.handleRef,
+    isDragSource = _d.isDragSource;
+  var isDragging = isDragSource || activeId === "".concat(event.id, "-").concat(view);
+  return jsxs("div", {
+    ref: ref,
+    className: "group/drag relative",
+    style: {
+      height: height || "auto",
+      opacity: isDragging ? 0.3 : undefined
     },
-    style: style,
-    className: "touch-none",
-    children: jsx(EventItem, {
+    children: [jsx("div", {
+      ref: handleRef,
+      className: "absolute -left-0.5 top-0 bottom-0 z-10 flex w-5 cursor-grab items-center justify-center rounded-l opacity-0 transition-opacity group-hover/drag:opacity-60 active:cursor-grabbing",
+      "aria-label": "Drag to move event",
+      children: jsx(GripIcon, {})
+    }), jsx(EventItem, {
       event: event,
       view: view,
       showTime: showTime,
@@ -865,12 +780,9 @@ function DraggableEvent(_a) {
       isLastDay: isLastDay,
       isDragging: isDragging,
       onClick: onClick,
-      onMouseDown: handleMouseDown,
-      onTouchStart: handleTouchStart,
-      dndListeners: listeners,
-      dndAttributes: attributes,
-      "aria-hidden": ariaHidden
-    })
+      "aria-hidden": ariaHidden,
+      className: "group-hover/drag:pl-3.5 sm:group-hover/drag:pl-4"
+    })]
   });
 }
 
@@ -889,16 +801,13 @@ function DroppableCell(_a) {
         time: time
       }
     }),
-    setNodeRef = _b.setNodeRef,
-    isOver = _b.isOver;
-  // Format time for display in tooltip (only for debugging)
-  var formattedTime = time !== undefined ? "".concat(Math.floor(time), ":").concat(Math.round((time - Math.floor(time)) * 60).toString().padStart(2, "0")) : null;
+    ref = _b.ref,
+    isDropTarget = _b.isDropTarget;
+  console.log('isDropTarget', isDropTarget);
   return jsx("div", {
-    ref: setNodeRef,
+    ref: ref,
     onClick: onClick,
-    className: cn("[&[data-dragging]]:bg-accent flex h-full flex-col overflow-hidden px-0.5 py-1 sm:px-1", className),
-    title: formattedTime ? "".concat(formattedTime) : undefined,
-    "data-dragging": isOver && activeEvent ? true : undefined,
+    className: cn("flex h-full flex-col overflow-hidden px-0.5 py-1 transition-colors sm:px-1", isDropTarget && activeEvent && "bg-primary/10 dark:bg-primary/15", className),
     children: children
   });
 }
@@ -2187,5 +2096,5 @@ function EventCalendar(_a) {
   });
 }
 
-export { AgendaDaysToShow, AgendaView, CalendarDndProvider, DayView, DefaultEndHour, DefaultStartHour, DraggableEvent, DroppableCell, EndHour, EventCalendar, EventGap, EventHeight, EventItem, MonthView, StartHour, WeekCellsHeight, WeekView, getAgendaEventsForDay, getAllEventsForDay, getBorderRadiusClasses, getEventColorClasses, getEventsForDay, getSpanningEventsForDay, isMultiDayEvent, sortEvents, useCalendarDnd, useCurrentTimeIndicator, useEventVisibility };
+export { AgendaDaysToShow, AgendaView, CalendarDndProvider, DayView, DefaultEndHour, DefaultStartHour, DraggableEvent, DroppableCell, EndHour, EventCalendar, EventGap, EventHeight, EventItem, MonthView, StartHour, WeekCellsHeight, WeekView, getAgendaEventsForDay, getAllEventsForDay, getBorderRadiusClasses, getEventColorClasses, getEventsForDay, getSpanningEventsForDay, getTagColorClasses, isMultiDayEvent, sortEvents, useCalendarDnd, useCurrentTimeIndicator, useEventVisibility };
 //# sourceMappingURL=index.esm.js.map

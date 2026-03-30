@@ -9,6 +9,10 @@ export interface CalendarEvent {
   allDay?: boolean
   color?: EventColor
   location?: string
+  tag?: {
+    label: string
+    color?: EventColor
+  }
 }
 
 export type EventColor =

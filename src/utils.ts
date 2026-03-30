@@ -43,6 +43,36 @@ export function getEventColorClasses(color?: EventColor | string): string {
 }
 
 /**
+ * Get CSS classes for tag badge colors
+ */
+export function getTagColorClasses(color?: string): string {
+  switch (color) {
+    case "sky":
+      return "bg-sky-300/40 text-sky-900 dark:bg-sky-400/20 dark:text-sky-200"
+    case "amber":
+      return "bg-amber-300/40 text-amber-900 dark:bg-amber-400/20 dark:text-amber-200"
+    case "violet":
+      return "bg-violet-300/40 text-violet-900 dark:bg-violet-400/20 dark:text-violet-200"
+    case "rose":
+      return "bg-rose-300/40 text-rose-900 dark:bg-rose-400/20 dark:text-rose-200"
+    case "emerald":
+      return "bg-emerald-300/40 text-emerald-900 dark:bg-emerald-400/20 dark:text-emerald-200"
+    case "orange":
+      return "bg-orange-300/40 text-orange-900 dark:bg-orange-400/20 dark:text-orange-200"
+    case "red":
+      return "bg-red-300/40 text-red-900 dark:bg-red-400/20 dark:text-red-200"
+    case "green":
+      return "bg-green-300/40 text-green-900 dark:bg-green-400/20 dark:text-green-200"
+    case "blue":
+      return "bg-blue-300/40 text-blue-900 dark:bg-blue-400/20 dark:text-blue-200"
+    case "yellow":
+      return "bg-yellow-300/40 text-yellow-900 dark:bg-yellow-400/20 dark:text-yellow-200"
+    default:
+      return "bg-black/10 text-current dark:bg-white/10"
+  }
+}
+
+/**
  * Get CSS classes for border radius based on event position in multi-day events
  */
 export function getBorderRadiusClasses(

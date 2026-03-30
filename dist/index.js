@@ -825,7 +825,6 @@ function DroppableCell(_a) {
     }),
     ref = _b.ref,
     isDropTarget = _b.isDropTarget;
-  console.log('isDropTarget', isDropTarget);
   return jsxRuntime.jsx("div", {
     ref: ref,
     onClick: onClick,

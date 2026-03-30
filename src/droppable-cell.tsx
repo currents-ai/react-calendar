@@ -29,7 +29,6 @@ export function DroppableCell({
       time,
     },
   })
-  console.log('isDropTarget', isDropTarget)
 
   return (
     <div

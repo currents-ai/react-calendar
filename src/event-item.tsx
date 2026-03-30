@@ -155,7 +155,7 @@ export function EventItem({
                   <EventTag label={event.tag.label} color={event.tag.color} className="ml-auto" />
               )}
             </div>
-            <span className="truncate font-medium">{event.title}</span>
+            <span className="font-medium">{event.title}</span>
           </div>
         )}
       </EventWrapper>

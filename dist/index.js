@@ -434,7 +434,7 @@ function EventItem(_a) {
             className: "ml-auto"
           })]
         }), jsxRuntime.jsx("span", {
-          className: "truncate font-medium",
+          className: "font-medium",
           children: event.title
         })]
       })

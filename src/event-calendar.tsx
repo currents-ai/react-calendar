@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, type ReactNode } from "react"
 import {
   addDays,
   addMonths,
@@ -28,7 +28,11 @@ import {
 import { DayView } from "./day-view"
 import { cn } from "./lib/utils"
 import { MonthView } from "./month-view"
-import { CalendarEvent, CalendarView } from "./types"
+import { CalendarEvent, CalendarVariant, CalendarView } from "./types"
+import {
+  CalendarConfigProvider,
+  type CalendarConfig,
+} from "./variant-context"
 import { Button } from "./ui/button"
 import {
   DropdownMenu,
@@ -61,6 +65,14 @@ export interface EventCalendarProps {
   eventGap?: number
   weekCellsHeight?: number
   agendaDaysToShow?: number
+  variant?: CalendarVariant
+  /** Consumer-owned event content + interaction tweaks (see CalendarConfig). */
+  renderEventContent?: CalendarConfig["renderEventContent"]
+  hideDragHandle?: boolean
+  liftOnHover?: boolean
+  /** Slot rendered in the header's right side (e.g. a legend), vertically
+   *  centered with the title/nav. */
+  headerActions?: ReactNode
 }
 
 export function EventCalendar({
@@ -78,6 +90,11 @@ export function EventCalendar({
   eventGap = EventGap,
   weekCellsHeight = WeekCellsHeight,
   agendaDaysToShow = AgendaDaysToShow,
+  variant = "soft",
+  renderEventContent,
+  hideDragHandle,
+  liftOnHover,
+  headerActions,
 }: EventCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [view, setView] = useState<CalendarView>(initialView)
@@ -167,6 +184,17 @@ export function EventCalendar({
 
   const viewTitle = useMemo(() => {
     if (view === "month") {
+      if (variant === "minimal") {
+        // month stays in the title color; year is muted
+        return (
+          <>
+            {format(currentDate, "MMMM")}{" "}
+            <span className="text-muted-foreground font-normal">
+              {format(currentDate, "yyyy")}
+            </span>
+          </>
+        )
+      }
       return format(currentDate, "MMMM yyyy")
     } else if (view === "week") {
       const start = startOfWeek(currentDate, { weekStartsOn: 0 })
@@ -203,11 +231,18 @@ export function EventCalendar({
     } else {
       return format(currentDate, "MMMM yyyy")
     }
-  }, [currentDate, view])
+  }, [currentDate, view, variant])
 
   return (
+    <CalendarConfigProvider
+      config={{ variant, renderEventContent, hideDragHandle, liftOnHover }}
+    >
     <div
-      className="flex flex-col rounded-lg border has-data-[slot=month-view]:flex-1"
+      className={cn(
+        "flex flex-col border",
+        variant === "terminal" ? "rounded-none font-mono" : "rounded-lg"
+      )}
+      data-calendar-variant={variant}
       style={
         {
           "--event-height": `${eventHeight}px`,
@@ -227,15 +262,10 @@ export function EventCalendar({
           <div className="flex items-center gap-1 sm:gap-4">
             <Button
               variant="outline"
-              className="aspect-square max-[479px]:p-0!"
               onClick={handleToday}
+              className={variant === "minimal" ? "text-muted-foreground" : undefined}
             >
-              {/* <RiCalendarCheckLine
-                className="min-[480px]:hidden"
-                size={16}
-                aria-hidden="true"
-              /> */}
-              <span className="max-[479px]:sr-only">Today</span>
+              Today
             </Button>
             <div className="flex items-center sm:gap-2">
               <Button
@@ -243,6 +273,7 @@ export function EventCalendar({
                 size="icon"
                 onClick={handlePrevious}
                 aria-label="Previous"
+                className={variant === "minimal" ? "text-muted-foreground" : undefined}
               >
                 <ChevronLeftIcon size={16} aria-hidden="true" />
               </Button>
@@ -251,6 +282,7 @@ export function EventCalendar({
                 size="icon"
                 onClick={handleNext}
                 aria-label="Next"
+                className={variant === "minimal" ? "text-muted-foreground" : undefined}
               >
                 <ChevronRightIcon size={16} aria-hidden="true" />
               </Button>
@@ -260,6 +292,7 @@ export function EventCalendar({
             </h2>
           </div>
           <div className="flex items-center gap-2">
+            {headerActions}
             {showViewSwitcher && (
               <DropdownMenu>
                 <DropdownMenuTrigger>
@@ -362,5 +395,6 @@ export function EventCalendar({
         </div>
       </CalendarDndProvider>
     </div>
+    </CalendarConfigProvider>
   )
 }

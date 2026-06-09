@@ -47,36 +47,43 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 /* global Reflect, Promise, SuppressedError, Symbol, Iterator */
 
-var __assign = function () {
-  __assign = Object.assign || function __assign(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-    }
-    return t;
-  };
-  return __assign.apply(this, arguments);
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
+
 function __rest(s, e) {
-  var t = {};
-  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
-  }
-  return t;
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
 }
+
 function __spreadArray(to, from, pack) {
-  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-    if (ar || !(i in from)) {
-      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-      ar[i] = from[i];
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
     }
-  }
-  return to.concat(ar || Array.prototype.slice.call(from));
+    return to.concat(ar || Array.prototype.slice.call(from));
 }
+
 typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
-  var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
 function ChevronDownIcon(_a) {
@@ -202,6 +209,150 @@ function cn() {
   return tailwindMerge.twMerge(clsx(inputs));
 }
 
+var DEFAULT_CONFIG = {
+  variant: "soft"
+};
+var CalendarConfigContext = /*#__PURE__*/React.createContext(DEFAULT_CONFIG);
+function CalendarConfigProvider(_a) {
+  var config = _a.config,
+    children = _a.children;
+  return jsxRuntime.jsx(CalendarConfigContext.Provider, {
+    value: config,
+    children: children
+  });
+}
+function useCalendarConfig() {
+  return React.useContext(CalendarConfigContext);
+}
+/** Convenience selector for the common case. */
+function useCalendarVariant() {
+  return React.useContext(CalendarConfigContext).variant;
+}
+
+function statusKey(color) {
+  switch (color) {
+    case "green":
+    case "green-dark":
+    case "emerald":
+      return "success";
+    case "red":
+    case "red-light":
+    case "rose":
+      return "destructive";
+    case "yellow":
+    case "amber":
+    case "orange":
+      return "warning";
+    case "sky":
+    case "blue":
+    case "violet":
+      return "highlight";
+    default:
+      return "muted";
+  }
+}
+/**
+ * Full event surface + status treatment for an event pill, per variant — all
+ * theme tokens. soft: neutral card with a colored status edge. minimal: flat
+ * muted fill with a status edge. terminal: sharp, mono, hard status border.
+ */
+function getEventClasses(color, variant) {
+  if (variant === void 0) {
+    variant = "soft";
+  }
+  switch (variant) {
+    case "terminal":
+      return cn("bg-secondary text-foreground border font-mono uppercase tracking-tight", getStatusBorderClasses(color));
+    case "minimal":
+      // No fill — just a status-colored left border (matches the legend) and
+      // foreground text. Hover gets a faint surface so the lift reads.
+      return cn("bg-transparent text-foreground border-l-2 hover:bg-accent/60", getStatusAccentClasses(color));
+    case "soft":
+    default:
+      return cn("bg-card text-card-foreground border border-border border-l-[3px] shadow-sm hover:bg-accent hover:text-accent-foreground", getStatusAccentClasses(color));
+  }
+}
+/** Left status edge (soft + minimal). Theme tokens, literal classes. */
+function getStatusAccentClasses(color) {
+  switch (statusKey(color)) {
+    case "success":
+      return "border-l-success";
+    case "warning":
+      return "border-l-warning";
+    case "destructive":
+      return "border-l-destructive";
+    case "highlight":
+      return "border-l-highlight";
+    case "muted":
+    default:
+      return "border-l-muted-foreground";
+  }
+}
+/** All-sides status border (terminal). Theme tokens, literal classes. */
+function getStatusBorderClasses(color) {
+  switch (statusKey(color)) {
+    case "success":
+      return "border-success";
+    case "warning":
+      return "border-warning";
+    case "destructive":
+      return "border-destructive";
+    case "highlight":
+      return "border-highlight";
+    case "muted":
+    default:
+      return "border-muted-foreground";
+  }
+}
+/** Solid status dot fill (for legends). Theme tokens, literal classes. */
+function getStatusDotClasses(color) {
+  switch (statusKey(color)) {
+    case "success":
+      return "bg-success";
+    case "warning":
+      return "bg-warning";
+    case "destructive":
+      return "bg-destructive";
+    case "highlight":
+      return "bg-highlight";
+    case "muted":
+    default:
+      return "bg-muted-foreground";
+  }
+}
+/** Status badge fill + text. Theme tokens, literal classes. */
+function getStatusTagClasses(color) {
+  switch (statusKey(color)) {
+    case "success":
+      return "bg-success/15 text-success";
+    case "warning":
+      return "bg-warning/15 text-warning";
+    case "destructive":
+      return "bg-destructive/15 text-destructive";
+    case "highlight":
+      return "bg-highlight/15 text-highlight";
+    case "muted":
+    default:
+      return "bg-muted text-muted-foreground";
+  }
+}
+/**
+ * Per-variant chrome for a tag badge — radius and typeface only; color comes
+ * from getStatusTagClasses.
+ */
+function getTagChromeClasses(variant) {
+  if (variant === void 0) {
+    variant = "soft";
+  }
+  switch (variant) {
+    case "terminal":
+      return "rounded-none font-mono uppercase";
+    case "minimal":
+    case "soft":
+    default:
+      return "rounded";
+  }
+}
 /**
  * Get CSS classes for event colors
  */
@@ -272,7 +423,14 @@ function getTagColorClasses(color) {
 /**
  * Get CSS classes for border radius based on event position in multi-day events
  */
-function getBorderRadiusClasses(isFirstDay, isLastDay) {
+function getBorderRadiusClasses(isFirstDay, isLastDay, variant) {
+  if (variant === void 0) {
+    variant = "soft";
+  }
+  // The terminal variant is always square, including across multi-day spans.
+  if (variant === "terminal") {
+    return "rounded-none";
+  }
   if (isFirstDay && isLastDay) {
     return "rounded"; // Both ends rounded
   } else if (isFirstDay) {
@@ -356,8 +514,9 @@ function EventTag(_a) {
   var label = _a.label,
     color = _a.color,
     className = _a.className;
+  var variant = useCalendarVariant();
   return jsxRuntime.jsx("span", {
-    className: cn("inline-flex shrink-0 items-center rounded px-0.5 py-px font-medium leading-tight text-[10px] mt-0.5", getTagColorClasses(color), className),
+    className: cn("inline-flex shrink-0 items-center px-0.5 py-px font-medium leading-tight text-[10px] mt-0.5", getTagChromeClasses(variant), getStatusTagClasses(color), className),
     children: label
   });
 }
@@ -374,8 +533,11 @@ function EventWrapper(_a) {
     currentTime = _a.currentTime;
   var displayEnd = currentTime ? new Date(new Date(currentTime).getTime() + (new Date(event.end).getTime() - new Date(event.start).getTime())) : new Date(event.end);
   var isEventInPast = dateFns.isPast(displayEnd);
+  var _d = useCalendarConfig(),
+    variant = _d.variant,
+    liftOnHover = _d.liftOnHover;
   return jsxRuntime.jsx("button", {
-    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] [&[data-dragging]]:cursor-grabbing [&[data-dragging]]:shadow-lg sm:px-2", getEventColorClasses(event.color), getBorderRadiusClasses(isFirstDay, isLastDay), className),
+    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium transition outline-none select-none focus-visible:ring-[3px] [&[data-dragging]]:cursor-grabbing [&[data-dragging]]:shadow-lg sm:px-2", getEventClasses(event.color, variant), getBorderRadiusClasses(isFirstDay, isLastDay, variant), liftOnHover && "hover:-translate-y-0.5 hover:shadow-md hover:relative hover:z-10", className),
     "data-dragging": isDragging || undefined,
     "data-past-event": isEventInPast || undefined,
     onClick: onClick,
@@ -396,6 +558,9 @@ function EventItem(_a) {
     children = _a.children,
     className = _a.className;
   var eventColor = event.color;
+  var _d = useCalendarConfig(),
+    variant = _d.variant,
+    renderEventContent = _d.renderEventContent;
   var displayStart = React.useMemo(function () {
     return currentTime || new Date(event.start);
   }, [currentTime, event.start]);
@@ -412,6 +577,14 @@ function EventItem(_a) {
     }
     return "".concat(formatTimeWithOptionalMinutes(displayStart), " - ").concat(formatTimeWithOptionalMinutes(displayEnd));
   };
+  // Consumer-owned content (e.g. time-on-top, no tag). When it returns a node we
+  // render that inside the pill; otherwise we fall back to the default content.
+  var customContent = view !== "agenda" && renderEventContent ? renderEventContent(event, {
+    view: view,
+    displayStart: displayStart,
+    displayEnd: displayEnd,
+    durationMinutes: durationMinutes
+  }) : null;
   if (view === "month") {
     return jsxRuntime.jsx(EventWrapper, {
       event: event,
@@ -421,7 +594,7 @@ function EventItem(_a) {
       onClick: onClick,
       className: cn("mt-[var(--event-gap)] h-full py-0.5 items-center gap-1 text-[10px] sm:text-xs", className),
       currentTime: currentTime,
-      children: children || jsxRuntime.jsxs("div", {
+      children: children || customContent || jsxRuntime.jsxs("div", {
         className: "flex min-w-0 flex-col w-full",
         children: [jsxRuntime.jsxs("div", {
           className: "flex items-center",
@@ -449,7 +622,7 @@ function EventItem(_a) {
       onClick: onClick,
       className: cn("py-1", durationMinutes < 45 ? "items-center" : "flex-col", view === "week" ? "text-[10px] sm:text-xs" : "text-xs", className),
       currentTime: currentTime,
-      children: durationMinutes < 45 ? jsxRuntime.jsxs("div", {
+      children: customContent ? customContent : durationMinutes < 45 ? jsxRuntime.jsxs("div", {
         className: "flex min-w-0 items-center gap-1",
         children: [jsxRuntime.jsxs("span", {
           className: "truncate",
@@ -480,7 +653,7 @@ function EventItem(_a) {
   }
   // Agenda view
   return jsxRuntime.jsxs("button", {
-    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-col gap-1 rounded p-2 text-left transition outline-none focus-visible:ring-[3px] [&[data-past-event]]:opacity-90", getEventColorClasses(eventColor), className),
+    className: cn("focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-col gap-1 p-2 text-left transition outline-none focus-visible:ring-[3px] [&[data-past-event]]:opacity-90", getEventClasses(eventColor, variant), getBorderRadiusClasses(true, true, variant), className),
     "data-past-event": dateFns.isPast(new Date(event.end)) || undefined,
     onClick: onClick,
     children: [jsxRuntime.jsxs("div", {
@@ -774,6 +947,7 @@ function DraggableEvent(_a) {
     isLastDay = _c === void 0 ? true : _c,
     ariaHidden = _a["aria-hidden"];
   var activeId = useCalendarDnd().activeId;
+  var hideDragHandle = useCalendarConfig().hideDragHandle;
   var _d = react.useDraggable({
       id: "".concat(event.id, "-").concat(view),
       data: {
@@ -794,9 +968,9 @@ function DraggableEvent(_a) {
     },
     children: [jsxRuntime.jsx("div", {
       ref: handleRef,
-      className: "absolute -left-0.5 top-0 bottom-0 z-10 flex w-5 cursor-grab items-center justify-center rounded-l opacity-0 transition-opacity group-hover/drag:opacity-60 active:cursor-grabbing",
+      className: cn("absolute left-0 top-0 bottom-0 z-10 w-4 cursor-grab active:cursor-grabbing", !hideDragHandle && "flex items-center justify-center opacity-0 transition-opacity group-hover/drag:opacity-50"),
       "aria-label": "Drag to move event",
-      children: jsxRuntime.jsx(GripIcon, {})
+      children: !hideDragHandle && jsxRuntime.jsx(GripIcon, {})
     }), jsxRuntime.jsx(EventItem, {
       event: event,
       view: view,
@@ -805,8 +979,7 @@ function DraggableEvent(_a) {
       isLastDay: isLastDay,
       isDragging: isDragging,
       onClick: onClick,
-      "aria-hidden": ariaHidden,
-      className: "group-hover/drag:pl-3.5 sm:group-hover/drag:pl-4"
+      "aria-hidden": ariaHidden
     })]
   });
 }
@@ -1225,6 +1398,7 @@ function MonthView(_a) {
     _c = _a.eventGap,
     eventGap = _c === void 0 ? EventGap : _c,
     showNewEventButton = _a.showNewEventButton;
+  var variant = useCalendarVariant();
   var days = React.useMemo(function () {
     var monthStart = dateFns.startOfMonth(currentDate);
     var monthEnd = dateFns.endOfMonth(monthStart);
@@ -1282,12 +1456,12 @@ function MonthView(_a) {
       className: "border-border/70 grid grid-cols-7 border-b",
       children: weekdays.map(function (day) {
         return jsxRuntime.jsx("div", {
-          className: "text-muted-foreground/70 py-2 text-center text-sm",
+          className: cn("text-muted-foreground/70 py-2 text-center text-sm", variant === "terminal" && "text-xs uppercase tracking-widest"),
           children: day
         }, day);
       })
     }), jsxRuntime.jsx("div", {
-      className: "grid flex-1 auto-rows-fr",
+      className: "grid auto-rows-min",
       children: weeks.map(function (week, weekIndex) {
         return jsxRuntime.jsx("div", {
           className: "grid grid-cols-7 [&:last-child>*]:border-b-0",
@@ -1304,7 +1478,9 @@ function MonthView(_a) {
             var hasMore = visibleCount !== undefined && allDayEvents.length > visibleCount;
             var remainingCount = hasMore ? allDayEvents.length - visibleCount : 0;
             return jsxRuntime.jsx("div", {
-              className: "group [&[data-outside-cell]]:bg-sidebar data-outside-cell:bg-opacity-25 data-outside-cell:text-muted-foreground border-r border-b last:border-r-0",
+              className: cn("group [&[data-outside-cell]]:bg-muted/40 data-outside-cell:text-muted-foreground border-border border-b",
+              // minimal drops the vertical column rules for a cleaner grid
+              variant !== "minimal" && "border-r last:border-r-0"),
               "data-today": dateFns.isToday(day) || undefined,
               "data-outside-cell": !isCurrentMonth || undefined,
               children: jsxRuntime.jsxs(DroppableCell, {
@@ -1319,11 +1495,13 @@ function MonthView(_a) {
                 },
                 children: [jsxRuntime.jsx("div", {
                   "data-today": dateFns.isToday(day) || undefined,
-                  className: "[&[data-today]]:bg-primary [&[data-today]]:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm",
+                  className: cn("mt-1 inline-flex size-6 items-center justify-center text-sm", variant === "minimal" ?
+                  // muted numbers; today is just primary + semibold
+                  "text-muted-foreground [&[data-today]]:text-primary [&[data-today]]:font-semibold" : cn("[&[data-today]]:bg-primary [&[data-today]]:text-primary-foreground", variant === "terminal" ? "rounded-none" : "rounded-full")),
                   children: dateFns.format(day, "d")
                 }), jsxRuntime.jsxs("div", {
                   ref: isReferenceCell ? contentRef : null,
-                  className: "min-h-[calc((var(--event-height)+var(--event-gap))*2)] sm:min-h-[calc((var(--event-height)+var(--event-gap))*3)] lg:min-h-[calc((var(--event-height)+var(--event-gap))*4)]",
+                  className: "min-h-[calc((var(--event-height)+var(--event-gap))*2)]",
                   children: [sortEvents(allDayEvents).map(function (event, index) {
                     var eventStart = new Date(event.start);
                     var eventEnd = new Date(event.end);
@@ -1371,7 +1549,7 @@ function MonthView(_a) {
                     children: [jsxRuntime.jsx(PopoverTrigger, {
                       asChild: true,
                       children: jsxRuntime.jsx("button", {
-                        className: "focus-visible:border-ring focus-visible:ring-ring/50 text-muted-foreground hover:text-foreground hover:bg-muted/50 mt-[var(--event-gap)] flex h-[var(--event-height)] w-full items-center overflow-hidden px-1 text-left text-[10px] backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] sm:px-2 sm:text-xs",
+                        className: "focus-visible:border-ring focus-visible:ring-ring/50 text-muted-foreground hover:text-foreground hover:bg-muted/50 mt-[var(--event-gap)] flex h-[var(--event-height)] w-full items-center overflow-hidden px-1 text-left text-[10px] transition outline-none select-none focus-visible:ring-[3px] sm:px-2 sm:text-xs",
                         onClick: function (e) {
                           return e.stopPropagation();
                         },
@@ -1851,12 +2029,18 @@ function EventCalendar(_a) {
     _f = _a.weekCellsHeight,
     weekCellsHeight = _f === void 0 ? WeekCellsHeight : _f;
     _a.agendaDaysToShow;
-  var _h = React.useState(new Date()),
-    currentDate = _h[0],
-    setCurrentDate = _h[1];
-  var _j = React.useState(initialView),
-    view = _j[0],
-    setView = _j[1];
+    var _h = _a.variant,
+    variant = _h === void 0 ? "soft" : _h,
+    renderEventContent = _a.renderEventContent,
+    hideDragHandle = _a.hideDragHandle,
+    liftOnHover = _a.liftOnHover,
+    headerActions = _a.headerActions;
+  var _j = React.useState(new Date()),
+    currentDate = _j[0],
+    setCurrentDate = _j[1];
+  var _k = React.useState(initialView),
+    view = _k[0],
+    setView = _k[1];
   // const [isEventDialogOpen, setIsEventDialogOpen] = useState(false)
   // const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
   // Add keyboard shortcuts for view switching
@@ -1927,6 +2111,15 @@ function EventCalendar(_a) {
   };
   var viewTitle = React.useMemo(function () {
     if (view === "month") {
+      if (variant === "minimal") {
+        // month stays in the title color; year is muted
+        return jsxRuntime.jsxs(jsxRuntime.Fragment, {
+          children: [dateFns.format(currentDate, "MMMM"), " ", jsxRuntime.jsx("span", {
+            className: "text-muted-foreground font-normal",
+            children: dateFns.format(currentDate, "yyyy")
+          })]
+        });
+      }
       return dateFns.format(currentDate, "MMMM yyyy");
     } else if (view === "week") {
       var start = dateFns.startOfWeek(currentDate, {
@@ -1967,161 +2160,170 @@ function EventCalendar(_a) {
     } else {
       return dateFns.format(currentDate, "MMMM yyyy");
     }
-  }, [currentDate, view]);
-  return jsxRuntime.jsx("div", {
-    className: "flex flex-col rounded-lg border has-data-[slot=month-view]:flex-1",
-    style: {
-      "--event-height": "".concat(eventHeight, "px"),
-      "--event-gap": "".concat(eventGap, "px"),
-      "--week-cells-height": "".concat(weekCellsHeight, "px")
+  }, [currentDate, view, variant]);
+  return jsxRuntime.jsx(CalendarConfigProvider, {
+    config: {
+      variant: variant,
+      renderEventContent: renderEventContent,
+      hideDragHandle: hideDragHandle,
+      liftOnHover: liftOnHover
     },
-    "data-height": eventHeight,
-    children: jsxRuntime.jsxs(CalendarDndProvider, {
-      onEventUpdate: handleEventUpdate,
-      children: [jsxRuntime.jsxs("div", {
-        className: cn("flex items-center justify-between p-2 sm:p-4", className),
+    children: jsxRuntime.jsx("div", {
+      className: cn("flex flex-col border", variant === "terminal" ? "rounded-none font-mono" : "rounded-lg"),
+      "data-calendar-variant": variant,
+      style: {
+        "--event-height": "".concat(eventHeight, "px"),
+        "--event-gap": "".concat(eventGap, "px"),
+        "--week-cells-height": "".concat(weekCellsHeight, "px")
+      },
+      "data-height": eventHeight,
+      children: jsxRuntime.jsxs(CalendarDndProvider, {
+        onEventUpdate: handleEventUpdate,
         children: [jsxRuntime.jsxs("div", {
-          className: "flex items-center gap-1 sm:gap-4",
-          children: [jsxRuntime.jsx(Button, {
-            variant: "outline",
-            className: "aspect-square max-[479px]:p-0!",
-            onClick: handleToday,
-            children: jsxRuntime.jsx("span", {
-              className: "max-[479px]:sr-only",
-              children: "Today"
-            })
-          }), jsxRuntime.jsxs("div", {
-            className: "flex items-center sm:gap-2",
+          className: cn("flex items-center justify-between p-2 sm:p-4", className),
+          children: [jsxRuntime.jsxs("div", {
+            className: "flex items-center gap-1 sm:gap-4",
             children: [jsxRuntime.jsx(Button, {
-              variant: "ghost",
-              size: "icon",
-              onClick: handlePrevious,
-              "aria-label": "Previous",
-              children: jsxRuntime.jsx(ChevronLeftIcon, {
-                size: 16,
-                "aria-hidden": "true"
-              })
-            }), jsxRuntime.jsx(Button, {
-              variant: "ghost",
-              size: "icon",
-              onClick: handleNext,
-              "aria-label": "Next",
-              children: jsxRuntime.jsx(ChevronRightIcon, {
-                size: 16,
-                "aria-hidden": "true"
-              })
-            })]
-          }), jsxRuntime.jsx("h2", {
-            className: "text-sm font-semibold sm:text-lg md:text-xl",
-            children: viewTitle
-          })]
-        }), jsxRuntime.jsxs("div", {
-          className: "flex items-center gap-2",
-          children: [showViewSwitcher && jsxRuntime.jsxs(DropdownMenu, {
-            children: [jsxRuntime.jsx(DropdownMenuTrigger, {
-              children: jsxRuntime.jsx(Button, {
-                variant: "outline",
-                className: "gap-1.5 max-[479px]:h-8",
-                asChild: true,
-                children: jsxRuntime.jsxs("div", {
-                  children: [jsxRuntime.jsxs("span", {
-                    children: [jsxRuntime.jsx("span", {
-                      className: "visible sm:invisible",
-                      "aria-hidden": "true",
-                      children: view.charAt(0).toUpperCase()
-                    }), jsxRuntime.jsx("span", {
-                      className: "invisible sm:visible",
-                      children: view.charAt(0).toUpperCase() + view.slice(1)
-                    })]
-                  }), jsxRuntime.jsx(ChevronDownIcon, {
-                    className: "-me-1 opacity-60",
-                    size: 16,
-                    "aria-hidden": "true"
-                  })]
+              variant: "outline",
+              onClick: handleToday,
+              className: variant === "minimal" ? "text-muted-foreground" : undefined,
+              children: "Today"
+            }), jsxRuntime.jsxs("div", {
+              className: "flex items-center sm:gap-2",
+              children: [jsxRuntime.jsx(Button, {
+                variant: "ghost",
+                size: "icon",
+                onClick: handlePrevious,
+                "aria-label": "Previous",
+                className: variant === "minimal" ? "text-muted-foreground" : undefined,
+                children: jsxRuntime.jsx(ChevronLeftIcon, {
+                  size: 16,
+                  "aria-hidden": "true"
                 })
-              })
-            }), jsxRuntime.jsxs(DropdownMenuContent, {
-              align: "end",
-              className: "min-w-32",
-              children: [jsxRuntime.jsxs(DropdownMenuItem, {
-                onClick: function () {
-                  return setView("month");
-                },
-                children: ["Month ", jsxRuntime.jsx(DropdownMenuShortcut, {
-                  children: "M"
-                })]
-              }), jsxRuntime.jsxs(DropdownMenuItem, {
-                onClick: function () {
-                  return setView("week");
-                },
-                children: ["Week ", jsxRuntime.jsx(DropdownMenuShortcut, {
-                  children: "W"
-                })]
-              }), jsxRuntime.jsxs(DropdownMenuItem, {
-                onClick: function () {
-                  return setView("day");
-                },
-                children: ["Day ", jsxRuntime.jsx(DropdownMenuShortcut, {
-                  children: "D"
-                })]
-              }), jsxRuntime.jsxs(DropdownMenuItem, {
-                onClick: function () {
-                  return setView("agenda");
-                },
-                children: ["Agenda ", jsxRuntime.jsx(DropdownMenuShortcut, {
-                  children: "A"
+              }), jsxRuntime.jsx(Button, {
+                variant: "ghost",
+                size: "icon",
+                onClick: handleNext,
+                "aria-label": "Next",
+                className: variant === "minimal" ? "text-muted-foreground" : undefined,
+                children: jsxRuntime.jsx(ChevronRightIcon, {
+                  size: 16,
+                  "aria-hidden": "true"
+                })
+              })]
+            }), jsxRuntime.jsx("h2", {
+              className: "text-sm font-semibold sm:text-lg md:text-xl",
+              children: viewTitle
+            })]
+          }), jsxRuntime.jsxs("div", {
+            className: "flex items-center gap-2",
+            children: [headerActions, showViewSwitcher && jsxRuntime.jsxs(DropdownMenu, {
+              children: [jsxRuntime.jsx(DropdownMenuTrigger, {
+                children: jsxRuntime.jsx(Button, {
+                  variant: "outline",
+                  className: "gap-1.5 max-[479px]:h-8",
+                  asChild: true,
+                  children: jsxRuntime.jsxs("div", {
+                    children: [jsxRuntime.jsxs("span", {
+                      children: [jsxRuntime.jsx("span", {
+                        className: "visible sm:invisible",
+                        "aria-hidden": "true",
+                        children: view.charAt(0).toUpperCase()
+                      }), jsxRuntime.jsx("span", {
+                        className: "invisible sm:visible",
+                        children: view.charAt(0).toUpperCase() + view.slice(1)
+                      })]
+                    }), jsxRuntime.jsx(ChevronDownIcon, {
+                      className: "-me-1 opacity-60",
+                      size: 16,
+                      "aria-hidden": "true"
+                    })]
+                  })
+                })
+              }), jsxRuntime.jsxs(DropdownMenuContent, {
+                align: "end",
+                className: "min-w-32",
+                children: [jsxRuntime.jsxs(DropdownMenuItem, {
+                  onClick: function () {
+                    return setView("month");
+                  },
+                  children: ["Month ", jsxRuntime.jsx(DropdownMenuShortcut, {
+                    children: "M"
+                  })]
+                }), jsxRuntime.jsxs(DropdownMenuItem, {
+                  onClick: function () {
+                    return setView("week");
+                  },
+                  children: ["Week ", jsxRuntime.jsx(DropdownMenuShortcut, {
+                    children: "W"
+                  })]
+                }), jsxRuntime.jsxs(DropdownMenuItem, {
+                  onClick: function () {
+                    return setView("day");
+                  },
+                  children: ["Day ", jsxRuntime.jsx(DropdownMenuShortcut, {
+                    children: "D"
+                  })]
+                }), jsxRuntime.jsxs(DropdownMenuItem, {
+                  onClick: function () {
+                    return setView("agenda");
+                  },
+                  children: ["Agenda ", jsxRuntime.jsx(DropdownMenuShortcut, {
+                    children: "A"
+                  })]
                 })]
               })]
-            })]
-          }), showNewEventButton && jsxRuntime.jsxs(Button, {
-            className: "aspect-square max-[479px]:p-0!",
-            onClick: function () {
-              var startTime = new Date(currentDate);
-              startTime.setHours(0, 0, 0, 0);
-              onEventCreate === null || onEventCreate === void 0 ? void 0 : onEventCreate(startTime);
-            },
-            children: [jsxRuntime.jsx(PlusIcon, {
-              className: "opacity-60 sm:-ms-1",
-              size: 16,
-              "aria-hidden": "true"
-            }), jsxRuntime.jsx("span", {
-              className: "max-sm:sr-only",
-              children: "New event"
+            }), showNewEventButton && jsxRuntime.jsxs(Button, {
+              className: "aspect-square max-[479px]:p-0!",
+              onClick: function () {
+                var startTime = new Date(currentDate);
+                startTime.setHours(0, 0, 0, 0);
+                onEventCreate === null || onEventCreate === void 0 ? void 0 : onEventCreate(startTime);
+              },
+              children: [jsxRuntime.jsx(PlusIcon, {
+                className: "opacity-60 sm:-ms-1",
+                size: 16,
+                "aria-hidden": "true"
+              }), jsxRuntime.jsx("span", {
+                className: "max-sm:sr-only",
+                children: "New event"
+              })]
             })]
           })]
+        }), jsxRuntime.jsxs("div", {
+          className: "flex flex-1 flex-col",
+          children: [view === "month" && jsxRuntime.jsx(MonthView, {
+            currentDate: currentDate,
+            events: events,
+            onEventSelect: onEventSelect,
+            onEventCreate: onEventCreate,
+            eventGap: eventGap,
+            eventHeight: eventHeight,
+            showNewEventButton: showNewEventButton
+          }), view === "week" && jsxRuntime.jsx(WeekView, {
+            currentDate: currentDate,
+            events: events,
+            onEventSelect: onEventSelect,
+            onEventCreate: onEventCreate
+          }), view === "day" && jsxRuntime.jsx(DayView, {
+            currentDate: currentDate,
+            events: events,
+            onEventSelect: onEventSelect,
+            onEventCreate: onEventCreate
+          }), view === "agenda" && jsxRuntime.jsx(AgendaView, {
+            currentDate: currentDate,
+            events: events,
+            onEventSelect: onEventSelect
+          })]
         })]
-      }), jsxRuntime.jsxs("div", {
-        className: "flex flex-1 flex-col",
-        children: [view === "month" && jsxRuntime.jsx(MonthView, {
-          currentDate: currentDate,
-          events: events,
-          onEventSelect: onEventSelect,
-          onEventCreate: onEventCreate,
-          eventGap: eventGap,
-          eventHeight: eventHeight,
-          showNewEventButton: showNewEventButton
-        }), view === "week" && jsxRuntime.jsx(WeekView, {
-          currentDate: currentDate,
-          events: events,
-          onEventSelect: onEventSelect,
-          onEventCreate: onEventCreate
-        }), view === "day" && jsxRuntime.jsx(DayView, {
-          currentDate: currentDate,
-          events: events,
-          onEventSelect: onEventSelect,
-          onEventCreate: onEventCreate
-        }), view === "agenda" && jsxRuntime.jsx(AgendaView, {
-          currentDate: currentDate,
-          events: events,
-          onEventSelect: onEventSelect
-        })]
-      })]
+      })
     })
   });
 }
 
 exports.AgendaDaysToShow = AgendaDaysToShow;
 exports.AgendaView = AgendaView;
+exports.CalendarConfigProvider = CalendarConfigProvider;
 exports.CalendarDndProvider = CalendarDndProvider;
 exports.DayView = DayView;
 exports.DefaultEndHour = DefaultEndHour;
@@ -2140,13 +2342,21 @@ exports.WeekView = WeekView;
 exports.getAgendaEventsForDay = getAgendaEventsForDay;
 exports.getAllEventsForDay = getAllEventsForDay;
 exports.getBorderRadiusClasses = getBorderRadiusClasses;
+exports.getEventClasses = getEventClasses;
 exports.getEventColorClasses = getEventColorClasses;
 exports.getEventsForDay = getEventsForDay;
 exports.getSpanningEventsForDay = getSpanningEventsForDay;
+exports.getStatusAccentClasses = getStatusAccentClasses;
+exports.getStatusBorderClasses = getStatusBorderClasses;
+exports.getStatusDotClasses = getStatusDotClasses;
+exports.getStatusTagClasses = getStatusTagClasses;
+exports.getTagChromeClasses = getTagChromeClasses;
 exports.getTagColorClasses = getTagColorClasses;
 exports.isMultiDayEvent = isMultiDayEvent;
 exports.sortEvents = sortEvents;
+exports.useCalendarConfig = useCalendarConfig;
 exports.useCalendarDnd = useCalendarDnd;
+exports.useCalendarVariant = useCalendarVariant;
 exports.useCurrentTimeIndicator = useCurrentTimeIndicator;
 exports.useEventVisibility = useEventVisibility;
 //# sourceMappingURL=index.js.map

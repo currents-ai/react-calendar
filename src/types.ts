@@ -1,5 +1,13 @@
 export type CalendarView = "month" | "week" | "day" | "agenda"
 
+/**
+ * Visual language of the calendar.
+ * - `soft`     pastel, rounded, glassy backdrop-blur (the original look)
+ * - `minimal`  flat, no blur/shadow, left accent bar — clean and dense
+ * - `terminal` sharp corners, hard borders, mono type — matches the agent surface idiom
+ */
+export type CalendarVariant = "soft" | "minimal" | "terminal"
+
 export interface CalendarEvent {
   id: string
   title: string

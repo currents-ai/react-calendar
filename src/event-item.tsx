@@ -3,10 +3,12 @@ import { differenceInMinutes, format, getMinutes, isPast } from "date-fns"
 
 import { cn } from "./lib/utils"
 import { CalendarEvent } from "./types"
+import { useCalendarConfig, useCalendarVariant } from "./variant-context"
 import {
   getBorderRadiusClasses,
-  getEventColorClasses,
-  getTagColorClasses,
+  getEventClasses,
+  getStatusTagClasses,
+  getTagChromeClasses,
 } from "./utils"
 
 const formatTimeWithOptionalMinutes = (date: Date) => {
@@ -14,11 +16,13 @@ const formatTimeWithOptionalMinutes = (date: Date) => {
 }
 
 function EventTag({ label, color,className }: { label: string; color?: string ,className?:string}) {
+  const variant = useCalendarVariant()
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center rounded px-0.5 py-px font-medium leading-tight text-[10px] mt-0.5",
-        getTagColorClasses(color),
+        "inline-flex shrink-0 items-center px-0.5 py-px font-medium leading-tight text-[10px] mt-0.5",
+        getTagChromeClasses(variant),
+        getStatusTagClasses(color),
         className
       )}
     >
@@ -56,13 +60,16 @@ function EventWrapper({
     : new Date(event.end)
 
   const isEventInPast = isPast(displayEnd)
+  const { variant, liftOnHover } = useCalendarConfig()
 
   return (
     <button
       className={cn(
-        "focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] [&[data-dragging]]:cursor-grabbing [&[data-dragging]]:shadow-lg sm:px-2",
-        getEventColorClasses(event.color),
-        getBorderRadiusClasses(isFirstDay, isLastDay),
+        "focus-visible:border-ring focus-visible:ring-ring/50 overflow-wrap flex h-full w-full px-1 text-left font-medium transition outline-none select-none focus-visible:ring-[3px] [&[data-dragging]]:cursor-grabbing [&[data-dragging]]:shadow-lg sm:px-2",
+        getEventClasses(event.color, variant),
+        getBorderRadiusClasses(isFirstDay, isLastDay, variant),
+        liftOnHover &&
+          "hover:-translate-y-0.5 hover:shadow-md hover:relative hover:z-10",
         className
       )}
       data-dragging={isDragging || undefined}
@@ -101,6 +108,7 @@ export function EventItem({
   className,
 }: EventItemProps) {
   const eventColor = event.color
+  const { variant, renderEventContent } = useCalendarConfig()
 
   const displayStart = useMemo(() => {
     return currentTime || new Date(event.start)
@@ -129,6 +137,18 @@ export function EventItem({
     return `${formatTimeWithOptionalMinutes(displayStart)} - ${formatTimeWithOptionalMinutes(displayEnd)}`
   }
 
+  // Consumer-owned content (e.g. time-on-top, no tag). When it returns a node we
+  // render that inside the pill; otherwise we fall back to the default content.
+  const customContent =
+    view !== "agenda" && renderEventContent
+      ? renderEventContent(event, {
+          view,
+          displayStart,
+          displayEnd,
+          durationMinutes,
+        })
+      : null
+
   if (view === "month") {
     return (
       <EventWrapper
@@ -143,7 +163,7 @@ export function EventItem({
         )}
         currentTime={currentTime}
       >
-        {children || (
+        {children || customContent || (
           <div className="flex min-w-0 flex-col w-full">
             <div className="flex items-center">
               {!event.allDay && (
@@ -178,7 +198,9 @@ export function EventItem({
         )}
         currentTime={currentTime}
       >
-        {durationMinutes < 45 ? (
+        {customContent ? (
+          customContent
+        ) : durationMinutes < 45 ? (
           <div className="flex min-w-0 items-center gap-1">
             <span className="truncate">
               {event.title}{" "}
@@ -215,8 +237,9 @@ export function EventItem({
   return (
     <button
       className={cn(
-        "focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-col gap-1 rounded p-2 text-left transition outline-none focus-visible:ring-[3px] [&[data-past-event]]:opacity-90",
-        getEventColorClasses(eventColor),
+        "focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-col gap-1 p-2 text-left transition outline-none focus-visible:ring-[3px] [&[data-past-event]]:opacity-90",
+        getEventClasses(eventColor, variant),
+        getBorderRadiusClasses(true, true, variant),
         className
       )}
       data-past-event={isPast(new Date(event.end)) || undefined}

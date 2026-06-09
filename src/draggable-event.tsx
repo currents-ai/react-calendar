@@ -1,8 +1,10 @@
 import { useDraggable } from "@dnd-kit/react"
 
 import { useCalendarDnd } from "./calendar-dnd-context"
+import { cn } from "./lib/utils"
 import { EventItem } from "./event-item"
 import { CalendarEvent } from "./types"
+import { useCalendarConfig } from "./variant-context"
 
 interface DraggableEventProps {
   event: CalendarEvent
@@ -46,6 +48,7 @@ export function DraggableEvent({
   "aria-hidden": ariaHidden,
 }: DraggableEventProps) {
   const { activeId } = useCalendarDnd()
+  const { hideDragHandle } = useCalendarConfig()
 
   const { ref, handleRef, isDragSource } = useDraggable({
     id: `${event.id}-${view}`,
@@ -66,13 +69,19 @@ export function DraggableEvent({
         opacity: isDragging ? 0.3 : undefined,
       }}
     >
-      {/* Drag handle - visible on hover */}
+      {/* Drag handle. Default: a grip that fades in on hover (overlay, no
+          reflow). When hideDragHandle is set, the grip is gone but the strip
+          still initiates drag — discoverability comes from the hover lift. */}
       <div
         ref={handleRef}
-        className="absolute -left-0.5 top-0 bottom-0 z-10 flex w-5 cursor-grab items-center justify-center rounded-l opacity-0 transition-opacity group-hover/drag:opacity-60 active:cursor-grabbing"
+        className={cn(
+          "absolute left-0 top-0 bottom-0 z-10 w-4 cursor-grab active:cursor-grabbing",
+          !hideDragHandle &&
+            "flex items-center justify-center opacity-0 transition-opacity group-hover/drag:opacity-50"
+        )}
         aria-label="Drag to move event"
       >
-        <GripIcon />
+        {!hideDragHandle && <GripIcon />}
       </div>
 
       <EventItem
@@ -84,7 +93,6 @@ export function DraggableEvent({
         isDragging={isDragging}
         onClick={onClick}
         aria-hidden={ariaHidden}
-        className="group-hover/drag:pl-3.5 sm:group-hover/drag:pl-4"
       />
     </div>
   )

@@ -18,7 +18,9 @@ import { DroppableCell } from "./droppable-cell"
 import { EventCalendarProps } from "./event-calendar"
 import { EventItem } from "./event-item"
 import { useEventVisibility } from "./hooks/use-event-visibility"
+import { cn } from "./lib/utils"
 import { CalendarEvent } from "./types"
+import { useCalendarVariant } from "./variant-context"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import {
   getAllEventsForDay,
@@ -47,6 +49,7 @@ export function MonthView({
   eventGap = EventGap,
   showNewEventButton,
 }: MonthViewProps) {
+  const variant = useCalendarVariant()
   const days = useMemo(() => {
     const monthStart = startOfMonth(currentDate)
     const monthEnd = endOfMonth(monthStart)
@@ -99,13 +102,17 @@ export function MonthView({
         {weekdays.map((day) => (
           <div
             key={day}
-            className="text-muted-foreground/70 py-2 text-center text-sm"
+            className={cn(
+              "text-muted-foreground/70 py-2 text-center text-sm",
+              variant === "terminal" &&
+                "text-xs uppercase tracking-widest"
+            )}
           >
             {day}
           </div>
         ))}
       </div>
-      <div className="grid flex-1 auto-rows-fr">
+      <div className="grid auto-rows-min">
         {weeks.map((week, weekIndex) => (
           <div
             key={`week-${weekIndex}`}
@@ -134,7 +141,11 @@ export function MonthView({
               return (
                 <div
                   key={day.toString()}
-                  className="group [&[data-outside-cell]]:bg-sidebar data-outside-cell:bg-opacity-25 data-outside-cell:text-muted-foreground border-r border-b last:border-r-0"
+                  className={cn(
+                    "group [&[data-outside-cell]]:bg-muted/40 data-outside-cell:text-muted-foreground border-border border-b",
+                    // minimal drops the vertical column rules for a cleaner grid
+                    variant !== "minimal" && "border-r last:border-r-0"
+                  )}
                   data-today={isToday(day) || undefined}
                   data-outside-cell={!isCurrentMonth || undefined}
                 >
@@ -151,13 +162,24 @@ export function MonthView({
                   >
                     <div
                       data-today={isToday(day) || undefined}
-                      className="[&[data-today]]:bg-primary [&[data-today]]:text-primary-foreground mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm"
+                      className={cn(
+                        "mt-1 inline-flex size-6 items-center justify-center text-sm",
+                        variant === "minimal"
+                          ? // muted numbers; today is just primary + semibold
+                            "text-muted-foreground [&[data-today]]:text-primary [&[data-today]]:font-semibold"
+                          : cn(
+                              "[&[data-today]]:bg-primary [&[data-today]]:text-primary-foreground",
+                              variant === "terminal"
+                                ? "rounded-none"
+                                : "rounded-full"
+                            )
+                      )}
                     >
                       {format(day, "d")}
                     </div>
                     <div
                       ref={isReferenceCell ? contentRef : null}
-                      className="min-h-[calc((var(--event-height)+var(--event-gap))*2)] sm:min-h-[calc((var(--event-height)+var(--event-gap))*3)] lg:min-h-[calc((var(--event-height)+var(--event-gap))*4)]"
+                      className="min-h-[calc((var(--event-height)+var(--event-gap))*2)]"
                     >
                       {sortEvents(allDayEvents).map((event, index) => {
                         const eventStart = new Date(event.start)
@@ -221,7 +243,7 @@ export function MonthView({
                         <Popover modal>
                           <PopoverTrigger asChild>
                             <button
-                              className="focus-visible:border-ring focus-visible:ring-ring/50 text-muted-foreground hover:text-foreground hover:bg-muted/50 mt-[var(--event-gap)] flex h-[var(--event-height)] w-full items-center overflow-hidden px-1 text-left text-[10px] backdrop-blur-md transition outline-none select-none focus-visible:ring-[3px] sm:px-2 sm:text-xs"
+                              className="focus-visible:border-ring focus-visible:ring-ring/50 text-muted-foreground hover:text-foreground hover:bg-muted/50 mt-[var(--event-gap)] flex h-[var(--event-height)] w-full items-center overflow-hidden px-1 text-left text-[10px] transition outline-none select-none focus-visible:ring-[3px] sm:px-2 sm:text-xs"
                               onClick={(e) => e.stopPropagation()}
                             >
                               <span>

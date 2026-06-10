@@ -2,6 +2,13 @@ import * as react_jsx_runtime from 'react/jsx-runtime';
 import { ReactNode } from 'react';
 
 type CalendarView = "month" | "week" | "day" | "agenda";
+/**
+ * Visual language of the calendar.
+ * - `soft`     pastel, rounded, glassy backdrop-blur (the original look)
+ * - `minimal`  flat, no blur/shadow, left accent bar — clean and dense
+ * - `terminal` sharp corners, hard borders, mono type — matches the agent surface idiom
+ */
+type CalendarVariant = "soft" | "minimal" | "terminal";
 interface CalendarEvent {
     id: string;
     title: string;
@@ -70,6 +77,38 @@ interface EventItemProps {
 }
 declare function EventItem({ event, view, isDragging, onClick, showTime, currentTime, isFirstDay, isLastDay, children, className, }: EventItemProps): react_jsx_runtime.JSX.Element;
 
+/**
+ * Extension points the host app can feed into the calendar without forking the
+ * render code. Everything here is optional and defaults to the original
+ * behaviour, so the core component stays close to upstream and easy to re-merge.
+ *
+ * - variant            visual language (see CalendarVariant)
+ * - renderEventContent lets the consumer own the *inside* of an event pill
+ *                      (e.g. time-on-top layout, no status tag). When it returns
+ *                      a node that node is used; otherwise the default content.
+ * - hideDragHandle     hide the grip affordance (drag still works via the strip)
+ * - liftOnHover        raise the event slightly on hover instead of a handle
+ */
+interface CalendarEventRenderContext {
+    view: CalendarView;
+    displayStart: Date;
+    displayEnd: Date;
+    durationMinutes: number;
+}
+interface CalendarConfig {
+    variant: CalendarVariant;
+    renderEventContent?: (event: CalendarEvent, ctx: CalendarEventRenderContext) => React.ReactNode;
+    hideDragHandle?: boolean;
+    liftOnHover?: boolean;
+}
+declare function CalendarConfigProvider({ config, children, }: {
+    config: CalendarConfig;
+    children: React.ReactNode;
+}): react_jsx_runtime.JSX.Element;
+declare function useCalendarConfig(): CalendarConfig;
+/** Convenience selector for the common case. */
+declare function useCalendarVariant(): CalendarVariant;
+
 interface EventCalendarProps {
     events?: CalendarEvent[];
     onEventAdd?: (event: CalendarEvent) => void;
@@ -92,8 +131,16 @@ interface EventCalendarProps {
     eventGap?: number;
     weekCellsHeight?: number;
     agendaDaysToShow?: number;
+    variant?: CalendarVariant;
+    /** Consumer-owned event content + interaction tweaks (see CalendarConfig). */
+    renderEventContent?: CalendarConfig["renderEventContent"];
+    hideDragHandle?: boolean;
+    liftOnHover?: boolean;
+    /** Slot rendered in the header's right side (e.g. a legend), vertically
+     *  centered with the title/nav. */
+    headerActions?: ReactNode;
 }
-declare function EventCalendar({ events, onEventAdd, onEventUpdate, onEventDelete, className, initialView, onEventCreate, onEventSelect, showViewSwitcher, showNewEventButton, eventHeight, eventGap, weekCellsHeight, agendaDaysToShow, }: EventCalendarProps): react_jsx_runtime.JSX.Element;
+declare function EventCalendar({ events, onEventAdd, onEventUpdate, onEventDelete, className, initialView, onEventCreate, onEventSelect, showViewSwitcher, showNewEventButton, eventHeight, eventGap, weekCellsHeight, agendaDaysToShow, variant, renderEventContent, hideDragHandle, liftOnHover, headerActions, }: EventCalendarProps): react_jsx_runtime.JSX.Element;
 
 interface MonthViewProps extends Pick<EventCalendarProps, "eventHeight" | "eventGap" | "showNewEventButton"> {
     currentDate: Date;
@@ -133,6 +180,25 @@ declare const DefaultStartHour = 9;
 declare const DefaultEndHour = 10;
 
 /**
+ * Full event surface + status treatment for an event pill, per variant — all
+ * theme tokens. soft: neutral card with a colored status edge. minimal: flat
+ * muted fill with a status edge. terminal: sharp, mono, hard status border.
+ */
+declare function getEventClasses(color?: EventColor | string, variant?: CalendarVariant): string;
+/** Left status edge (soft + minimal). Theme tokens, literal classes. */
+declare function getStatusAccentClasses(color?: EventColor | string): string;
+/** All-sides status border (terminal). Theme tokens, literal classes. */
+declare function getStatusBorderClasses(color?: EventColor | string): string;
+/** Solid status dot fill (for legends). Theme tokens, literal classes. */
+declare function getStatusDotClasses(color?: EventColor | string): string;
+/** Status badge fill + text. Theme tokens, literal classes. */
+declare function getStatusTagClasses(color?: EventColor | string): string;
+/**
+ * Per-variant chrome for a tag badge — radius and typeface only; color comes
+ * from getStatusTagClasses.
+ */
+declare function getTagChromeClasses(variant?: CalendarVariant): string;
+/**
  * Get CSS classes for event colors
  */
 declare function getEventColorClasses(color?: EventColor | string): string;
@@ -143,7 +209,7 @@ declare function getTagColorClasses(color?: string): string;
 /**
  * Get CSS classes for border radius based on event position in multi-day events
  */
-declare function getBorderRadiusClasses(isFirstDay: boolean, isLastDay: boolean): string;
+declare function getBorderRadiusClasses(isFirstDay: boolean, isLastDay: boolean, variant?: CalendarVariant): string;
 /**
  * Check if an event is a multi-day event
  */
@@ -189,5 +255,5 @@ interface EventVisibilityResult {
  */
 declare function useEventVisibility({ eventHeight, eventGap, }: EventVisibilityOptions): EventVisibilityResult;
 
-export { AgendaDaysToShow, AgendaView, CalendarDndProvider, DayView, DefaultEndHour, DefaultStartHour, DraggableEvent, DroppableCell, EndHour, EventCalendar, EventGap, EventHeight, EventItem, MonthView, StartHour, WeekCellsHeight, WeekView, getAgendaEventsForDay, getAllEventsForDay, getBorderRadiusClasses, getEventColorClasses, getEventsForDay, getSpanningEventsForDay, getTagColorClasses, isMultiDayEvent, sortEvents, useCalendarDnd, useCurrentTimeIndicator, useEventVisibility };
-export type { CalendarEvent, CalendarView, EventColor };
+export { AgendaDaysToShow, AgendaView, CalendarConfigProvider, CalendarDndProvider, DayView, DefaultEndHour, DefaultStartHour, DraggableEvent, DroppableCell, EndHour, EventCalendar, EventGap, EventHeight, EventItem, MonthView, StartHour, WeekCellsHeight, WeekView, getAgendaEventsForDay, getAllEventsForDay, getBorderRadiusClasses, getEventClasses, getEventColorClasses, getEventsForDay, getSpanningEventsForDay, getStatusAccentClasses, getStatusBorderClasses, getStatusDotClasses, getStatusTagClasses, getTagChromeClasses, getTagColorClasses, isMultiDayEvent, sortEvents, useCalendarConfig, useCalendarDnd, useCalendarVariant, useCurrentTimeIndicator, useEventVisibility };
+export type { CalendarConfig, CalendarEvent, CalendarEventRenderContext, CalendarVariant, CalendarView, EventColor };

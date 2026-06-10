@@ -1,6 +1,160 @@
 import { isSameDay } from "date-fns"
 
-import type { CalendarEvent, EventColor } from "./types"
+import { cn } from "./lib/utils"
+import type { CalendarEvent, CalendarVariant, EventColor } from "./types"
+
+/**
+ * Status → theme semantic key. Every variant is built from theme variables only
+ * (no raw Tailwind palette), so the calendar tracks the active theme and its
+ * scoped dark contexts. The incoming `color` is the generic status hue set by
+ * the consumer; we fold it onto the theme's semantic tokens:
+ *   COMPLETED→success · RUNNING→warning · FAILED→destructive ·
+ *   SCHEDULED→highlight · everything else→muted.
+ *
+ * IMPORTANT: the *-Classes helpers below return complete literal class strings.
+ * Tailwind only generates class names it can see verbatim in source — never
+ * interpolate a token into a class name (`border-l-${key}` would be dropped).
+ */
+type StatusKey = "success" | "warning" | "destructive" | "highlight" | "muted"
+
+function statusKey(color?: EventColor | string): StatusKey {
+  switch (color) {
+    case "green":
+    case "green-dark":
+    case "emerald":
+      return "success"
+    case "red":
+    case "red-light":
+    case "rose":
+      return "destructive"
+    case "yellow":
+    case "amber":
+    case "orange":
+      return "warning"
+    case "sky":
+    case "blue":
+    case "violet":
+      return "highlight"
+    default:
+      return "muted"
+  }
+}
+
+/**
+ * Full event surface + status treatment for an event pill, per variant — all
+ * theme tokens. soft: neutral card with a colored status edge. minimal: flat
+ * muted fill with a status edge. terminal: sharp, mono, hard status border.
+ */
+export function getEventClasses(
+  color?: EventColor | string,
+  variant: CalendarVariant = "soft"
+): string {
+  switch (variant) {
+    case "terminal":
+      return cn(
+        "bg-secondary text-foreground border font-mono uppercase tracking-tight",
+        getStatusBorderClasses(color)
+      )
+    case "minimal":
+      // No fill — just a status-colored left border (matches the legend) and
+      // foreground text. Hover gets a faint surface so the lift reads.
+      return cn(
+        "bg-transparent text-foreground border-l-2 hover:bg-accent/60",
+        getStatusAccentClasses(color)
+      )
+    case "soft":
+    default:
+      return cn(
+        "bg-card text-card-foreground border border-border border-l-[3px] shadow-sm hover:bg-accent hover:text-accent-foreground",
+        getStatusAccentClasses(color)
+      )
+  }
+}
+
+/** Left status edge (soft + minimal). Theme tokens, literal classes. */
+export function getStatusAccentClasses(color?: EventColor | string): string {
+  switch (statusKey(color)) {
+    case "success":
+      return "border-l-success"
+    case "warning":
+      return "border-l-warning"
+    case "destructive":
+      return "border-l-destructive"
+    case "highlight":
+      return "border-l-highlight"
+    case "muted":
+    default:
+      return "border-l-muted-foreground"
+  }
+}
+
+/** All-sides status border (terminal). Theme tokens, literal classes. */
+export function getStatusBorderClasses(color?: EventColor | string): string {
+  switch (statusKey(color)) {
+    case "success":
+      return "border-success"
+    case "warning":
+      return "border-warning"
+    case "destructive":
+      return "border-destructive"
+    case "highlight":
+      return "border-highlight"
+    case "muted":
+    default:
+      return "border-muted-foreground"
+  }
+}
+
+/** Solid status dot fill (for legends). Theme tokens, literal classes. */
+export function getStatusDotClasses(color?: EventColor | string): string {
+  switch (statusKey(color)) {
+    case "success":
+      return "bg-success"
+    case "warning":
+      return "bg-warning"
+    case "destructive":
+      return "bg-destructive"
+    case "highlight":
+      return "bg-highlight"
+    case "muted":
+    default:
+      return "bg-muted-foreground"
+  }
+}
+
+/** Status badge fill + text. Theme tokens, literal classes. */
+export function getStatusTagClasses(color?: EventColor | string): string {
+  switch (statusKey(color)) {
+    case "success":
+      return "bg-success/15 text-success"
+    case "warning":
+      return "bg-warning/15 text-warning"
+    case "destructive":
+      return "bg-destructive/15 text-destructive"
+    case "highlight":
+      return "bg-highlight/15 text-highlight"
+    case "muted":
+    default:
+      return "bg-muted text-muted-foreground"
+  }
+}
+
+/**
+ * Per-variant chrome for a tag badge — radius and typeface only; color comes
+ * from getStatusTagClasses.
+ */
+export function getTagChromeClasses(
+  variant: CalendarVariant = "soft"
+): string {
+  switch (variant) {
+    case "terminal":
+      return "rounded-none font-mono uppercase"
+    case "minimal":
+    case "soft":
+    default:
+      return "rounded"
+  }
+}
 
 /**
  * Get CSS classes for event colors
@@ -77,8 +231,13 @@ export function getTagColorClasses(color?: string): string {
  */
 export function getBorderRadiusClasses(
   isFirstDay: boolean,
-  isLastDay: boolean
+  isLastDay: boolean,
+  variant: CalendarVariant = "soft"
 ): string {
+  // The terminal variant is always square, including across multi-day spans.
+  if (variant === "terminal") {
+    return "rounded-none"
+  }
   if (isFirstDay && isLastDay) {
     return "rounded" // Both ends rounded
   } else if (isFirstDay) {
